@@ -51,6 +51,7 @@ profiles:
         - laptop-personal-ssh-key
         - github-ssh-key
         - home-ops-ssh-key
+        - aur-ssh-key
 
 # Age encryption for sensitive files
 age:
