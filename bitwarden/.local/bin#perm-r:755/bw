@@ -9,6 +9,8 @@ bw_unlock() {
   local bw_key=$("$_real_bw" unlock --raw)
   echo "$bw_key" | gpg --yes --encrypt --recipient "${BW_GPGKEY}" -o "${BW_KEYCHAIN}" &&
     chmod 600 "${BW_KEYCHAIN}"
+  printf '%s' "$bw_key" > "${XDG_RUNTIME_DIR}/bw-session"
+  chmod 600 "${XDG_RUNTIME_DIR}/bw-session"
   pkill -u "$USER" zsh --signal=USR2 || true
 }
 

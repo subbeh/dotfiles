@@ -3,4 +3,9 @@
 export BITWARDENCLI_APPDATA_DIR="${BITWARDENCLI_APPDATA_DIR:-"$HOME/.local/share/bitwardencli"}"
 export BW_GPGKEY="{{ index .Vars.gpgKeys 0 }}"
 export BW_KEYCHAIN="${BITWARDENCLI_APPDATA_DIR}/.bitwarden-session.keychain"
-export BW_SESSION="$(gpg --decrypt "$BITWARDENCLI_APPDATA_DIR/.bitwarden-session.keychain" 2>/dev/null)"
+
+if [ -f "$BW_KEYCHAIN" ]; then
+  BW_SESSION="$(gpg --batch --pinentry-mode cancel --decrypt "$BW_KEYCHAIN" 2>/dev/null)" ||
+    BW_SESSION="$(cat "${XDG_RUNTIME_DIR}/bw-session" 2>/dev/null)" || true
+  export BW_SESSION
+fi

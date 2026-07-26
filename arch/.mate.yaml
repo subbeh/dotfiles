@@ -1,3 +1,5 @@
+targets:
+  etc: /etc
 packages:
   pacman:
     - age

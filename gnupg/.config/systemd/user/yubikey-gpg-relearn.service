@@ -1,0 +1,6 @@
+[Unit]
+Description=Re-learn GPG smartcard stubs for inserted YubiKey
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/gpg-connect-agent "scd serialno" "learn --force" /bye
