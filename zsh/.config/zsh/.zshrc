@@ -2,6 +2,7 @@
 
 # Enable debug mode:
 # setopt xtrace
+# zmodload zsh/zprof
 
 FPATH="$XDG_DATA_HOME"/zsh/site-functions:$FPATH
 HISTDUP=erase
@@ -80,3 +81,5 @@ src() {
     _reload
   fi
 }
+
+# zprof

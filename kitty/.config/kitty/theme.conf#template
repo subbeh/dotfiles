@@ -1,61 +1,61 @@
 # Base colors
-foreground              #{{ .Vars.color.fg0 }}
-background              #{{ .Vars.color.bg0 }}
+foreground              #{{ .Vars.color.surface.fg }}
+background              #{{ .Vars.color.surface.bg }}
 
 # Cursor colors
-cursor                  #{{ .Vars.color.cursor }}
-cursor_text_color       #{{ .Vars.color.bg1 }}
+cursor                  #{{ .Vars.color.cursor.bg }}
+cursor_text_color       #{{ .Vars.color.cursor.fg }}
 
 # Selection colors
-selection_foreground    #{{ .Vars.color.sel_fg }}
-selection_background    #{{ .Vars.color.sel_bg }}
+selection_foreground    #{{ .Vars.color.selection.fg }}
+selection_background    #{{ .Vars.color.selection.bg }}
 
 # Tab bar colors
-active_tab_foreground   #{{ .Vars.color.bg0 }}
-active_tab_background   #{{ .Vars.color.fg0 }}
-inactive_tab_foreground #{{ .Vars.color.fg0 }}
-inactive_tab_background #{{ .Vars.color.bg0 }}
+active_tab_foreground   #{{ .Vars.color.surface.bg }}
+active_tab_background   #{{ .Vars.color.surface.fg }}
+inactive_tab_foreground #{{ .Vars.color.surface.fg }}
+inactive_tab_background #{{ .Vars.color.surface.bg }}
 
 # Marks
-mark1_foreground        #{{ .Vars.color.bg0 }}
-mark1_background        #{{ .Vars.color.bg2 }}
-mark2_foreground        #{{ .Vars.color.bg0 }}
-mark2_background        #{{ .Vars.color.yellow }}
-mark3_foreground        #{{ .Vars.color.bg0 }}
-mark3_background        #{{ .Vars.color.fg0 }}
+mark1_foreground        #{{ .Vars.color.surface.bg }}
+mark1_background        #{{ .Vars.color.surface.bg2 }}
+mark2_foreground        #{{ .Vars.color.surface.bg }}
+mark2_background        #{{ .Vars.color.yellow.base }}
+mark3_foreground        #{{ .Vars.color.surface.bg }}
+mark3_background        #{{ .Vars.color.surface.fg }}
 
 # Basic colors (ANSI)
 # black
-color0                  #{{ .Vars.color.black }}
-color8                  #{{ .Vars.color.black_bright }}
+color0                  #{{ .Vars.color.black.base }}
+color8                  #{{ .Vars.color.black.bright }}
 
 # red
-color1                  #{{ .Vars.color.red }}
-color9                  #{{ .Vars.color.red_bright }}
+color1                  #{{ .Vars.color.red.base }}
+color9                  #{{ .Vars.color.red.bright }}
 
 # green
-color2                  #{{ .Vars.color.green }}
-color10                 #{{ .Vars.color.green_bright }}
+color2                  #{{ .Vars.color.green.base }}
+color10                 #{{ .Vars.color.green.bright }}
 
 # yellow
-color3                  #{{ .Vars.color.yellow }}
-color11                 #{{ .Vars.color.yellow_bright }}
+color3                  #{{ .Vars.color.yellow.base }}
+color11                 #{{ .Vars.color.yellow.bright }}
 
 # blue
-color4                  #{{ .Vars.color.blue }}
-color12                 #{{ .Vars.color.blue_bright }}
+color4                  #{{ .Vars.color.blue.base }}
+color12                 #{{ .Vars.color.blue.bright }}
 
 # magenta
-color5                  #{{ .Vars.color.magenta }}
-color13                 #{{ .Vars.color.magenta_bright }}
+color5                  #{{ .Vars.color.magenta.base }}
+color13                 #{{ .Vars.color.magenta.bright }}
 
 # cyan
-color6                  #{{ .Vars.color.cyan }}
-color14                 #{{ .Vars.color.cyan_bright }}
+color6                  #{{ .Vars.color.cyan.base }}
+color14                 #{{ .Vars.color.cyan.bright }}
 
 # white
-color7                  #{{ .Vars.color.white }}
-color15                 #{{ .Vars.color.white_bright }}
+color7                  #{{ .Vars.color.white.base }}
+color15                 #{{ .Vars.color.white.bright }}
 
 color16                 #000000
 color17                 #00005f

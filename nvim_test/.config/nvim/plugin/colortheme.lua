@@ -6,13 +6,13 @@ local p = require("palette")
 -- base00-07 are the dark->light ramp; base08-0F are the accents.
 require("mini.base16").setup({
   palette = {
-    base00 = p.bg0, -- default background
-    base01 = p.bg1, -- lighter background (statusline, cursorline)
+    base00 = p.surface_bg, -- default background
+    base01 = p.surface_bg1, -- lighter background (statusline, cursorline)
     base02 = p.sel_bg, -- selection background
-    base03 = p.bg2, -- comments, invisibles
+    base03 = p.surface_bg2, -- comments, invisibles
     base04 = p.white, -- dark foreground (statusline)
-    base05 = p.fg0, -- default foreground
-    base06 = p.fg0, -- light foreground
+    base05 = p.surface_fg, -- default foreground
+    base06 = p.surface_fg, -- light foreground
     base07 = p.white_bright, -- light background
     base08 = p.red, -- variables, diff deleted
     base09 = p.orange, -- numbers, booleans, constants
