@@ -27,7 +27,7 @@ export bgnotify_bell=false
 function bgnotify_formatted {
   ## $1=exit_status, $2=command, $3=elapsed_time
   local title
-  (( $1 == 0 )) && title="Done" || title="Failed ($1)"
+  (($1 == 0)) && title="Done" || title="Failed ($1)"
   # Skip interactive programs where a completion notice is just noise.
   if ! [[ "$2" =~ ^(nvim|vim|vi|less|man|lazygit)\ .* ]]; then
     bgnotify "$title -- after $3 s" "$2"
@@ -42,8 +42,8 @@ function bgnotify_formatted {
 zinit wait lucid for \
   Aloxaf/fzf-tab \
   atload'ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd); _zsh_autosuggest_start' \
-    zsh-users/zsh-autosuggestions \
+  zsh-users/zsh-autosuggestions \
   OMZP::bgnotify \
   OMZP::safe-paste \
-  atload'ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line); ZSH_HIGHLIGHT_STYLES[comment]="fg=8"' \
-    zsh-users/zsh-syntax-highlighting
+  atload'ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line); ZSH_HIGHLIGHT_STYLES[comment]="fg=8"; ZSH_HIGHLIGHT_STYLES[command]="fg=12"; ZSH_HIGHLIGHT_STYLES[alias]="fg=10"; ZSH_HIGHLIGHT_STYLES[function]="fg=13,bold"' \
+  zsh-users/zsh-syntax-highlighting

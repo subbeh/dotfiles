@@ -37,12 +37,14 @@ core:
     background: blue
 
   socket:
-    foreground: fg
+    foreground: bg
     background: magenta
+    font-style: bold
 
   door:
-    foreground: fg
+    foreground: bg
     background: magenta
+    font-style: bold
 
   block_device:
     foreground: cyan

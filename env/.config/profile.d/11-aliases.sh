@@ -15,6 +15,7 @@ alias grep='grep --color=auto'
 alias httpserver='python3 -m http.server'
 alias lip='curl -sw "\n" -4 ifconfig.me'
 alias sdiff='diff --color=always --side-by-side'
+alias watch='watch -dc'
 
 # navigation
 alias d='dirs -v'
