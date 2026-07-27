@@ -15,7 +15,6 @@ local function match_profile(profile, live)
       return false
     end
   end
-  Utils.debug("PROFILE MATCH: " .. profile.name)
   return true
 end
 

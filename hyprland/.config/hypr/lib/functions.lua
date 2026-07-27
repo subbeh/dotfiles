@@ -25,7 +25,6 @@ end
 Func.move_all_workspaces = function(monitor)
   for _, ws in ipairs(hl.get_workspaces()) do
     if not ws.special then
-      Utils.debug(ws.id)
       hl.dispatch(hl.dsp.workspace.move({ workspace = ws, monitor = monitor }))
     end
   end
