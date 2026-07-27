@@ -2,9 +2,14 @@ variables:
   color:
     surface:
       fg:      d7d7d7
-      bg:      262626
-      bg1:     303030
-      bg2:     6c6c6c
+      fg_muted: 797979
+      bg:      151515
+      bg1:     212121
+      bg2:     262626
+      bg3:     303030
+      bg4:     3a3a3a
+      bg5:     444444
+      bg6:     6c6c6c
     cursor:
       fg:      303030
       bg:      87afd7
@@ -17,6 +22,7 @@ variables:
     red:
       base:    d75f5f
       bright:  ff5f5f
+      dim:     5f0000
     green:
       base:    b6d8b6
       bright:  afffaf
@@ -37,3 +43,4 @@ variables:
       bright:  d7d7d7
     orange:
       base:    fab387
+      dark:    d75f00

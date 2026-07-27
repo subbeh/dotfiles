@@ -1,0 +1,53 @@
+{
+  "name": "theme",
+  "base": "dark",
+  "overrides": {
+    "claude": "#{{ .Vars.color.blue.base }}",
+    "text": "#{{ .Vars.color.surface.fg }}",
+    "inverseText": "#{{ .Vars.color.surface.bg2 }}",
+    "inactive": "#{{ .Vars.color.black.bright }}",
+    "subtle": "#{{ .Vars.color.surface.bg3 }}",
+    "suggestion": "#{{ .Vars.color.cyan.base }}",
+    "permission": "#{{ .Vars.color.blue.bright }}",
+    "remember": "#{{ .Vars.color.magenta.base }}",
+
+    "success": "#{{ .Vars.color.green.bright }}",
+    "error": "#{{ .Vars.color.red.bright }}",
+    "warning": "#{{ .Vars.color.yellow.base }}",
+    "merged": "#{{ .Vars.color.magenta.base }}",
+
+    "promptBorder": "#{{ .Vars.color.blue.base }}",
+    "planMode": "#{{ .Vars.color.magenta.base }}",
+    "autoAccept": "#{{ .Vars.color.green.base }}",
+    "bashBorder": "#{{ .Vars.color.black.bright }}",
+    "ide": "#{{ .Vars.color.cyan.base }}",
+    "fastMode": "#{{ .Vars.color.yellow.base }}",
+
+    "diffAdded": "#{{ .Vars.color.green.bright }}",
+    "diffRemoved": "#{{ .Vars.color.red.dim }}",
+    "diffAddedDimmed": "#{{ .Vars.color.surface.bg2 }}",
+    "diffRemovedDimmed": "#{{ .Vars.color.surface.bg2 }}",
+    "diffAddedWord": "#{{ .Vars.color.green.base }}",
+    "diffRemovedWord": "#{{ .Vars.color.red.base }}",
+
+    "userMessageBackground": "#{{ .Vars.color.surface.bg3 }}",
+    "userMessageBackgroundHover": "#{{ .Vars.color.surface.bg4 }}",
+    "messageActionsBackground": "#{{ .Vars.color.surface.bg2 }}",
+    "bashMessageBackgroundColor": "#{{ .Vars.color.surface.bg3 }}",
+    "memoryBackgroundColor": "#{{ .Vars.color.surface.bg3 }}",
+    "selectionBg": "#{{ .Vars.color.selection.bg }}",
+
+    "rate_limit_fill": "#{{ .Vars.color.blue.base }}",
+    "rate_limit_empty": "#{{ .Vars.color.surface.bg3 }}",
+    "briefLabelYou": "#{{ .Vars.color.blue.base }}",
+    "briefLabelClaude": "#{{ .Vars.color.magenta.base }}",
+
+    "rainbow_red": "#{{ .Vars.color.red.base }}",
+    "rainbow_orange": "#{{ .Vars.color.orange.dark }}",
+    "rainbow_yellow": "#{{ .Vars.color.yellow.base }}",
+    "rainbow_green": "#{{ .Vars.color.green.base }}",
+    "rainbow_cyan": "#{{ .Vars.color.cyan.base }}",
+    "rainbow_blue": "#{{ .Vars.color.blue.base }}",
+    "rainbow_purple": "#{{ .Vars.color.magenta.base }}"
+  }
+}

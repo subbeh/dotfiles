@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASE16_COLOR_00_HEX=${BASE16_COLOR_00_HEX:-{{ .Vars.color.surface.bg }}}
+BASE16_COLOR_00_HEX=${BASE16_COLOR_00_HEX:-{{ .Vars.color.black.base }}}
 BASE16_COLOR_01_HEX=${BASE16_COLOR_01_HEX:-{{ .Vars.color.red.base }}}
 BASE16_COLOR_02_HEX=${BASE16_COLOR_02_HEX:-{{ .Vars.color.green.base }}}
 BASE16_COLOR_03_HEX=${BASE16_COLOR_03_HEX:-{{ .Vars.color.yellow.base }}}
@@ -8,7 +8,7 @@ BASE16_COLOR_04_HEX=${BASE16_COLOR_04_HEX:-{{ .Vars.color.blue.base }}}
 BASE16_COLOR_05_HEX=${BASE16_COLOR_05_HEX:-{{ .Vars.color.magenta.base }}}
 BASE16_COLOR_06_HEX=${BASE16_COLOR_06_HEX:-{{ .Vars.color.cyan.base }}}
 BASE16_COLOR_07_HEX=${BASE16_COLOR_07_HEX:-{{ .Vars.color.white.base }}}
-BASE16_COLOR_08_HEX=${BASE16_COLOR_08_HEX:-{{ .Vars.color.surface.bg2 }}}
+BASE16_COLOR_08_HEX=${BASE16_COLOR_08_HEX:-{{ .Vars.color.black.bright }}}
 BASE16_COLOR_09_HEX=${BASE16_COLOR_09_HEX:-{{ .Vars.color.red.bright }}}
 BASE16_COLOR_0A_HEX=${BASE16_COLOR_0A_HEX:-{{ .Vars.color.green.bright }}}
 BASE16_COLOR_0B_HEX=${BASE16_COLOR_0B_HEX:-{{ .Vars.color.yellow.bright }}}

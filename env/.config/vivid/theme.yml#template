@@ -1,9 +1,9 @@
 colors:
   fg: "{{ .Vars.color.surface.fg }}"
-  bg: "{{ .Vars.color.surface.bg }}"
+  bg: "{{ .Vars.color.surface.bg2 }}"
 
   white:          "{{ .Vars.color.white.base }}"
-  grey:           "{{ .Vars.color.surface.bg2 }}"
+  grey:           "{{ .Vars.color.surface.bg6 }}"
   red:            "{{ .Vars.color.red.base }}"
   red_bright:     "{{ .Vars.color.red.bright }}"
   green:          "{{ .Vars.color.green.base }}"

@@ -3,9 +3,9 @@
 -- and re-apply statemate so every tool stays in sync.
 return {
   surface_fg     = "#{{ .Vars.color.surface.fg }}",
-  surface_bg     = "#{{ .Vars.color.surface.bg }}",
-  surface_bg1    = "#{{ .Vars.color.surface.bg1 }}",
-  surface_bg2    = "#{{ .Vars.color.surface.bg2 }}",
+  surface_bg     = "#{{ .Vars.color.surface.bg2 }}",
+  surface_bg1    = "#{{ .Vars.color.surface.bg3 }}",
+  surface_bg2    = "#{{ .Vars.color.surface.bg6 }}",
 
   cursor_fg      = "#{{ .Vars.color.cursor.fg }}",
   cursor_bg      = "#{{ .Vars.color.cursor.bg }}",

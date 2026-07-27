@@ -7,10 +7,10 @@ readonly K8S_ICON=""
 readonly KS_ICON=""
 
 # Colors
-readonly COLOR_GREEN="#afffaf"
-readonly COLOR_YELLOW="#d7d7af"
-readonly COLOR_RED="#d75f5f"
-readonly COLOR_GRAY="#d7d7d7"
+readonly COLOR_GREEN="#{{ .Vars.color.green.bright }}"
+readonly COLOR_YELLOW="#{{ .Vars.color.yellow.base }}"
+readonly COLOR_RED="#{{ .Vars.color.red.base }}"
+readonly COLOR_GRAY="#{{ .Vars.color.surface.fg }}"
 
 # Timeout for kubectl commands
 readonly KUBECTL_TIMEOUT=5

@@ -1,15 +1,15 @@
 * {
     font:   "FiraCode Nerd Font 8";
 
-    fg:      #d7d7d7;
-    bg:      #303030;
-    grey:    #626262;
-    red:     #ff5f5f;
-    green:   #afd787;
-    yellow:  #d7d7af;
-    blue:    #87d7ff;
-    magenta: #d7afd7;
-    cyan:    #87d7af;
+    fg:      #{{ .Vars.color.surface.fg }};
+    bg:      #{{ .Vars.color.surface.bg3 }};
+    grey:    #{{ .Vars.color.surface.bg6 }};
+    red:     #{{ .Vars.color.red.bright }};
+    green:   #{{ .Vars.color.green.base }};
+    yellow:  #{{ .Vars.color.yellow.base }};
+    blue:    #{{ .Vars.color.blue.bright }};
+    magenta: #{{ .Vars.color.magenta.base }};
+    cyan:    #{{ .Vars.color.cyan.base }};
 
     background-color:   transparent;
     text-color:         @fg;
