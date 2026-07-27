@@ -10,7 +10,7 @@ XDG_SRC_HOME=${XDG_SRC_HOME:-$HOME/.local/src}
 XDG_BIN_HOME=${XDG_BIN_HOME:-$HOME/.local/bin}
 
 {{ if eq .OS "linux" -}}
-XDG_GDATA_DIR=/data
+XDG_GDATA_HOME=/data
 {{ end }}
 
 XDG_WORKSPACE_HOME=${XDG_GDATA_HOME:-$HOME}/workspace

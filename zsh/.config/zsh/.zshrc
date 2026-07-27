@@ -29,6 +29,8 @@ setopt pushd_ignore_dups    # Don't push duplicate directories onto the stack
 setopt pushd_silent         # Don't print directory stack after pushd/popd
 
 hash -d ws=${XDG_WORKSPACE_HOME}
+hash -d tmp=${XDG_TEMP_HOME}
+hash -d data=${XDDG_GDATA_HOME}
 
 source "$XDG_CONFIG_HOME/zsh/keybinds"
 
@@ -39,6 +41,9 @@ source "$XDG_CONFIG_HOME/zsh/keybinds"
 if [[ ! -o login ]]; then
   emulate sh -c 'test -r "$XDG_CONFIG_HOME/sh/profile.d.sh" && . "$_"'
 fi
+
+typeset -ga __compdef_replay=()
+function compdef { __compdef_replay+=("${(j: :)${(q)@}}"); }
 
 for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
   if [ -r "$script" ]; then
@@ -51,6 +56,9 @@ zstyle :completion:* cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 
 autoload -U compinit
 compinit -u -C -d "${XDG_CACHE_HOME}/zsh/zcompdump"
+
+for __def in "${__compdef_replay[@]}"; do eval "compdef ${__def}"; done
+unset __compdef_replay __def
 
 # Rebuild the command hash and completion dump so newly installed programs are
 # found and completable. Broadcast via SIGUSR1 by the dotfiles deploy hook.
