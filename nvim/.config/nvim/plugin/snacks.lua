@@ -1,8 +1,8 @@
-vim.pack.add({ "folke/snacks.nvim" })
+vim.pack.add({ "https://github.com/folke/snacks.nvim" })
 
 local icons = require("icons")
 local snacks = require("snacks")
-local p = require("palette")
+-- local colors = require("colors")
 
 require("snacks").setup({
   bigfile = { enabled = true },
@@ -68,33 +68,70 @@ require("snacks").setup({
     },
   },
   picker = {
-    enabled = true,
+    hidden = true,
+    ignored = false,
+    exclude = { ".git" },
+    sources = {
+      -- Must explicitly set hidden=true per source to override source defaults
+      files = {
+        hidden = true,
+      },
+      grep = {
+        hidden = true,
+      },
+      grep_buffers = {
+        hidden = true,
+      },
+      explorer = {
+        hidden = true,
+      },
+      buffers = {
+        current = false,
+        sort_lastused = true,
+        win = {
+          list = {
+            keys = {
+              ["<Tab>"] = function(picker)
+                picker:close()
+              end,
+              ["dd"] = "bufdelete",
+            },
+          },
+        },
+      },
+    },
+    formatters = {
+      file = {
+        filename_first = true,
+        truncate = 250,
+      },
+    },
   },
 })
 
 -- stylua: ignore start
 
 -- Keymaps
-vim.keymap.set("n",   "<leader><leader>", function() snacks.picker.smart() end,       { desc = "Find files" })
-vim.keymap.set("n",   "<tab>",            function() snacks.picker.buffers() end,     { desc = "Buffers" })
-vim.keymap.set("n",   "<leader>fg",       function() snacks.picker.grep() end,        { desc = "Grep" })
-vim.keymap.set("n",   "<leader>ff",       function() snacks.picker.files() end,       { desc = "Files" })
-vim.keymap.set("n",   "<leader>fo",       function() snacks.picker.recent() end,      { desc = "Recent files" })
-vim.keymap.set("n",   "<leader>fh",       function() snacks.picker.help() end,        { desc = "Help" })
-vim.keymap.set("n",   "<leader>sk",       function() snacks.picker.keymaps() end,     { desc = "Keymaps" })
-vim.keymap.set("n",   "<leader>sc",       function() snacks.picker.commands() end,    { desc = "Commands" })
-vim.keymap.set("n",   "<leader>sR",       function() snacks.picker.registers() end,   { desc = "Registers" })
-vim.keymap.set("n",   "<leader>cS",       function() snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
-vim.keymap.set("n",   "<leader>/",        function() snacks.picker.lines() end,       { desc = "Buffer lines" })
-vim.keymap.set({ "n", "v" }, "<leader>gB",function() snacks.gitbrowse() end,          { desc = "Git browse" })
+vim.keymap.set("n", "<leader><leader>", function() snacks.picker.smart({ filter = { cwd = true }}) end, { desc = "Find files" })
+vim.keymap.set("n", "<leader>fg",       function() snacks.picker.grep() end,                            { desc = "Grep" })
+vim.keymap.set("n", "<tab>",            function() snacks.picker.buffers({ focus = "list" }) end,       { desc = "Buffers" })
+-- vim.keymap.set("n",   "<leader>ff",       function() snacks.picker.files() end,       { desc = "Files" })
+-- vim.keymap.set("n",   "<leader>fo",       function() snacks.picker.recent() end,      { desc = "Recent files" })
+-- vim.keymap.set("n",   "<leader>fh",       function() snacks.picker.help() end,        { desc = "Help" })
+-- vim.keymap.set("n",   "<leader>sk",       function() snacks.picker.keymaps() end,     { desc = "Keymaps" })
+-- vim.keymap.set("n",   "<leader>sc",       function() snacks.picker.commands() end,    { desc = "Commands" })
+-- vim.keymap.set("n",   "<leader>sR",       function() snacks.picker.registers() end,   { desc = "Registers" })
+-- vim.keymap.set("n",   "<leader>cS",       function() snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
+-- vim.keymap.set("n",   "<leader>/",        function() snacks.picker.lines() end,       { desc = "Buffer lines" })
+-- vim.keymap.set({ "n", "v" }, "<leader>gB",function() snacks.gitbrowse() end,          { desc = "Git browse" })
 
--- Highlighting
-local set = vim.api.nvim_set_hl
-set(0, "SnacksDashboardDesc",   { fg = p.surface_fg }) -- item description text
-set(0, "SnacksDashboardKey",    { fg = p.blue }) -- keybind letter
-set(0, "SnacksDashboardIcon",   { fg = p.surface_fg }) -- item icons
-set(0, "SnacksDashboardTitle",  { fg = p.blue, bold = true }) -- section titles
-set(0, "SnacksDashboardHeader", { fg = p.blue_bright }) -- ASCII header
-set(0, "SnacksDashboardFooter", { fg = p.surface_bg2 }) -- footer / startup line (dim)
-set(0, "SnacksDashboardDir",    { fg = p.surface_bg2 }) -- dir portion of paths (dim)
-set(0, "SnacksDashboardFile",   { fg = p.magenta }) -- filenames
+-- Highlighting -- TODO
+-- local set = vim.api.nvim_set_hl
+-- set(0, "SnacksDashboardDesc",   { fg = colors.fg1 }) -- item description text
+-- set(0, "SnacksDashboardKey",    { fg = colors.blue.base }) -- keybind letter
+-- set(0, "SnacksDashboardIcon",   { fg = colors.fg1 }) -- item icons
+-- set(0, "SnacksDashboardTitle",  { fg = colors.blue.base, bold = true }) -- section titles
+-- set(0, "SnacksDashboardHeader", { fg = colors.blue.bright }) -- ASCII header
+-- set(0, "SnacksDashboardFooter", { fg = colors.bg1 }) -- footer / startup line (dim)
+-- set(0, "SnacksDashboardDir",    { fg = colors.bg1 }) -- dir portion of paths (dim)
+-- set(0, "SnacksDashboardFile",   { fg = colors.magenta.base }) -- filenames

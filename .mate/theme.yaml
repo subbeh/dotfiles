@@ -1,46 +1,46 @@
 variables:
   color:
     surface:
-      fg:      d7d7d7
-      fg_muted: 797979
-      bg:      151515
-      bg1:     212121
-      bg2:     262626
-      bg3:     303030
-      bg4:     3a3a3a
-      bg5:     444444
-      bg6:     6c6c6c
+      fg:     d7d7d7  # #d7d7d7
+      fg_muted: 797979  # #797979
+      bg:     151515  # #151515
+      bg1:    212121  # #212121
+      bg2:    262626  # #262626
+      bg3:    303030  # #303030
+      bg4:    3a3a3a  # #3a3a3a
+      bg5:    444444  # #444444
+      bg6:    6c6c6c  # #6c6c6c
     cursor:
-      fg:      303030
-      bg:      87afd7
+      fg:     303030  # #303030
+      bg:     87afd7  # #87afd7
     selection:
-      fg:      d7d7d7
-      bg:      005f87
+      fg:     d7d7d7  # #d7d7d7
+      bg:     005f87  # #005f87
     black:
-      base:    262626
-      bright:  6c6c6c
+      base:   262626  # #262626
+      bright: 6c6c6c  # #6c6c6c
     red:
-      base:    d75f5f
-      bright:  ff5f5f
-      dim:     5f0000
+      base:   d75f5f  # #d75f5f
+      bright: ff5f5f  # #ff5f5f
+      dim:    5f0000  # #5f0000
     green:
-      base:    b6d8b6
-      bright:  afffaf
+      base:   b6d8b6  # #b6d8b6
+      bright: afffaf  # #afffaf
     yellow:
-      base:    d7d7af
-      bright:  ffffc0
+      base:   d7d7af  # #d7d7af
+      bright: ffffc0  # #ffffc0
     blue:
-      base:    87afd7
-      bright:  87d7ff
+      base:   87afd7  # #87afd7
+      bright: 87d7ff  # #87d7ff
     magenta:
-      base:    d7bad7
-      bright:  d7a3d7
+      base:   d7bad7  # #d7bad7
+      bright: d7a3d7  # #d7a3d7
     cyan:
-      base:    97caca
-      bright:  adffff
+      base:   97caca  # #97caca
+      bright: adffff  # #adffff
     white:
-      base:    a7a7a7
-      bright:  d7d7d7
+      base:   a7a7a7  # #a7a7a7
+      bright: d7d7d7  # #d7d7d7
     orange:
-      base:    fab387
-      dark:    d75f00
+      base:   fab387  # #fab387
+      dark:   d75f00  # #d75f00

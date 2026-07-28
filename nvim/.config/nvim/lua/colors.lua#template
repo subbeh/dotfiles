@@ -1,0 +1,53 @@
+-- vi: ft=lua
+-- Color palette, generated from .mate/theme.yaml by statemate templating.
+-- Do NOT edit the deployed lua/palette.lua by hand; edit .mate/theme.yaml
+-- and re-apply statemate so every tool stays in sync.
+
+return {
+  bg0 = "#{{ .Vars.color.surface.bg3 }}",
+  bg1 = "#{{ .Vars.color.surface.bg2 }}",
+
+  fg1 = "#{{ .Vars.color.surface.fg }}",
+  fg2 = "#{{ .Vars.color.surface.bg5 }}",
+  fg3 = "#{{ .Vars.color.surface.bg6 }}",
+
+  cursor = "#{{ .Vars.color.cursor.bg }}",
+
+  sel0 = "#{{ .Vars.color.selection.fg }}",
+  sel1 = "#{{ .Vars.color.selection.bg }}",
+
+  comment = "#{{ .Vars.color.black.bright }}",
+
+  black = {
+    base = "#{{ .Vars.color.black.base }}",
+    bright = "#{{ .Vars.color.black.bright }}",
+  },
+  red = {
+    base = "#{{ .Vars.color.red.base }}",
+    bright = "#{{ .Vars.color.red.bright }}",
+  },
+  green = {
+    base = "#{{ .Vars.color.green.base }}",
+    bright = "#{{ .Vars.color.green.bright }}",
+  },
+  yellow = {
+    base = "#{{ .Vars.color.yellow.base }}",
+    bright = "#{{ .Vars.color.yellow.bright }}",
+  },
+  blue = {
+    base = "#{{ .Vars.color.blue.base }}",
+    bright = "#{{ .Vars.color.blue.bright }}",
+  },
+  magenta = {
+    base = "#{{ .Vars.color.magenta.base }}",
+    bright = "#{{ .Vars.color.magenta.bright }}",
+  },
+  cyan = {
+    base = "#{{ .Vars.color.cyan.base }}",
+    bright = "#{{ .Vars.color.cyan.bright }}",
+  },
+  white = {
+    base = "#{{ .Vars.color.white.base }}",
+    bright = "#{{ .Vars.color.white.bright }}",
+  },
+}
