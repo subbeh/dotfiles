@@ -1,7 +1,7 @@
 * {
     font:   "FiraCode Nerd Font 8";
 
-    fg:      #{{ .Vars.color.surface.fg }};
+    fg:      #{{ .Vars.color.surface.fg0 }};
     bg:      #{{ .Vars.color.surface.bg3 }};
     grey:    #{{ .Vars.color.surface.bg6 }};
     red:     #{{ .Vars.color.red.bright }};

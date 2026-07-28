@@ -3,7 +3,7 @@
   "base": "dark",
   "overrides": {
     "claude": "#{{ .Vars.color.blue.base }}",
-    "text": "#{{ .Vars.color.surface.fg }}",
+    "text": "#{{ .Vars.color.surface.fg0 }}",
     "inverseText": "#{{ .Vars.color.surface.bg2 }}",
     "inactive": "#{{ .Vars.color.black.bright }}",
     "subtle": "#{{ .Vars.color.surface.bg3 }}",

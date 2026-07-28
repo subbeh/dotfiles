@@ -1,9 +1,9 @@
-@define-color fg        #{{ .Vars.color.surface.fg }};
+@define-color fg        #{{ .Vars.color.surface.fg0 }};
 @define-color bg        #{{ .Vars.color.surface.bg3 }};
 @define-color bg2       #{{ .Vars.color.surface.bg5 }};
 @define-color bg3       #{{ .Vars.color.surface.bg6 }};
 @define-color bg4       #{{ .Vars.color.surface.bg1 }};
-@define-color black     #{{ .Vars.color.surface.bg }};
+@define-color black     #{{ .Vars.color.surface.bg0 }};
 @define-color cyan      #{{ .Vars.color.cyan.base }};
 @define-color blue      #{{ .Vars.color.blue.bright }};
 @define-color blue2     #{{ .Vars.color.blue.base }};

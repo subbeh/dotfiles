@@ -2,7 +2,7 @@ vim.pack.add({ "https://github.com/folke/snacks.nvim" })
 
 local icons = require("icons")
 local snacks = require("snacks")
--- local colors = require("colors")
+local colors = require("colors")
 
 require("snacks").setup({
   bigfile = { enabled = true },
@@ -126,7 +126,8 @@ vim.keymap.set("n", "<tab>",            function() snacks.picker.buffers({ focus
 -- vim.keymap.set({ "n", "v" }, "<leader>gB",function() snacks.gitbrowse() end,          { desc = "Git browse" })
 
 -- Highlighting -- TODO
--- local set = vim.api.nvim_set_hl
+local set = vim.api.nvim_set_hl
+set(0, "MiniIndentscopeSymbol",   { fg = colors.fg3 })
 -- set(0, "SnacksDashboardDesc",   { fg = colors.fg1 }) -- item description text
 -- set(0, "SnacksDashboardKey",    { fg = colors.blue.base }) -- keybind letter
 -- set(0, "SnacksDashboardIcon",   { fg = colors.fg1 }) -- item icons

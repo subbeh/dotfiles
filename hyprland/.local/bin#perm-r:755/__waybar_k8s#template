@@ -10,7 +10,7 @@ readonly KS_ICON=""
 readonly COLOR_GREEN="#{{ .Vars.color.green.bright }}"
 readonly COLOR_YELLOW="#{{ .Vars.color.yellow.base }}"
 readonly COLOR_RED="#{{ .Vars.color.red.base }}"
-readonly COLOR_GRAY="#{{ .Vars.color.surface.fg }}"
+readonly COLOR_GRAY="#{{ .Vars.color.surface.fg0 }}"
 
 # Timeout for kubectl commands
 readonly KUBECTL_TIMEOUT=5
@@ -96,10 +96,10 @@ main() {
 
     # Build list of NOT ready kustomizations for tooltip
     local failed_ks
-    failed_ks=$(kubectl get kustomizations -A --no-headers 2>/dev/null | \
-      awk '$4 != "True" {printf "%s/%s ✗\n", $1, $2}' | \
-      column -t | \
-      awk 1 ORS='\\n' | \
+    failed_ks=$(kubectl get kustomizations -A --no-headers 2>/dev/null |
+      awk '$4 != "True" {printf "%s/%s ✗\n", $1, $2}' |
+      column -t |
+      awk 1 ORS='\\n' |
       sed 's/\\n$//')
 
     tooltip="$tooltip, $ready_ks/$total_ks kustomizations ready"

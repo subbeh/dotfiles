@@ -2,7 +2,7 @@
 -- Do NOT edit the deployed lua/palette.lua by hand; edit .mate/theme.yaml
 -- and re-apply statemate so every tool stays in sync.
 return {
-  surface_fg     = "#{{ .Vars.color.surface.fg }}",
+  surface.fg     = "#{{ .Vars.color.surface.fg0 }}",
   surface_bg     = "#{{ .Vars.color.surface.bg2 }}",
   surface_bg1    = "#{{ .Vars.color.surface.bg3 }}",
   surface_bg2    = "#{{ .Vars.color.surface.bg6 }}",

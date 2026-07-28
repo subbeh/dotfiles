@@ -1,5 +1,5 @@
 colors:
-  fg: "{{ .Vars.color.surface.fg }}"
+  fg: "{{ .Vars.color.surface.fg0 }}"
   bg: "{{ .Vars.color.surface.bg2 }}"
 
   white:          "{{ .Vars.color.white.base }}"

@@ -7,9 +7,10 @@ return {
   bg0 = "#{{ .Vars.color.surface.bg3 }}",
   bg1 = "#{{ .Vars.color.surface.bg2 }}",
 
-  fg1 = "#{{ .Vars.color.surface.fg }}",
-  fg2 = "#{{ .Vars.color.surface.bg5 }}",
-  fg3 = "#{{ .Vars.color.surface.bg6 }}",
+  fg1 = "#{{ .Vars.color.surface.fg0 }}",
+  fg2 = "#{{ .Vars.color.surface.fg1 }}",
+  fg3 = "#{{ .Vars.color.surface.bg5 }}",
+  fg4 = "#{{ .Vars.color.surface.bg6 }}",
 
   cursor = "#{{ .Vars.color.cursor.bg }}",
 
