@@ -4,7 +4,7 @@
   "overrides": {
     "claude": "#{{ .Vars.color.blue.base }}",
     "text": "#{{ .Vars.color.fg.default }}",
-    "inverseText": "#{{ .Vars.color.bg.dark }}",
+    "inverseText": "#{{ .Vars.color.bg.default }}",
     "inactive": "#{{ .Vars.color.black.bright }}",
     "subtle": "#{{ .Vars.color.bg.default }}",
     "suggestion": "#{{ .Vars.color.cyan.base }}",
@@ -25,14 +25,14 @@
 
     "diffAdded": "#{{ .Vars.color.green.bright }}",
     "diffRemoved": "#{{ .Vars.color.red.dim }}",
-    "diffAddedDimmed": "#{{ .Vars.color.bg.dark }}",
-    "diffRemovedDimmed": "#{{ .Vars.color.bg.dark }}",
+    "diffAddedDimmed": "#{{ .Vars.color.bg.default }}",
+    "diffRemovedDimmed": "#{{ .Vars.color.bg.default }}",
     "diffAddedWord": "#{{ .Vars.color.green.base }}",
     "diffRemovedWord": "#{{ .Vars.color.red.base }}",
 
     "userMessageBackground": "#{{ .Vars.color.bg.default }}",
     "userMessageBackgroundHover": "#{{ .Vars.color.bg.light }}",
-    "messageActionsBackground": "#{{ .Vars.color.bg.dark }}",
+    "messageActionsBackground": "#{{ .Vars.color.bg.default }}",
     "bashMessageBackgroundColor": "#{{ .Vars.color.bg.default }}",
     "memoryBackgroundColor": "#{{ .Vars.color.bg.default }}",
     "selectionBg": "#{{ .Vars.color.selection.bg }}",

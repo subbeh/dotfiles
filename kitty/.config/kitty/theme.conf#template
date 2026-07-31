@@ -1,6 +1,6 @@
 # Base colors
 foreground              #{{ .Vars.color.fg.default }}
-background              #{{ .Vars.color.bg.dark }}
+background              #{{ .Vars.color.bg.default }}
 
 # Cursor colors
 cursor                  #{{ .Vars.color.cursor.bg }}
@@ -11,17 +11,17 @@ selection_foreground    #{{ .Vars.color.selection.fg }}
 selection_background    #{{ .Vars.color.selection.bg }}
 
 # Tab bar colors
-active_tab_foreground   #{{ .Vars.color.bg.dark }}
+active_tab_foreground   #{{ .Vars.color.bg.default }}
 active_tab_background   #{{ .Vars.color.fg.default }}
 inactive_tab_foreground #{{ .Vars.color.fg.default }}
-inactive_tab_background #{{ .Vars.color.bg.dark }}
+inactive_tab_background #{{ .Vars.color.bg.default }}
 
 # Marks
-mark1_foreground        #{{ .Vars.color.bg.dark }}
+mark1_foreground        #{{ .Vars.color.bg.default }}
 mark1_background        #{{ .Vars.color.bg.lightest }}
-mark2_foreground        #{{ .Vars.color.bg.dark }}
+mark2_foreground        #{{ .Vars.color.bg.default }}
 mark2_background        #{{ .Vars.color.yellow.base }}
-mark3_foreground        #{{ .Vars.color.bg.dark }}
+mark3_foreground        #{{ .Vars.color.bg.default }}
 mark3_background        #{{ .Vars.color.fg.default }}
 
 # Basic colors (ANSI)

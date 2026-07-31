@@ -163,6 +163,6 @@ vim.keymap.set("n", "<leader>ll",       function() snacks.picker.lsp_references(
 
 -- Highlighting
 local set = vim.api.nvim_set_hl
-set(0, "SnacksPicker",       { bg = colors.bg.dark })
+set(0, "SnacksPicker",       { bg = colors.bg.light })
 set(0, "SnacksPickerBorder", { fg = colors.fg.default })
 set(0, "SnacksPickerDirectory", { fg = colors.fg.darker })

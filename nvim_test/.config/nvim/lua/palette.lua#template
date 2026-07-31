@@ -3,7 +3,7 @@
 -- and re-apply statemate so every tool stays in sync.
 return {
   surface.fg     = "#{{ .Vars.color.fg.default }}",
-  surface_bg     = "#{{ .Vars.color.bg.dark }}",
+  surface_bg     = "#{{ .Vars.color.bg.default }}",
   surface_bg1    = "#{{ .Vars.color.bg.default }}",
   surface_bg2    = "#{{ .Vars.color.bg.lightest }}",
 

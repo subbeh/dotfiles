@@ -2,8 +2,8 @@
 @define-color bg        #{{ .Vars.color.bg.default }};
 @define-color bg2       #{{ .Vars.color.bg.lighter }};
 @define-color bg3       #{{ .Vars.color.bg.lightest }};
-@define-color bg4       #{{ .Vars.color.bg.darker }};
-@define-color black     #{{ .Vars.color.bg.darkest }};
+@define-color bg4       #{{ .Vars.color.bg.dark }};
+@define-color black     #{{ .Vars.color.bg.darker }};
 @define-color cyan      #{{ .Vars.color.cyan.base }};
 @define-color blue      #{{ .Vars.color.blue.bright }};
 @define-color blue2     #{{ .Vars.color.blue.base }};

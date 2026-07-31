@@ -1,13 +1,11 @@
 variables:
   color:
     bg:
-      lightest: 6c6c6c #6c6c6c
-      lighter:  4c4c4c #484F58
-      light:    3c3c3c #3c3c3c
-      default:  303030 #303030
-      dark:     262626 #262626
-      darker:   212121 #212121
-      darkest:  151515 #151515
+      lighter:  3c3c3c #3c3c3c
+      light:    303030 #303030
+      default:  262626 #262626
+      dark:     212121 #212121
+      darker:   151515 #151515
     fg:
       default:  d7d7d7 #d7d7d7
       dark:     bbbbbb #bbbbbb

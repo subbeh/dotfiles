@@ -5,7 +5,7 @@
 
 return {
   bg0 = "#{{ .Vars.color.bg.default }}",
-  bg1 = "#{{ .Vars.color.bg.dark }}",
+  bg1 = "#{{ .Vars.color.bg.default }}",
 
   fg1 = "#{{ .Vars.color.fg.default }}",
   fg2 = "#{{ .Vars.color.fg.dark }}",
@@ -25,7 +25,6 @@ return {
     default = "#{{ .Vars.color.bg.default }}",
     dark = "#{{ .Vars.color.bg.dark }}",
     darker = "#{{ .Vars.color.bg.darker }}",
-    darkest = "#{{ .Vars.color.bg.darkest }}",
   },
   fg = {
     default = "#{{ .Vars.color.fg.default }}",

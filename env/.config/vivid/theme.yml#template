@@ -1,6 +1,6 @@
 colors:
   fg: "{{ .Vars.color.fg.default }}"
-  bg: "{{ .Vars.color.bg.dark }}"
+  bg: "{{ .Vars.color.bg.default }}"
 
   white:          "{{ .Vars.color.white.base }}"
   grey:           "{{ .Vars.color.bg.lightest }}"
