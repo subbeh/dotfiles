@@ -27,6 +27,9 @@ require("mini.ai").setup({
   },
 })
 
+-- Sessions
+require("mini.sessions").setup()
+
 -- Surround
 require("mini.surround").setup()
 
@@ -67,6 +70,7 @@ require("mini.clue").setup({
     { mode = "n", keys = "<Leader>c", desc = "+Code" },
     { mode = "n", keys = "<Leader>f", desc = "+Find" },
     { mode = "n", keys = "<Leader>g", desc = "+Git" },
+    { mode = "n", keys = "<Leader>gh", desc = "+GitHub" },
     { mode = "n", keys = "<Leader>s", desc = "+System" },
     { mode = "n", keys = "<Leader>u", desc = "+UI" },
     { mode = "n", keys = "<Leader>x", desc = "+Copy" },
@@ -100,7 +104,6 @@ vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
 require("mini.icons").setup()
 
 -- stylua: ignore start
-
 -- Highlighting -- TODO
 local set = vim.api.nvim_set_hl
-set(0, "MiniIndentscopeSymbol", { fg = colors.fg3 })
+set(0, "MiniIndentscopeSymbol", { fg = colors.bg.lighter })

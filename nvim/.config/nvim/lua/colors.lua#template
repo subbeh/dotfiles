@@ -4,21 +4,35 @@
 -- and re-apply statemate so every tool stays in sync.
 
 return {
-  bg0 = "#{{ .Vars.color.surface.bg3 }}",
-  bg1 = "#{{ .Vars.color.surface.bg2 }}",
+  bg0 = "#{{ .Vars.color.bg.default }}",
+  bg1 = "#{{ .Vars.color.bg.dark }}",
 
-  fg1 = "#{{ .Vars.color.surface.fg0 }}",
-  fg2 = "#{{ .Vars.color.surface.fg1 }}",
-  fg3 = "#{{ .Vars.color.surface.bg5 }}",
-  fg4 = "#{{ .Vars.color.surface.bg6 }}",
+  fg1 = "#{{ .Vars.color.fg.default }}",
+  fg2 = "#{{ .Vars.color.fg.dark }}",
+  fg3 = "#{{ .Vars.color.bg.darker }}",
 
   cursor = "#{{ .Vars.color.cursor.bg }}",
 
-  sel0 = "#{{ .Vars.color.selection.fg }}",
-  sel1 = "#{{ .Vars.color.selection.bg }}",
+  sel0 = "#{{ .Vars.color.selection.bg }}",
+  sel1 = "#{{ .Vars.color.selection.fg }}",
 
   comment = "#{{ .Vars.color.black.bright }}",
 
+  bg = {
+    lightest = "#{{ .Vars.color.bg.lightest }}",
+    lighter = "#{{ .Vars.color.bg.lighter }}",
+    light = "#{{ .Vars.color.bg.light }}",
+    default = "#{{ .Vars.color.bg.default }}",
+    dark = "#{{ .Vars.color.bg.dark }}",
+    darker = "#{{ .Vars.color.bg.darker }}",
+    darkest = "#{{ .Vars.color.bg.darkest }}",
+  },
+  fg = {
+    default = "#{{ .Vars.color.fg.default }}",
+    dark = "#{{ .Vars.color.fg.dark }}",
+    darker = "#{{ .Vars.color.fg.darker }}",
+    darkest = "#{{ .Vars.color.fg.darkest }}",
+  },
   black = {
     base = "#{{ .Vars.color.black.base }}",
     bright = "#{{ .Vars.color.black.bright }}",

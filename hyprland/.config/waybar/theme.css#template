@@ -1,8 +1,8 @@
 @define-color fg #999999;
-@define-color bg #{{ .Vars.color.surface.bg3 }};
-@define-color bglight #{{ .Vars.color.surface.bg5 }};
-@define-color bgdark #{{ .Vars.color.surface.bg1 }};
-@define-color black #{{ .Vars.color.surface.bg0 }};
+@define-color bg #{{ .Vars.color.bg.default }};
+@define-color bglight #{{ .Vars.color.bg.lighter }};
+@define-color bgdark #{{ .Vars.color.bg.darker }};
+@define-color black #{{ .Vars.color.bg.darkest }};
 @define-color white #{{ .Vars.color.white.base }};
 @define-color cyan #{{ .Vars.color.cyan.base }};
 @define-color blue #{{ .Vars.color.blue.bright }};

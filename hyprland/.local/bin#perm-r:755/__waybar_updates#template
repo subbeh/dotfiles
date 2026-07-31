@@ -5,7 +5,7 @@ if command -v checkupdates_all &>/dev/null; then
 
   if [[ -z "$(echo "$updates" | tr -d '[:space:]')" ]]; then
     updates_fmt=""
-    color="#{{ .Vars.color.surface.fg1 }}"
+    color="#{{ .Vars.color.fg.darkest }}"
   else
     count="$(echo "$updates" | wc -l)"
     updates_fmt="$(echo "$updates" | awk 1 ORS='\\n' | sed 's/\\n$//')"
@@ -14,5 +14,5 @@ if command -v checkupdates_all &>/dev/null; then
 
   echo "{\"text\": \"<span color='$color'>󰮯</span> $count\", \"tooltip\": \"$updates_fmt\"}"
 else
-  echo "{\"text\": \"<span color='#{{ .Vars.color.surface.fg1 }}'>󰮯</span> n/a\"}"
+  echo "{\"text\": \"<span color='#{{ .Vars.color.fg.darkest }}'>󰮯</span> n/a\"}"
 fi

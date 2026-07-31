@@ -4,9 +4,9 @@ set -uo pipefail
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/waybar-network"
 mkdir -p "$CACHE_DIR"
 
-COLOR_FG="#{{ .Vars.color.surface.fg0 }}"
+COLOR_FG="#{{ .Vars.color.fg.default }}"
 COLOR_CONNECTED="#{{ .Vars.color.green.bright }}"
-COLOR_DISCONNECTED="#{{ .Vars.color.surface.fg1 }}"
+COLOR_DISCONNECTED="#{{ .Vars.color.fg.darkest }}"
 
 # Function to check if a service is enabled and cache its status
 is_enabled() {
