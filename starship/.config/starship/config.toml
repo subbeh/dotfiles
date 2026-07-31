@@ -16,6 +16,7 @@ $character\
 
 right_format = """
 $cmd_duration\
+${custom.statemate}\
 ${custom.hermes}\
 ${custom.k8shome}\
 $sudo\
@@ -121,3 +122,9 @@ command = ''' kubectl config view --minify --output 'jsonpath={..namespace}' '''
 symbol = '󱃾'
 when = ''' [ "$KUBECONFIG" = "$HOMELAB_DIR/.secret/kubeconfig" ] '''
 format = '[$symbol ](bold blue)[$output ](dimmed white)'
+
+[custom.statemate]
+command = 'mate status --short'
+symbol = '󱃾'
+when = ''' test -n "$(mate status --short)" '''
+format = '[$symbol ](bold yellow)[$output ](dimmed white)'

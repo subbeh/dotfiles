@@ -1,13 +1,15 @@
 vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
 
+local colors = require("colors")
+
 -- Completion
-require("mini.completion").setup({
-  delay = { completion = 100, info = 100, signature = 50 },
-  window = {
-    info = { border = "single" },
-    signature = { border = "single" },
-  },
-})
+-- require("mini.completion").setup({
+--   delay = { completion = 100, info = 100, signature = 50 },
+--   window = {
+--     info = { border = "single" },
+--     signature = { border = "single" },
+--   },
+-- })
 
 -- Motion
 require("mini.jump").setup()
@@ -96,3 +98,9 @@ vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
 
 -- Icons
 require("mini.icons").setup()
+
+-- stylua: ignore start
+
+-- Highlighting -- TODO
+local set = vim.api.nvim_set_hl
+set(0, "MiniIndentscopeSymbol", { fg = colors.fg3 })

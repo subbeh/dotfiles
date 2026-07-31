@@ -7,3 +7,6 @@ export PROFILE_OS=linux
 {{ else -}}
 export PROFILE_OS=unknown
 {{ end }}
+
+command -v run0 >/dev/null 2>&1 && SU_CMD=run0
+export SU_CMD="${SU_CMD:-sudo}"

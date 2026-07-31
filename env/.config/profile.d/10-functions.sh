@@ -32,5 +32,11 @@ mvr() {
   rsync --archive -hh --partial --info=stats1,progress2 --modify-window=1 --remove-source-files "$@"
 }
 
+# user login
+chkcmd machinectl && user() {
+  machinectl shell test@
+}
+
 # calculator
 _calc() { printf "%s\n" "$*" | bc -l; }
+alias calc='noglob _calc'

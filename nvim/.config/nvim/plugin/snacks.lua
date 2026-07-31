@@ -70,6 +70,11 @@ require("snacks").setup({
   picker = {
     hidden = true,
     ignored = false,
+    layout = {
+      layout = {
+        backdrop = false,
+      },
+    },
     exclude = { ".git" },
     sources = {
       -- Must explicitly set hidden=true per source to override source defaults
@@ -114,6 +119,7 @@ require("snacks").setup({
 -- Keymaps
 vim.keymap.set("n", "<leader><leader>", function() snacks.picker.smart({ filter = { cwd = true }}) end, { desc = "Find files" })
 vim.keymap.set("n", "<leader>fg",       function() snacks.picker.grep() end,                            { desc = "Grep" })
+vim.keymap.set("n", "<leader>fh",       function() snacks.picker.highlights() end,                            { desc = "Highlights" })
 vim.keymap.set("n", "<tab>",            function() snacks.picker.buffers({ focus = "list" }) end,       { desc = "Buffers" })
 -- vim.keymap.set("n",   "<leader>ff",       function() snacks.picker.files() end,       { desc = "Files" })
 -- vim.keymap.set("n",   "<leader>fo",       function() snacks.picker.recent() end,      { desc = "Recent files" })
@@ -127,7 +133,7 @@ vim.keymap.set("n", "<tab>",            function() snacks.picker.buffers({ focus
 
 -- Highlighting -- TODO
 local set = vim.api.nvim_set_hl
-set(0, "MiniIndentscopeSymbol",   { fg = colors.fg3 })
+set(0, "SnacksPicker",   { bg = colors.fg1 })
 -- set(0, "SnacksDashboardDesc",   { fg = colors.fg1 }) -- item description text
 -- set(0, "SnacksDashboardKey",    { fg = colors.blue.base }) -- keybind letter
 -- set(0, "SnacksDashboardIcon",   { fg = colors.fg1 }) -- item icons

@@ -5,6 +5,7 @@ packages:
     - hyprland
     - hyprlock
     - hyprpaper
+    - hyprpicker
     - hyprpolkitagent
     - hyprshutdown
     - ttf-proggyclean-nerd

@@ -1,14 +1,15 @@
 #!/bin/sh
 
 # system
+alias ctls='run0 systemctl status'
+alias ctl='run0 systemctl'
 alias dmesg='dmesg --color=auto'
 alias dmesgg='dmesg --human --follow-new --decode --kernel'
-alias ctl='sudo systemctl'
-alias ctls='sudo systemctl status'
-alias jrnl='sudo journalctl -b'
-alias jrnle='sudo journalctl -p3 -xb'
-alias jrnlu='sudo journalctl -b -u'
-alias svc='systemctl --type=service'
 alias err='journalctl -b -p err'
-alias userctl='systemctl --user'
 alias ip='ip -color=auto'
+alias jrnle='run0 journalctl -p3 -xb'
+alias jrnl='run0 journalctl -b'
+alias jrnlu='run0 journalctl -b -u'
+alias sudo='run0'
+alias svc='systemctl --type=service'
+alias userctl='systemctl --user'
