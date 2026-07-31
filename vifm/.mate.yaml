@@ -8,6 +8,6 @@ packages:
   pacman:
     - zathura
     - zathura-pdf-poppler
-    - dumptorrrent
+    - dumptorrent
     - fuse-zip
     - fuseiso

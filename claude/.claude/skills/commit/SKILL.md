@@ -17,9 +17,12 @@ git diff --cached --stat
 git diff --cached
 git log --oneline -10
 git branch --show-current
+find . -maxdepth 1 -name "CONTRIBUTING.md" -o -name "CONTRIBUTING" -o -path "./docs/CONTRIBUTING.md" -o -path "./docs/CONTRIBUTING" -o -path "./.github/CONTRIBUTING.md" -o -path "./.github/CONTRIBUTING"
 ```
 
 For large staged diffs (>500 lines total), use `git diff --cached --stat` first, then selectively read key files with `git diff --cached -- <file>`.
+
+**If a CONTRIBUTING.md (or CONTRIBUTING) file exists** (check `./`, `./docs/`, and `./.github/`), read it and follow any commit-related guidelines it contains (commit message format, branch naming, sign-off requirements, etc.). Those guidelines take precedence over the defaults in this skill where they conflict.
 
 ## Step 2: Determine Scope
 
