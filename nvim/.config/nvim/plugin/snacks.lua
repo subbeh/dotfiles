@@ -99,6 +99,15 @@ require("snacks").setup({
             width = 30,
           },
         },
+        win = {
+          list = {
+            keys = {
+              ["-"] = "explorer_up",
+              ["W"] = "explorer_close_all",
+              ["<C-]>"] = "tcd",
+            },
+          },
+        },
       },
       buffers = {
         current = false,
@@ -153,13 +162,13 @@ vim.keymap.set("n", "<leader>ghd",      function() snacks.picker.git_diff() end,
 vim.keymap.set("n", "<leader>ghi",      function() snacks.picker.gh_issue() end,                        { desc = "GitHub Issue" })
 vim.keymap.set("n", "<leader>ghp",      function() snacks.picker.gh_pr() end,                           { desc = "GitHub PR" })
 vim.keymap.set("n", "<leader>gl",       function() snacks.picker.git_log_file() end,                    { desc = "Git Log (file)" })
-vim.keymap.set("n", "<leader>gL",       function() snacks.picker.git_log_file() end,                    { desc = "Git Log (line)" })
+vim.keymap.set("n", "<leader>gL",       function() snacks.picker.git_log_line() end,                    { desc = "Git Log (line)" })
 vim.keymap.set("n", "<leader>gS",       function() snacks.picker.git_stash() end,                       { desc = "Git Stash" })
-vim.keymap.set("n", "<leader>ll",       function() snacks.picker.lsp_config() end,                      { desc = "List Servers" })
-vim.keymap.set("n", "<leader>ll",       function() snacks.picker.lsp_declarations() end,                { desc = "List Declarations" })
-vim.keymap.set("n", "<leader>ll",       function() snacks.picker.lsp_definitions() end,                 { desc = "List Definitions" })
-vim.keymap.set("n", "<leader>ll",       function() snacks.picker.lsp_implementations() end,             { desc = "List Implementations" })
-vim.keymap.set("n", "<leader>ll",       function() snacks.picker.lsp_references() end,                  { desc = "List References" })
+vim.keymap.set("n", "<leader>lc",       function() snacks.picker.lsp_config() end,                      { desc = "List Servers" })
+vim.keymap.set("n", "<leader>ld",       function() snacks.picker.lsp_declarations() end,                { desc = "List Declarations" })
+vim.keymap.set("n", "<leader>lf",       function() snacks.picker.lsp_definitions() end,                 { desc = "List Definitions" })
+vim.keymap.set("n", "<leader>li",       function() snacks.picker.lsp_implementations() end,             { desc = "List Implementations" })
+vim.keymap.set("n", "<leader>lr",       function() snacks.picker.lsp_references() end,                  { desc = "List References" })
 
 -- Highlighting
 local set = vim.api.nvim_set_hl

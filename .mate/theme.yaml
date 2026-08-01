@@ -21,7 +21,7 @@ variables:
       base:     262626 #262626
       bright:   6c6c6c #6c6c6c
     red:
-      base:     d75f5f #d75f5f
+      base:     fe7b72 #fe7b72
       bright:   ff5f5f #ff5f5f
       dim:      5f0000 #703131
     green:

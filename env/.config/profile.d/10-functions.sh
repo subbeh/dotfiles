@@ -33,8 +33,8 @@ mvr() {
 }
 
 # user login
-chkcmd machinectl && user() {
-  machinectl shell test@
+chkcmd machinectl && chusr() {
+  machinectl shell $1@
 }
 
 # calculator

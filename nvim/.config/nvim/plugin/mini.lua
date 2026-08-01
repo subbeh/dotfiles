@@ -2,7 +2,7 @@ vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
 
 local colors = require("colors")
 
--- Completion
+-- Completion --
 -- require("mini.completion").setup({
 --   delay = { completion = 100, info = 100, signature = 50 },
 --   window = {
@@ -11,13 +11,13 @@ local colors = require("colors")
 --   },
 -- })
 
--- Motion
+-- Motion --
 require("mini.jump").setup()
 require("mini.jump2d").setup({
   mappings = { start_jumping = "<CR>" },
 })
 
--- Textobjects
+-- Textobjects --
 require("mini.ai").setup({
   n_lines = 500,
   custom_textobjects = {
@@ -27,40 +27,66 @@ require("mini.ai").setup({
   },
 })
 
--- Sessions
+-- Sessions --
 require("mini.sessions").setup()
 
--- Surround
+-- Surround --
 require("mini.surround").setup()
 
--- Autopairs
+-- Autopairs --
 require("mini.pairs").setup()
 
--- Statusline
-require("mini.statusline").setup({ use_icons = true })
+-- Statusline --
+require("mini.statusline").setup({
+  use_icons = true,
+  function()
+    local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+    local git = MiniStatusline.section_git({ trunc_width = 40 })
+    local diff = MiniStatusline.section_diff({ trunc_width = 75 })
+    local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+    local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
+    local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+    local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+    local location = MiniStatusline.section_location({ trunc_width = 75 })
+    local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
 
--- Keymap hints
+    return MiniStatusline.combine_groups({
+      { hl = mode_hl, strings = { mode } },
+      { hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics, lsp } },
+      "%<", -- Mark general truncate point
+      { hl = "MiniStatuslineFilename", strings = { filename } },
+      "%=", -- End left alignment
+      { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+      { hl = mode_hl, strings = { search, location } },
+    })
+  end,
+})
+
+-- Keymap hints --
 require("mini.clue").setup({
   triggers = {
-    { mode = "n", keys = "<Leader>" },
-    { mode = "x", keys = "<Leader>" },
-    { mode = "n", keys = "g" },
-    { mode = "x", keys = "g" },
-    { mode = "n", keys = "'" },
-    { mode = "n", keys = "`" },
-    { mode = "x", keys = "'" },
-    { mode = "x", keys = "`" },
-    { mode = "n", keys = '"' },
-    { mode = "x", keys = '"' },
-    { mode = "i", keys = "<C-r>" },
-    { mode = "c", keys = "<C-r>" },
-    { mode = "n", keys = "<C-w>" },
-    { mode = "n", keys = "z" },
-    { mode = "x", keys = "z" },
+    -- Leader triggers
+    { mode = { "n", "x" }, keys = "<Leader>" },
+    -- `[` and `]` keys
     { mode = "n", keys = "[" },
     { mode = "n", keys = "]" },
+    -- Built-in completion
+    { mode = "i", keys = "<C-x>" },
+    -- `g` key
+    { mode = { "n", "x" }, keys = "g" },
+    -- Marks
+    { mode = { "n", "x" }, keys = "'" },
+    { mode = { "n", "x" }, keys = "`" },
+    -- Registers
+    { mode = { "n", "x" }, keys = '"' },
+    { mode = { "i", "c" }, keys = "<C-r>" },
+    -- Window commands
+    { mode = "n", keys = "<C-w>" },
+    -- `z` key
+    { mode = { "n", "x" }, keys = "z" },
   },
   clues = {
+    require("mini.clue").gen_clues.square_brackets(),
     require("mini.clue").gen_clues.builtin_completion(),
     require("mini.clue").gen_clues.g(),
     require("mini.clue").gen_clues.marks(),
@@ -71,12 +97,13 @@ require("mini.clue").setup({
     { mode = "n", keys = "<Leader>f", desc = "+Find" },
     { mode = "n", keys = "<Leader>g", desc = "+Git" },
     { mode = "n", keys = "<Leader>gh", desc = "+GitHub" },
+    { mode = "n", keys = "<Leader>l", desc = "+LSP" },
     { mode = "n", keys = "<Leader>s", desc = "+System" },
     { mode = "n", keys = "<Leader>u", desc = "+UI" },
     { mode = "n", keys = "<Leader>x", desc = "+Copy" },
   },
   window = {
-    delay = 300,
+    delay = 0,
     config = { width = "auto" },
   },
 })
@@ -100,10 +127,21 @@ vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
   end,
 })
 
--- Icons
+-- Icons --
 require("mini.icons").setup()
 
 -- stylua: ignore start
--- Highlighting -- TODO
+-- Highlighting --
 local set = vim.api.nvim_set_hl
-set(0, "MiniIndentscopeSymbol", { fg = colors.bg.lighter })
+set(0, "MiniIndentscopeSymbol",     { fg = colors.bg.lighter })
+
+set(0, "MiniClueNextKey",           { fg = colors.fg.default })
+set(0, "MiniClueDescSingle",        { fg = colors.red.base })
+set(0, "MiniClueDescGroup",         { fg = colors.yellow.base })
+
+set(0, "MiniStatuslineModeNormal",  { bg = colors.blue.bright,    fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeInsert",  { bg = colors.green.bright,   fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeVisual",  { bg = colors.yellow.bright,  fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeReplace", { bg = colors.red.bright,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeCommand", { bg = colors.magenta.bright, fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeOther",   { bg = colors.fg.default,     fg = colors.bg.default, bold = true, cterm = { bold = true } })

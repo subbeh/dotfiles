@@ -13,3 +13,8 @@ alias jrnlu='run0 journalctl -b -u'
 alias sudo='run0'
 alias svc='systemctl --type=service'
 alias userctl='systemctl --user'
+
+# clipboard
+alias cc="fc -ln -1 | wl-copy -n"
+alias xc="wl-copy -n"
+alias xp="pwd | wl-copy -n"
