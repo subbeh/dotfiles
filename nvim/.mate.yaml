@@ -3,6 +3,7 @@ packages:
     - neovim
     - luacheck
     - stylua
+    - tree-sitter-cli
     - yaml-language-server
 ignore:
   - .luacheckrc

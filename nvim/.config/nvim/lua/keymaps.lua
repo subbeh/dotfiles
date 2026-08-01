@@ -2,6 +2,7 @@ local map = vim.keymap.set
 
 map("n", "<Space>", "", { noremap = true, silent = true })
 map("n", "<leader>q", "<cmd>qa<cr>", { desc = "Quit all" })
+map("n", "<leader>sh", "<cmd>checkhealth<cr>", { desc = "Health" })
 
 -- Move lines
 map("x", "J", ":move '>+1<CR>gv-gv", { silent = true })

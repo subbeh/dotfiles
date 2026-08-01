@@ -1,4 +1,4 @@
-vim.pack.add({ "projekt0n/github-nvim-theme" })
+vim.pack.add({ "https://github.com/projekt0n/github-nvim-theme" })
 
 local colors = require("colors")
 
@@ -11,7 +11,7 @@ require("github-theme").setup({
 vim.cmd("colorscheme github_dark")
 
 local set = vim.api.nvim_set_hl
-set(0, "LineNr", { fg = colors.fg.dark })
+set(0, "LineNr", { fg = colors.fg.darker })
 set(0, "Visual", { bg = colors.bg.lighter })
 set(0, "DiagnosticInfo", { fg = colors.blue.base })
 set(0, "Error", { fg = colors.red.base })
