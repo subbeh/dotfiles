@@ -177,7 +177,7 @@ require("mini.clue").setup({
 
 -- indent scope
 require("mini.indentscope").setup({
-  symbol = "│",
+  symbol = icons.ui.LineMiddle,
   options = { try_as_border = true },
 })
 
@@ -188,7 +188,7 @@ set(0, "MiniDiffSignAdd",            { fg = colors.green.bright })
 set(0, "MiniDiffSignChange",         { fg = colors.yellow.bright })
 set(0, "MiniDiffSignDelete",         { fg = colors.red.bright })
 
-set(0, "MiniIndentscopeSymbol",      { fg = colors.bg.lighter })
+set(0, "MiniIndentscopeSymbol",      { fg = colors.bg.lightest })
 
 set(0, "MiniClueNextKey",            { fg = colors.fg.default })
 set(0, "MiniClueDescSingle",         { fg = colors.red.base })
@@ -206,3 +206,13 @@ set(0, "MiniStatuslineFileinfo",     { bg = colors.bg.default,     fg = colors.f
 set(0, "MiniStatuslineDevinfoIcon",  { bg = colors.bg.lighter,     fg = colors.red.base })
 set(0, "MiniStatuslineDirinfoIcon",  { bg = colors.bg.default,     fg = colors.blue.base })
 set(0, "MiniStatuslineFileinfoIcon", { bg = colors.bg.default,     fg = colors.blue.base })
+
+set(0, "MiniIconsRed", { fg = colors.red.bright })
+set(0, "MiniIconsBlue", { fg = colors.blue.bright })
+set(0, "MiniIconsCyan", { fg = colors.cyan.bright })
+set(0, "MiniIconsGrey", { fg = colors.white.base })
+set(0, "MiniIconsAzure", { fg = colors.blue.base })
+set(0, "MiniIconsGreen", { fg = colors.green.bright })
+set(0, "MiniIconsOrange", { fg = colors.yellow.base })
+set(0, "MiniIconsPurple", { fg = colors.magenta.bright })
+set(0, "MiniIconsYellow", { fg = colors.yellow.bright })
