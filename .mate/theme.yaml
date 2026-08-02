@@ -1,6 +1,7 @@
 variables:
   color:
     bg:
+      lightest: 555555 #555555
       lighter:  3c3c3c #3c3c3c
       light:    303030 #303030
       default:  262626 #262626
