@@ -4,7 +4,6 @@ local colors = require("colors")
 local icons = require("icons")
 
 require("mini.icons").setup()
-require("mini.diff").setup()
 require("mini.git").setup()
 require("mini.pairs").setup()
 require("mini.sessions").setup()
@@ -32,6 +31,18 @@ require("mini.completion").setup({
   window = {
     info = { border = "single" },
     signature = { border = "single" },
+  },
+})
+
+-- diff --
+require("mini.diff").setup({
+  view = {
+    style = "sign",
+    signs = {
+      add = icons.ui.BoldLineMiddle,
+      change = icons.ui.BoldLineDashedMiddle,
+      delete = icons.ui.BoldLineMiddle,
+    },
   },
 })
 
@@ -87,7 +98,7 @@ require("mini.statusline").setup({
       local status = require("mini.statusline")
       local _, mode_hl = status.section_mode({ trunc_width = 9999 })
       local mode = mode_names[vim.fn.mode()] or "MISC"
-      local git = status.section_git({ trunc_width = 40, icon = with_icon(icons.git.Branch, "", "MiniStatuslineDevinfo") })
+      local git = status.section_git({ trunc_width = 40, icon = with_icon(vim.trim(icons.git.Branch), "", "MiniStatuslineDevinfo") })
       local summary = vim.b.minigit_summary
       if git ~= "" and summary ~= nil and summary.root ~= nil then
         git = with_icon(icons.git.Repo, vim.fn.fnamemodify(summary.root, ":t"), "MiniStatuslineDevinfo") .. " " .. git
@@ -173,21 +184,25 @@ require("mini.indentscope").setup({
 -- stylua: ignore start
 -- highlighting --
 local set = vim.api.nvim_set_hl
-set(0, "MiniIndentscopeSymbol",     { fg = colors.bg.lighter })
+set(0, "MiniDiffSignAdd",            { fg = colors.green.bright })
+set(0, "MiniDiffSignChange",         { fg = colors.yellow.bright })
+set(0, "MiniDiffSignDelete",         { fg = colors.red.bright })
 
-set(0, "MiniClueNextKey",           { fg = colors.fg.default })
-set(0, "MiniClueDescSingle",        { fg = colors.red.base })
-set(0, "MiniClueDescGroup",         { fg = colors.yellow.base })
+set(0, "MiniIndentscopeSymbol",      { fg = colors.bg.lighter })
 
-set(0, "MiniStatuslineModeNormal",  { bg = colors.blue.bright,    fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeInsert",  { bg = colors.green.bright,   fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeVisual",  { bg = colors.yellow.bright,  fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeReplace", { bg = colors.red.bright,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeCommand", { bg = colors.magenta.bright, fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeOther",   { bg = colors.fg.default,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineDevinfo",     { bg = colors.bg.lighter,     fg = colors.fg.default })
-set(0, "MiniStatuslineDirinfo",     { bg = colors.bg.default,     fg = colors.fg.darkest })
-set(0, "MiniStatuslineFileinfo",    { bg = colors.bg.default,     fg = colors.fg.default })
-set(0, "MiniStatuslineDevinfoIcon", { bg = colors.bg.lighter,     fg = colors.yellow.bright })
-set(0, "MiniStatuslineDirinfoIcon", { bg = colors.bg.default,     fg = colors.blue.base })
-set(0, "MiniStatuslineFileinfoIcon",{ bg = colors.bg.default,     fg = colors.blue.base })
+set(0, "MiniClueNextKey",            { fg = colors.fg.default })
+set(0, "MiniClueDescSingle",         { fg = colors.red.base })
+set(0, "MiniClueDescGroup",          { fg = colors.yellow.base })
+
+set(0, "MiniStatuslineModeNormal",   { bg = colors.blue.bright,    fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeInsert",   { bg = colors.green.bright,   fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeVisual",   { bg = colors.yellow.bright,  fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeReplace",  { bg = colors.red.bright,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeCommand",  { bg = colors.magenta.bright, fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeOther",    { bg = colors.fg.default,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineDevinfo",      { bg = colors.bg.lighter,     fg = colors.fg.default })
+set(0, "MiniStatuslineDirinfo",      { bg = colors.bg.default,     fg = colors.fg.darkest })
+set(0, "MiniStatuslineFileinfo",     { bg = colors.bg.default,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoIcon",  { bg = colors.bg.lighter,     fg = colors.red.base })
+set(0, "MiniStatuslineDirinfoIcon",  { bg = colors.bg.default,     fg = colors.blue.base })
+set(0, "MiniStatuslineFileinfoIcon", { bg = colors.bg.default,     fg = colors.blue.base })
