@@ -9,6 +9,10 @@ require("fidget").setup({
     override_vim_notify = true,
   },
   progress = {
-    display = { done_icon = "✓" },
+    display = {
+      done_icon = require("icons").ui.Check,
+    },
   },
 })
+
+vim.keymap.set("n", "<leader>sn", "<cmd>Fidget history<cr>", { desc = "Notifications" })

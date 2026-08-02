@@ -109,6 +109,24 @@ require("snacks").setup({
           },
         },
       },
+      icons = {
+        -- Append mini.icons entries to the built-in nerd font / emoji sources so
+        -- glyphs are searchable by filetype, extension, OS and LSP kind names.
+        finder = function(opts, ctx)
+          local items = require("snacks.picker.source.icons").icons(opts, ctx)
+          local mini_icons = require("mini.icons")
+          local util = require("snacks.picker.util")
+          for _, category in ipairs({ "filetype", "extension", "file", "directory", "lsp", "os" }) do
+            for _, name in ipairs(mini_icons.list(category)) do
+              local item = { icon = mini_icons.get(category, name), name = name, category = category, source = "mini.icons" }
+              item.text = util.text(item, { "source", "category", "name" })
+              item.data = item.icon
+              items[#items + 1] = item
+            end
+          end
+          return items
+        end,
+      },
       buffers = {
         current = false,
         sort_lastused = true,

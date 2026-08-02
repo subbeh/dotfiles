@@ -1,23 +1,47 @@
 vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
 
 local colors = require("colors")
+local icons = require("icons")
 
--- Completion --
--- require("mini.completion").setup({
---   delay = { completion = 100, info = 100, signature = 50 },
---   window = {
---     info = { border = "single" },
---     signature = { border = "single" },
---   },
--- })
+require("mini.icons").setup()
+require("mini.diff").setup()
+require("mini.git").setup()
+require("mini.pairs").setup()
+require("mini.sessions").setup()
+require("mini.surround").setup()
 
--- Motion --
+-- autocmds --
+vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
+  callback = function()
+    vim.schedule(function()
+      local disabled = {
+        help = true,
+        snacks_picker_input = true,
+      }
+      if disabled[vim.bo.filetype] then
+        vim.b.miniindentscope_disable = true
+        vim.b.minicompletion_disable = true
+      end
+    end)
+  end,
+})
+
+-- completion --
+require("mini.completion").setup({
+  delay = { completion = 100, info = 100, signature = 50 },
+  window = {
+    info = { border = "single" },
+    signature = { border = "single" },
+  },
+})
+
+-- motion --
 require("mini.jump").setup()
 require("mini.jump2d").setup({
   mappings = { start_jumping = "<CR>" },
 })
 
--- Textobjects --
+-- textobjects --
 require("mini.ai").setup({
   n_lines = 500,
   custom_textobjects = {
@@ -27,19 +51,73 @@ require("mini.ai").setup({
   },
 })
 
--- Sessions --
-require("mini.sessions").setup()
+-- statusline --
+-- stylua: ignore start
+local mode_names = {
+  n = "NOR", v = "VIS", V = "V-L", ["\22"] = "V-B",
+  s = "SEL", S = "S-L", ["\19"] = "S-B",
+  i = "INS", R = "REP", c = "CMD", r = "PRM", ["!"] = "SHL", t = "TRM",
+}
+-- stylua: ignore end
 
--- Surround --
-require("mini.surround").setup()
+-- Color an icon separately from its section text: switch to "<hl>Icon", draw the
+-- icon, then switch back so the rest of the section keeps the section highlight.
+local function with_icon(icon, text, hl)
+  return "%#" .. hl .. "Icon#" .. icon .. "%#" .. hl .. "#" .. text
+end
 
--- Autopairs --
-require("mini.pairs").setup()
+-- mini.icons highlight groups define only `fg`, so using one directly would leave
+-- the icon on the default background. Derive a cached group per icon color that
+-- pairs it with the section background.
+local ft_icon_hls = {}
+local function ft_icon_hl(icon_hl)
+  local hl = ft_icon_hls[icon_hl]
+  if hl == nil then
+    hl = "MiniStatuslineFileinfo" .. icon_hl:gsub("MiniIcons", "")
+    local fg = vim.api.nvim_get_hl(0, { name = icon_hl, link = false }).fg
+    vim.api.nvim_set_hl(0, hl, { bg = colors.bg.default, fg = fg or colors.fg.default })
+    ft_icon_hls[icon_hl] = hl
+  end
+  return hl
+end
 
--- Statusline --
-require("mini.statusline").setup()
+require("mini.statusline").setup({
+  content = {
+    active = function()
+      local status = require("mini.statusline")
+      local _, mode_hl = status.section_mode({ trunc_width = 9999 })
+      local mode = mode_names[vim.fn.mode()] or "MISC"
+      local git = status.section_git({ trunc_width = 40, icon = with_icon(icons.git.Branch, "", "MiniStatuslineDevinfo") })
+      local summary = vim.b.minigit_summary
+      if git ~= "" and summary ~= nil and summary.root ~= nil then
+        git = with_icon(icons.git.Repo, vim.fn.fnamemodify(summary.root, ":t"), "MiniStatuslineDevinfo") .. " " .. git
+      end
+      local lsp = status.section_lsp({ trunc_width = 60 })
+      local cwd = with_icon(icons.ui.Folder, vim.fn.fnamemodify(vim.fn.getcwd(), ":~"), "MiniStatuslineDirinfo")
+      local filename = vim.fn.expand("%:.")
+      filename = filename ~= "" and with_icon(icons.ui.File, filename, "MiniStatuslineFileinfo") or ""
+      local filetype = vim.bo.filetype
+      if filetype ~= "" then
+        local ft_icon, ft_hl = require("mini.icons").get("filetype", filetype)
+        filetype = "%#" .. ft_icon_hl(ft_hl) .. "#" .. ft_icon .. "%#MiniStatuslineFileinfo# " .. filetype
+      end
 
--- Keymap hints --
+      return status.combine_groups({
+        { hl = mode_hl, strings = { mode } },
+        { hl = "MiniStatuslineDevinfo", strings = { git, lsp } },
+        "%#StatusLine#%=",
+        { hl = "MiniStatuslineFilename", strings = {} },
+        "%#StatusLine#%=",
+        { hl = "MiniStatuslineDirinfo", strings = { cwd } },
+        { hl = "MiniStatuslineFileinfo", strings = { filename } },
+        { hl = "MiniStatuslineFileinfo", strings = { filetype } },
+      })
+    end,
+  },
+  use_icons = true,
+})
+
+-- keymap hints --
 require("mini.clue").setup({
   triggers = {
     -- Leader triggers
@@ -86,30 +164,14 @@ require("mini.clue").setup({
   },
 })
 
--- Indent scope
+-- indent scope
 require("mini.indentscope").setup({
   symbol = "│",
   options = { try_as_border = true },
 })
-vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
-  callback = function()
-    vim.schedule(function()
-      local disabled = {
-        help = true,
-        snacks_dashboard = true,
-      }
-      if disabled[vim.bo.filetype] then
-        vim.b.miniindentscope_disable = true
-      end
-    end)
-  end,
-})
-
--- Icons --
-require("mini.icons").setup()
 
 -- stylua: ignore start
--- Highlighting --
+-- highlighting --
 local set = vim.api.nvim_set_hl
 set(0, "MiniIndentscopeSymbol",     { fg = colors.bg.lighter })
 
@@ -123,3 +185,9 @@ set(0, "MiniStatuslineModeVisual",  { bg = colors.yellow.bright,  fg = colors.bg
 set(0, "MiniStatuslineModeReplace", { bg = colors.red.bright,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
 set(0, "MiniStatuslineModeCommand", { bg = colors.magenta.bright, fg = colors.bg.default, bold = true, cterm = { bold = true } })
 set(0, "MiniStatuslineModeOther",   { bg = colors.fg.default,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineDevinfo",     { bg = colors.bg.lighter,     fg = colors.fg.default })
+set(0, "MiniStatuslineDirinfo",     { bg = colors.bg.default,     fg = colors.fg.darkest })
+set(0, "MiniStatuslineFileinfo",    { bg = colors.bg.default,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoIcon", { bg = colors.bg.lighter,     fg = colors.yellow.bright })
+set(0, "MiniStatuslineDirinfoIcon", { bg = colors.bg.default,     fg = colors.blue.base })
+set(0, "MiniStatuslineFileinfoIcon",{ bg = colors.bg.default,     fg = colors.blue.base })
