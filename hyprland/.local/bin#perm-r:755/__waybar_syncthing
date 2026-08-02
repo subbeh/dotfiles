@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+set -euo pipefail
 
 # Check if syncthing is running (parent process only)
 SYSTEMD_USER_PID=$(pgrep -x systemd --uid "$USER" | head -n1)

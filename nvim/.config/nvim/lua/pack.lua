@@ -1,12 +1,4 @@
 local hooks = {
-  ["telescope-fzf-native.nvim"] = {
-    kind = { "install", "update" },
-    build = { "make" },
-  },
-  ["nvim-texlabconfig"] = {
-    kind = { "install", "update" },
-    build = { "go", "build", "-o", vim.fs.joinpath(vim.env.HOME, ".local/bin/") },
-  },
   ["mason.nvim"] = {
     kind = { "update" },
     build = "MasonUpdate",
@@ -56,5 +48,5 @@ vim.api.nvim_create_autocmd("PackChanged", {
 -- stylua: ignore start
 -- Keymaps
 vim.keymap.set("n", "<leader>pu", function() vim.pack.update() end, { desc = "Update Packages" })
-vim.keymap.set("n", "<leader>ps", function() vim.pack.update(nil, { offline = true }) end, { desc = "Package status" })
-vim.keymap.set("n", "<leader>pr", function() vim.pack.update(nil, { target = 'lockfile' }) end, { desc = "Reset from Lockfile" })
+vim.keymap.set("n", "<leader>ps", function() vim.pack.update(nil,   { offline = true }) end,      { desc = "Package status" })
+vim.keymap.set("n", "<leader>pr", function() vim.pack.update(nil,   { target = 'lockfile' }) end, { desc = "Reset from Lockfile" })

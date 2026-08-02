@@ -5,7 +5,7 @@ set -euo pipefail
 zsh_path="$(command -v zsh || true)"
 if [[ -z "$zsh_path" ]]; then
   echo "zsh is not installed; skipping shell change" >&2
-  exit 0
+  exit 1
 fi
 
 current_shell="$(getent passwd "$USER" | cut -d: -f7)"

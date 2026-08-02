@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -x
 
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/waybar-network"
 
