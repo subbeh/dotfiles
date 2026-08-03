@@ -142,8 +142,12 @@ syncthing cli config devices add --device-id "$VPS_DEVICE_ID" --name "VPS"
 # Ensure parent directory exists
 mkdir -p "$(dirname "$WORKSPACE_DIR")"
 
-# Add folder configuration
+# Add folder configuration (remove existing if reconfiguring)
 echo "Configuring workspace folder..."
+if syncthing cli config folders "$FOLDER_ID" get &>/dev/null; then
+  echo "Removing existing folder configuration..."
+  syncthing cli config folders "$FOLDER_ID" delete
+fi
 syncthing cli config folders add --id "$FOLDER_ID" --path "$WORKSPACE_DIR" --label "workspace"
 syncthing cli config folders "$FOLDER_ID" devices add --device-id "$MAC_DEVICE_ID"
 syncthing cli config folders "$FOLDER_ID" devices add --device-id "$VPS_DEVICE_ID"
