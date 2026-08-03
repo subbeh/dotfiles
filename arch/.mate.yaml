@@ -18,5 +18,19 @@ packages:
     - os-prober
     - reflector
     - vim
+    - btrfs-progs
+    - dosfstools
+    - efibootmgr
+    - intel-ucode
+    - libfido2
+    - linux-firmware
+    - linux-headers
+    - networkmanager
+    - sbctl
+    - snap-pac
+    - snapper
+    - sudo
+    - systemd-ukify
+    - zram-generator
   aur:
     - paru
