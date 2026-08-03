@@ -2,23 +2,19 @@ targets:
   etc: /etc
 packages:
   pacman:
-    - age
     - base
     - base-devel
     - dhcpcd
-    - git
+    - fprintd
+    - fwupd
     - go
     - grub
     - jq
     - keyd
-    - less
     - linux
-    - lsof
-    - nmap
     - openssh
     - os-prober
     - reflector
-    - vim
     - btrfs-progs
     - dosfstools
     - efibootmgr
@@ -30,7 +26,8 @@ packages:
     - sbctl
     - snap-pac
     - snapper
-    - sudo
+    - sof-firmware
+    - tlp
     - systemd-ukify
     - zram-generator
   aur:

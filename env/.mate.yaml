@@ -1,8 +1,14 @@
 packages:
   common:
+    - age
+    - git
+    - less
+    - lsof
+    - nmap
     - onefetch
-    - pandoc-cli
+    - sudo
     - tree
+    - vim
     - vivid
   brew:
     - coreutils
