@@ -102,7 +102,7 @@ if [[ ! -f "$HOME/.local/state/syncthing/config.xml" ]]; then
 fi
 
 # Get this device's ID
-DEVICE_ID=$(syncthing --device-id)
+DEVICE_ID=$(syncthing device-id)
 echo ""
 echo "=========================================="
 echo "This device's Syncthing ID:"
