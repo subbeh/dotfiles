@@ -1,5 +1,7 @@
 #!/bin/sh
 
+export GITHUB_TOKEN="{{ bitwarden "github.com" "field" "gh-cli-token" }}"
+
 alias gs='git status'
 alias ga='git add'
 alias gaa='git add --all'

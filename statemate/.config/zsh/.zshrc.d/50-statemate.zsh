@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-set -euo pipefail
-
 if [ "$PROFILE_OS" = "darwin" ]; then
   _bin=${XDG_PROJECTS_HOME}/statemate/dist/mate-darwin-arm64
 elif [ "$PROFILE_OS" = "linux" ]; then

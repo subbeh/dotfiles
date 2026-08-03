@@ -3,3 +3,4 @@ packages:
     - tmux
   aur:
     - tmuxinator
+    - tpack-bin

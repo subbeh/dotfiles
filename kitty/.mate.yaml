@@ -1,3 +1,6 @@
 packages:
   common:
     - kitty
+  pacman:
+    - ttf-firacode-nerd
+    - ttf-hack-nerd

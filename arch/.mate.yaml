@@ -10,6 +10,7 @@ packages:
     - go
     - grub
     - jq
+    - keyd
     - less
     - linux
     - lsof
