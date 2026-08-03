@@ -13,10 +13,10 @@ packages:
     - less
     - linux
     - lsof
+    - nmap
     - openssh
     - os-prober
     - reflector
     - vim
   aur:
     - paru
-    - gnu-netcat

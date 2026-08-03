@@ -49,6 +49,7 @@ profiles:
       - tmux
       - zsh
     variables:
+      workspaceDir: "/data/workspace"
       sshKeys:
         - laptop-personal-ssh-key
         - github-ssh-key
