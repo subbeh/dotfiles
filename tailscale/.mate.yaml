@@ -1,3 +1,6 @@
+targets:
+  etc: /etc
+
 packages:
   common:
     - tailscale
