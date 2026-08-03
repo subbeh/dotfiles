@@ -4,6 +4,35 @@ local icons = require("icons")
 local snacks = require("snacks")
 local colors = require("colors")
 
+-- Explorer pane navigation.
+--
+-- The explorer's list and input are floating windows, so `wincmd h/j/k/l` does
+-- not see them and nvim-tmux-navigation moves to the wrong window (or is
+-- shadowed outright: <c-j>/<c-k> are list_down/list_up by default). The
+-- explorer is docked on the left, so hand C-h/C-j/C-k straight to tmux and let
+-- C-l focus the file window the picker was opened from.
+local function explorer_nav_keys()
+  local keys = {}
+  for lhs, dir in pairs({ ["<c-h>"] = "h", ["<c-j>"] = "j", ["<c-k>"] = "k" }) do
+    keys[lhs] = function()
+      local tmux = require("nvim-tmux-navigation.tmux_util")
+      -- Matches disable_when_zoomed in plugin/tmux.lua.
+      if vim.env.TMUX and tmux.should_tmux_control(true, true) then
+        tmux.tmux_change_pane(dir)
+      end
+    end
+  end
+  keys["<c-l>"] = function()
+    -- A key handler receives the snacks.win, not the picker, so look the
+    -- picker up to reach the window it was opened from.
+    local picker = snacks.picker.get({ source = "explorer" })[1]
+    if picker and picker.main and vim.api.nvim_win_is_valid(picker.main) then
+      vim.api.nvim_set_current_win(picker.main)
+    end
+  end
+  return keys
+end
+
 require("snacks").setup({
   -- misc
   bigfile = { enabled = true },
@@ -101,11 +130,14 @@ require("snacks").setup({
         },
         win = {
           list = {
-            keys = {
+            keys = vim.tbl_extend("error", explorer_nav_keys(), {
               ["-"] = "explorer_up",
               ["W"] = "explorer_close_all",
               ["<C-]>"] = "tcd",
-            },
+            }),
+          },
+          input = {
+            keys = explorer_nav_keys(),
           },
         },
       },

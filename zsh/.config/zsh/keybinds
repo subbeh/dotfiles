@@ -72,7 +72,8 @@ fi
 
 # History navigation
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
-zle -N up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
 
 # Edit current command in $EDITOR. From: https://unix.stackexchange.com/a/6622
 autoload edit-command-line

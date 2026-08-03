@@ -30,7 +30,7 @@ setopt pushd_silent         # Don't print directory stack after pushd/popd
 
 hash -d ws=${XDG_WORKSPACE_DIR}
 hash -d tmp=${XDG_TEMP_DIR}
-hash -d data=${XDDG_GDATA_DIR}
+hash -d data=${XDG_DATA_DIR}
 
 source "$XDG_CONFIG_HOME/zsh/keybinds"
 

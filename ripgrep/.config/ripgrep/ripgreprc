@@ -8,6 +8,7 @@
 --glob=!.git/*
 --glob=!.direnv/*
 --glob=!.venv/*
+--glob=!.snapshots/*
 --glob=!node_modules/*
 --glob=!.terraform/*
 --glob=!*.tfstate*

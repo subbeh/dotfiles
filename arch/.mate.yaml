@@ -23,6 +23,7 @@ packages:
     - linux-firmware
     - linux-headers
     - networkmanager
+    - npm
     - sbctl
     - snap-pac
     - snapper

@@ -1,0 +1,6 @@
+configuration {
+  /* Ctrl+C closes rofi. Control+c defaults to kb-secondary-copy, and rofi
+     refuses to start with a binding claimed twice, so clear that first. */
+  kb-secondary-copy: "";
+  kb-cancel:         "Escape,Control+g,Control+bracketleft,Control+c";
+}

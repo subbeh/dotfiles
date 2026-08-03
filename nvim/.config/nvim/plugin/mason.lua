@@ -59,7 +59,16 @@ local function install_missing(missing)
       local pkg = registry.get_package(name)
       if not pkg:is_installed() then
         vim.notify(("Installing %s"):format(name), vim.log.levels.INFO, { title = "mason.nvim" })
-        pkg:install()
+        -- Report failures: mason only surfaces them via :MasonInstall and the
+        -- :Mason window, so a programmatic install fails silently and is retried
+        -- on every startup.
+        pkg:install(nil, function(success, err)
+          if not success then
+            vim.schedule(function()
+              vim.notify(("Failed to install %s: %s"):format(name, err), vim.log.levels.ERROR, { title = "mason.nvim" })
+            end)
+          end
+        end)
       end
     end
   end
