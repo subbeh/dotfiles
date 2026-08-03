@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# Bootstrap Tailscale and connect to tailnet
+
+set -euo pipefail
+
+CONNECT_TIMEOUT=120  # 2 minutes
+
+# --- helpers ---
+confirm() {
+  local prompt="$1" default="${2:-Y}" reply hint
+  if [[ "$default" == [Yy] ]]; then hint="[Y/n]"; else hint="[y/N]"; fi
+  read -r -n 1 -p "$prompt $hint " reply </dev/tty || reply=""
+  echo >&2
+  reply="${reply:-$default}"
+  [[ "$reply" == [Yy]* ]]
+}
+
+wait_for_tailscale() {
+  local timeout="$1"
+  local elapsed=0
+  echo "Waiting for Tailscale to connect..."
+  while true; do
+    local status
+    status=$(tailscale status --json 2>/dev/null | jq -r '.BackendState' 2>/dev/null || echo "unknown")
+
+    if [[ "$status" == "Running" ]]; then
+      echo "Tailscale connected!"
+      return 0
+    fi
+
+    if [[ "$status" == "NeedsLogin" ]]; then
+      echo "  Waiting for authentication... (${elapsed}s)"
+    else
+      echo "  Status: $status (${elapsed}s)"
+    fi
+
+    sleep 2
+    ((elapsed += 2))
+
+    if ((elapsed >= timeout)); then
+      echo "Tailscale failed to connect within ${timeout}s" >&2
+      return 1
+    fi
+  done
+}
+
+# --- main ---
+if ! confirm "Set up Tailscale?" Y; then
+  exit 0
+fi
+
+# Enable and start the daemon
+echo "Starting Tailscale daemon..."
+sudo systemctl enable --now tailscaled.service
+
+# Set operator so user can run tailscale commands without sudo
+sudo tailscale set --operator="$USER"
+
+# Authenticate and connect
+echo ""
+echo "Authenticating with Tailscale..."
+echo "A browser URL will be displayed - open it to authenticate."
+echo ""
+tailscale up
+
+# Wait for connection
+if ! wait_for_tailscale "$CONNECT_TIMEOUT"; then
+  echo "Failed to connect to Tailscale" >&2
+  exit 1
+fi
+
+# Show status
+echo ""
+echo "Tailscale connected successfully!"
+echo ""
+tailscale status
+echo ""
+echo "Tailscale IP: $(tailscale ip -4)"

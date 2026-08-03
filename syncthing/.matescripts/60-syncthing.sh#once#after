@@ -1,0 +1,189 @@
+#!/usr/bin/env bash
+# Bootstrap Syncthing to join existing Mac/VPS sync cluster
+
+set -euo pipefail
+
+WORKSPACE_DIR="/data/workspace"
+DOTFILES_DIR="$WORKSPACE_DIR/dotfiles"
+DOTFILES_BACKUP="/tmp/dotfiles-backup-$$"
+SYNC_TIMEOUT=1800  # 30 minutes
+POLL_INTERVAL=5
+
+# --- prompt helpers ---
+confirm() {
+  local prompt="$1" default="${2:-Y}" reply hint
+  if [[ "$default" == [Yy] ]]; then hint="[Y/n]"; else hint="[y/N]"; fi
+  read -r -n 1 -p "$prompt $hint " reply </dev/tty || reply=""
+  echo >&2
+  reply="${reply:-$default}"
+  [[ "$reply" == [Yy]* ]]
+}
+
+prompt() {
+  local prompt="$1" reply
+  read -r -p "$prompt " reply </dev/tty || reply=""
+  echo "$reply"
+}
+
+# --- syncthing helpers ---
+wait_for_syncthing() {
+  local timeout="${1:-30}"
+  local elapsed=0
+  echo "Waiting for Syncthing to be ready..."
+  while ! syncthing cli config version get &>/dev/null; do
+    sleep 1
+    ((elapsed++))
+    if ((elapsed >= timeout)); then
+      echo "Syncthing failed to start within ${timeout}s" >&2
+      return 1
+    fi
+  done
+  echo "Syncthing is ready."
+}
+
+get_folder_status() {
+  local folder_id="$1"
+  syncthing cli show system 2>/dev/null | grep -A5 "\"$folder_id\"" | grep -oP '"state":\s*"\K[^"]+' || echo "unknown"
+}
+
+wait_for_sync() {
+  local folder_id="$1" timeout="$2"
+  local elapsed=0
+  echo "Waiting for folder '$folder_id' to sync (timeout: ${timeout}s)..."
+  while true; do
+    local status
+    status=$(syncthing cli operations status 2>/dev/null | grep -A10 "\"$folder_id\"" | grep -oP '"state":\s*"\K[^"]+' || echo "unknown")
+
+    if [[ "$status" == "idle" ]]; then
+      echo "Sync complete!"
+      return 0
+    fi
+
+    echo "  Status: $status (${elapsed}s elapsed)"
+    sleep "$POLL_INTERVAL"
+    ((elapsed += POLL_INTERVAL))
+
+    if ((elapsed >= timeout)); then
+      echo "Sync did not complete within timeout" >&2
+      return 1
+    fi
+  done
+}
+
+cleanup_on_failure() {
+  echo "Restoring dotfiles from backup..."
+  if [[ -d "$DOTFILES_BACKUP" ]]; then
+    rm -rf "$DOTFILES_DIR" 2>/dev/null || true
+    mv "$DOTFILES_BACKUP" "$DOTFILES_DIR"
+    echo "Dotfiles restored to $DOTFILES_DIR"
+  fi
+  systemctl --user stop syncthing.service 2>/dev/null || true
+}
+
+# --- main ---
+if ! confirm "Initialize Syncthing?" Y; then
+  exit 0
+fi
+
+# Check if already configured
+if [[ -f "$HOME/.local/state/syncthing/config.xml" ]]; then
+  if ! confirm "Syncthing config already exists. Reconfigure?" N; then
+    echo "Skipping Syncthing setup."
+    exit 0
+  fi
+fi
+
+# Generate initial config if needed
+if [[ ! -f "$HOME/.local/state/syncthing/config.xml" ]]; then
+  echo "Generating Syncthing configuration..."
+  syncthing generate
+fi
+
+# Get this device's ID
+DEVICE_ID=$(syncthing --device-id)
+echo ""
+echo "=========================================="
+echo "This device's Syncthing ID:"
+echo "$DEVICE_ID"
+echo "=========================================="
+echo ""
+echo "Add this device ID to your Mac and VPS Syncthing instances."
+echo ""
+
+# Collect peer device IDs
+echo "Enter the device IDs of your existing Syncthing peers:"
+echo ""
+MAC_DEVICE_ID=$(prompt "Mac device ID:")
+VPS_DEVICE_ID=$(prompt "VPS device ID:")
+
+# Get existing folder ID
+echo ""
+FOLDER_ID=$(prompt "Folder ID for /data/workspace (from Mac/VPS):")
+
+# Start Syncthing service
+echo ""
+echo "Starting Syncthing service..."
+systemctl --user enable syncthing.service
+systemctl --user start syncthing.service
+
+# Wait for daemon to be ready
+if ! wait_for_syncthing 60; then
+  echo "Failed to start Syncthing" >&2
+  exit 1
+fi
+
+# Add peer devices
+echo "Adding peer devices..."
+syncthing cli config devices add --device-id "$MAC_DEVICE_ID" --name "Mac"
+syncthing cli config devices add --device-id "$VPS_DEVICE_ID" --name "VPS"
+
+# Move dotfiles aside if they exist
+if [[ -d "$DOTFILES_DIR" ]]; then
+  echo "Moving dotfiles to temporary location..."
+  mv "$DOTFILES_DIR" "$DOTFILES_BACKUP"
+  trap cleanup_on_failure EXIT
+fi
+
+# Ensure workspace directory exists
+mkdir -p "$WORKSPACE_DIR"
+
+# Add folder configuration
+echo "Configuring workspace folder..."
+syncthing cli config folders add --id "$FOLDER_ID" --path "$WORKSPACE_DIR" --label "workspace"
+syncthing cli config folders "$FOLDER_ID" devices add --device-id "$MAC_DEVICE_ID"
+syncthing cli config folders "$FOLDER_ID" devices add --device-id "$VPS_DEVICE_ID"
+
+# Restart to apply changes
+echo "Restarting Syncthing to apply configuration..."
+syncthing cli operations restart
+sleep 5
+wait_for_syncthing 60
+
+# Wait for sync to complete
+echo ""
+echo "Waiting for initial sync..."
+echo "(Make sure you've added this device on your Mac and VPS)"
+echo ""
+
+if wait_for_sync "$FOLDER_ID" "$SYNC_TIMEOUT"; then
+  # Verify dotfiles arrived
+  if [[ -d "$DOTFILES_DIR" ]]; then
+    echo "Dotfiles synced successfully!"
+    # Remove backup
+    rm -rf "$DOTFILES_BACKUP"
+    trap - EXIT
+  else
+    echo "Warning: Sync completed but dotfiles directory not found" >&2
+    echo "Check if the folder is shared correctly on peers" >&2
+    cleanup_on_failure
+    exit 1
+  fi
+else
+  echo "Sync timed out or failed" >&2
+  cleanup_on_failure
+  exit 1
+fi
+
+echo ""
+echo "Syncthing setup complete!"
+echo "Web GUI available at: http://127.0.0.1:8384"
