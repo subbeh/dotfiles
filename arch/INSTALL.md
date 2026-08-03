@@ -49,13 +49,13 @@ sgdisk --print $DISK
 
 Expected layout:
 
-| # | Label | Size   | Type |
-|---|-------|--------|------|
-| 1 | EFI   | 512M   | ef00 (keep) |
-| 2 | (MSR) | —      | (keep) |
-| 3 | (Win) | —      | (keep) |
-| 4 | root  | 200G   | 8300 |
-| 5 | data  | (rest) | 8300 |
+| #   | Label | Size   | Type        |
+| --- | ----- | ------ | ----------- |
+| 1   | EFI   | 512M   | ef00 (keep) |
+| 2   | (MSR) | —      | (keep)      |
+| 3   | (Win) | —      | (keep)      |
+| 4   | root  | 200G   | 8300        |
+| 5   | data  | (rest) | 8300        |
 
 ```bash
 partprobe -s $DISK
@@ -131,18 +131,26 @@ opts="defaults,ssd,noatime,compress=zstd,space_cache=v2"
 
 mount -o $opts,subvol=@ /dev/mapper/root /mnt
 
-mkdir -p /mnt/{boot,home,var/log,var/cache,.snapshots,home/.snapshots,data,data/.snapshots}
+mkdir -p /mnt/{boot,home,var/log,var/cache,.snapshots,data}
 
 mount -o $opts,subvol=@home /dev/mapper/root /mnt/home
 mount -o $opts,subvol=@var_log /dev/mapper/root /mnt/var/log
 mount -o $opts,subvol=@var_cache /dev/mapper/root /mnt/var/cache
 mount -o $opts,subvol=@snapshots /dev/mapper/root /mnt/.snapshots
+
+mkdir /mnt/home/.snapshots
 mount -o $opts,subvol=@home_snapshots /dev/mapper/root /mnt/home/.snapshots
 
 mount -o $opts,subvol=@data /dev/mapper/data /mnt/data
+
+mkdir /mnt/data/.snapshots
 mount -o $opts,subvol=@data_snapshots /dev/mapper/data /mnt/data/.snapshots
 
 mount $PART_EFI /mnt/boot
+
+# Clean up old Arch boot files (keep Windows bootloader intact)
+rm -f /mnt/boot/vmlinuz-linux /mnt/boot/initramfs-linux* /mnt/boot/intel-ucode.img /mnt/boot/amd-ucode.img
+rm -rf /mnt/boot/EFI/Linux /mnt/boot/loader
 ```
 
 ## Base Install
@@ -150,10 +158,7 @@ mount $PART_EFI /mnt/boot
 ```bash
 timedatectl set-ntp true
 
-# Mirrors
-reflector --country AU --age 24 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-
-# Install base system
+# Install base system (archiso mirrorlist is read-only; run reflector after chroot)
 pacstrap -K /mnt base base-devel linux linux-headers linux-firmware intel-ucode \
   git sudo vim openssh networkmanager reflector \
   btrfs-progs snapper snap-pac \
@@ -176,6 +181,12 @@ cat /mnt/etc/fstab
 arch-chroot /mnt
 ```
 
+### Mirrors
+
+```bash
+reflector --country AU --age 24 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+```
+
 ### Locale & Time
 
 ```bash
@@ -183,7 +194,7 @@ sed -i 's/^#en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-ln -sf /usr/share/zoneinfo/Australia/Sydney /etc/localtime
+ln -sf /usr/share/zoneinfo/Australia/Melbourne /etc/localtime
 hwclock --systohc
 ```
 
@@ -212,7 +223,6 @@ EDITOR=vim visudo
 ### Pacman
 
 ```bash
-sed -i 's/^#Color/Color/' /etc/pacman.conf
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 ```
 
@@ -234,23 +244,11 @@ EOF
 
 ## Initramfs
 
-### crypttab.initramfs
-
-sd-encrypt reads this file for early-boot LUKS unlock. It picks up FIDO2 token metadata directly from the LUKS2 header (after enrollment), so no `rd.luks.options` needed in cmdline.
-
-```bash
-ROOT_UUID=$(blkid -s UUID -o value /dev/disk/by-partlabel/root)
-
-cat << EOF > /etc/crypttab.initramfs
-root    UUID=${ROOT_UUID}    -    discard
-EOF
-```
-
 ### mkinitcpio
 
 ```bash
 cat << 'EOF' > /etc/mkinitcpio.conf
-MODULES=(i915 btrfs)
+MODULES=(nvme nvme_core i915 btrfs)
 BINARIES=()
 FILES=()
 HOOKS=(base systemd autodetect modconf kms keyboard sd-vconsole sd-encrypt filesystems)
@@ -258,6 +256,8 @@ EOF
 
 mkinitcpio -P
 ```
+
+Note: `nvme` and `nvme_core` must be explicitly listed because `autodetect` runs in chroot and won't detect the NVMe drive.
 
 ## Bootloader (systemd-boot)
 
@@ -270,46 +270,32 @@ systemctl enable systemd-boot-update.service
 
 ```bash
 cat << 'EOF' > /boot/loader/loader.conf
-default arch.conf
+default arch-linux.efi
 timeout 5
 console-mode auto
 editor  no
 EOF
 ```
 
-### Arch entry
+systemd-boot auto-detects UKIs in `/boot/EFI/Linux/`, so no manual .conf entries needed.
+
+## Secure Boot + UKI
+
+### Create Secure Boot keys
 
 ```bash
-cat << 'EOF' > /boot/loader/entries/arch.conf
-title   Arch Linux
-linux   /vmlinuz-linux
-initrd  /intel-ucode.img
-initrd  /initramfs-linux.img
-options root=/dev/mapper/root rootflags=subvol=@ rw
-EOF
+sbctl create-keys
 ```
 
-### Fallback entry
-
-```bash
-cat << 'EOF' > /boot/loader/entries/arch-fallback.conf
-title   Arch Linux (fallback)
-linux   /vmlinuz-linux
-initrd  /intel-ucode.img
-initrd  /initramfs-linux-fallback.img
-options root=/dev/mapper/root rootflags=subvol=@ rw
-EOF
-```
-
-## UKI Preparation (for future Secure Boot)
-
-Set up Unified Kernel Image generation so enabling Secure Boot later is just key enrollment + signing.
+### Configure UKI generation
 
 ```bash
 mkdir -p /etc/kernel
 
-cat << 'EOF' > /etc/kernel/cmdline
-root=/dev/mapper/root rootflags=subvol=@ rw
+ROOT_UUID=$(blkid -s UUID -o value /dev/disk/by-partlabel/root)
+
+cat << EOF > /etc/kernel/cmdline
+rd.luks.name=${ROOT_UUID}=root rd.luks.options=discard root=/dev/mapper/root rootflags=subvol=@ rw
 EOF
 
 cat << 'EOF' > /etc/mkinitcpio.d/linux.preset
@@ -329,16 +315,24 @@ mkdir -p /boot/EFI/Linux
 mkinitcpio -P
 ```
 
-Add a loader entry for the UKI:
+### Sign EFI binaries
 
 ```bash
-cat << 'EOF' > /boot/loader/entries/arch-uki.conf
-title   Arch Linux (UKI)
-efi     /EFI/Linux/arch-linux.efi
-EOF
+# Sign UKIs
+sbctl sign -s /boot/EFI/Linux/arch-linux.efi
+sbctl sign -s /boot/EFI/Linux/arch-linux-fallback.efi
+
+# Sign systemd-boot
+sbctl sign -s /boot/EFI/systemd/systemd-bootx64.efi
+sbctl sign -s /boot/EFI/BOOT/BOOTX64.EFI
+
+# Clean up old GRUB files if present (no longer needed)
+rm -rf /boot/EFI/Grub /boot/EFI/arch /boot/grub
+
+# Verify (Microsoft files show ✗ — expected, they use MS keys)
+sbctl verify
 ```
 
-The traditional vmlinuz+initramfs entries remain as fallback. When ready for Secure Boot: `sbctl create-keys && sbctl enroll-keys && sbctl sign -s /boot/EFI/Linux/arch-linux.efi`.
 
 ## FIDO2 Enrollment (YubiKey)
 
@@ -348,11 +342,10 @@ Enroll both a passphrase (already done during luksFormat) and the YubiKey:
 systemd-cryptenroll /dev/disk/by-partlabel/root --fido2-device=auto
 ```
 
-Test that both unlock methods work:
+Touch YubiKey when prompted. Verify enrollment:
 
 ```bash
-systemd-cryptenroll /dev/disk/by-partlabel/root --fido2-device=auto --dry-run 2>/dev/null
-cryptsetup luksDump /dev/disk/by-partlabel/root | grep -A2 "Tokens:"
+cryptsetup luksDump /dev/disk/by-partlabel/root | grep -A5 "Tokens:"
 ```
 
 ## Data Partition Auto-unlock
@@ -382,16 +375,11 @@ EOF
 
 ## Snapper
 
+We already created the snapshot subvolumes earlier, so just write the config files directly (skip `snapper create-config` which tries to create subvolumes).
+
 ### Root config
 
 ```bash
-snapper -c root create-config /
-
-# Replace default subvolume with our pre-created one
-btrfs subvolume delete /.snapshots
-mkdir /.snapshots
-mount -a
-
 cat << 'EOF' > /etc/snapper/configs/root
 SUBVOLUME="/"
 FSTYPE="btrfs"
@@ -422,12 +410,6 @@ EOF
 ### Home config
 
 ```bash
-snapper -c home create-config /home
-
-btrfs subvolume delete /home/.snapshots
-mkdir /home/.snapshots
-mount -a
-
 cp /etc/snapper/configs/root /etc/snapper/configs/home
 sed -i 's|SUBVOLUME="/"|SUBVOLUME="/home"|' /etc/snapper/configs/home
 ```
@@ -435,12 +417,6 @@ sed -i 's|SUBVOLUME="/"|SUBVOLUME="/home"|' /etc/snapper/configs/home
 ### Data config
 
 ```bash
-snapper -c data create-config /data
-
-btrfs subvolume delete /data/.snapshots
-mkdir /data/.snapshots
-mount -a
-
 cp /etc/snapper/configs/root /etc/snapper/configs/data
 sed -i 's|SUBVOLUME="/"|SUBVOLUME="/data"|' /etc/snapper/configs/data
 ```
@@ -476,28 +452,11 @@ cat << 'EOF' > /etc/xdg/reflector/reflector.conf
 EOF
 ```
 
-## Dual Boot — Verify Windows
-
-systemd-boot auto-detects Windows Boot Manager on the shared EFI partition.
-
-```bash
-bootctl list
-```
-
-If Windows does not appear, create a manual entry:
-
-```bash
-cat << 'EOF' > /boot/loader/entries/windows.conf
-title   Windows
-efi     /EFI/Microsoft/Boot/bootmgfw.efi
-EOF
-```
-
 ## Finalize
 
 ```bash
 # Create initial snapshot
-snapper -c root create -d "Base install"
+snapper --no-dbus -c root create -d "Base install"
 
 # Exit chroot
 exit
@@ -511,7 +470,7 @@ reboot
 
 ## Post-reboot Verification
 
-1. systemd-boot menu appears with Arch + Windows entries
+1. systemd-boot menu appears with Arch UKI + Windows entries
 2. YubiKey prompt appears — touch to unlock root
 3. System boots to login prompt
 4. Log in as sysadm
@@ -521,6 +480,58 @@ reboot
 8. Connect wifi: `nmcli device wifi connect <SSID> password <pass> hidden yes`
 9. Verify TRIM: `sudo fstrim -v /` (should report bytes trimmed)
 10. Verify zram: `swapon --show` (should show /dev/zram0)
+
+If Windows doesn't appear in the boot menu, create a manual entry:
+
+```bash
+cat << 'EOF' > /boot/loader/entries/windows.conf
+title   Windows
+efi     /EFI/Microsoft/Boot/bootmgfw.efi
+EOF
+```
+
+## Enable Secure Boot
+
+After first boot, enroll your Secure Boot keys.
+
+### 1. Enter UEFI Setup Mode
+
+1. Reboot and enter UEFI Setup (F1 on ThinkPad at boot)
+2. Navigate to **Security → Secure Boot**
+3. **Reset to Setup Mode** or **Clear All Secure Boot Keys** (this enables Setup Mode)
+4. Save and exit — boot back into Arch
+
+### 2. Enroll keys
+
+```bash
+# Check status (should show Setup Mode)
+sbctl status
+
+# Enroll keys (--microsoft includes MS keys for Windows dual-boot)
+sudo sbctl enroll-keys --microsoft
+
+# Verify
+sbctl status
+```
+
+### 3. Enable Secure Boot
+
+1. Reboot into UEFI Setup (F1)
+2. Navigate to **Security → Secure Boot**
+3. **Enable Secure Boot**
+4. Save and exit
+
+### 4. Verify
+
+```bash
+# Should show "Secure Boot: enabled"
+sbctl status
+
+# Should show all files signed
+sbctl verify
+```
+
+If boot fails after enabling Secure Boot, disable it in UEFI and check `sbctl verify` for unsigned files.
 
 ---
 
