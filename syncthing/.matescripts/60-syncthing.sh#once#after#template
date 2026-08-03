@@ -150,8 +150,8 @@ syncthing cli config folders "$FOLDER_ID" devices add --device-id "$VPS_DEVICE_I
 
 # Restart to apply changes
 echo "Restarting Syncthing to apply configuration..."
-syncthing cli operations restart
-sleep 5
+systemctl --user restart syncthing.service
+sleep 2
 wait_for_syncthing 60
 
 # Wait for sync to complete
