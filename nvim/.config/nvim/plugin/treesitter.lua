@@ -1,12 +1,14 @@
 vim.pack.add({
-  "https://github.com/nvim-lua/plenary.nvim",
   { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
 })
 
-require("nvim-treesitter").setup({
-  auto_install = true,
-  ensure_installed = {
+-- The `main` branch has no module system: setup() only configures install_dir, and
+-- highlighting/indenting are driven by core vim.treesitter in the autocmd below.
+-- Install hangs when the tree-sitter CLI is missing.
+-- See: https://github.com/nvim-treesitter/nvim-treesitter/issues/8010
+if vim.fn.executable("tree-sitter") == 1 then
+  local install = require("nvim-treesitter").install({
     "bash",
     "comment",
     "css",
@@ -29,73 +31,49 @@ require("nvim-treesitter").setup({
     "regex",
     "sql",
     "terraform",
-    "tmux",
     "vim",
     "vimdoc",
     "yaml",
-  },
-  highlight = { enable = true },
-  indent = { enable = true },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-  },
-})
+  })
 
-require("nvim-treesitter-textobjects").setup({
-  select = {
-    lookahead = true,
-  },
-})
-
-local function move_map(lhs, fn, obj)
-  vim.keymap.set({ "n", "x", "o" }, lhs, function()
-    require("nvim-treesitter-textobjects.move")[fn](obj, "textobjects")
-  end)
-end
-
-local function select_map(lhs, obj, scope)
-  vim.keymap.set({ "x", "o" }, lhs, function()
-    require("nvim-treesitter-textobjects.select").select_textobject(obj, scope or "textobjects")
-  end)
+  if #vim.api.nvim_list_uis() == 0 then
+    install:wait(300000)
+  end
 end
 
 vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("user.treesitter", { clear = true }),
   callback = function(args)
     local lang = vim.treesitter.language.get_lang(args.match)
-    if vim.treesitter.language.add(lang or "") then
-      if #vim.api.nvim_get_runtime_file(("queries/%s/textobjects.scm"):format(lang), false) > 0 then
-        move_map("]m", "goto_next_start", "@function.outer")
-        move_map("]]", "goto_next_start", "@class.outer")
-        move_map("]M", "goto_next_end", "@function.outer")
-        move_map("][", "goto_next_end", "@class.outer")
-        move_map("[m", "goto_previous_start", "@function.outer")
-        move_map("[[", "goto_previous_start", "@class.outer")
-        move_map("[M", "goto_previous_end", "@function.outer")
-        move_map("[]", "goto_previous_end", "@class.outer")
-        select_map("ib", "@block.inner")
-        select_map("ab", "@block.outer")
-        select_map("ie", "@call.inner")
-        select_map("ae", "@call.outer")
-        select_map("ic", "@class.inner")
-        select_map("ac", "@class.outer")
-        select_map("ii", "@conditional.inner")
-        select_map("ai", "@conditional.outer")
-        select_map("if", "@function.inner")
-        select_map("af", "@function.outer")
-        select_map("il", "@loop.inner")
-        select_map("al", "@loop.outer")
-        select_map("ia", "@parameter.inner")
-        select_map("aa", "@parameter.outer")
-        select_map("iv", "@statement.inner")
-        select_map("av", "@statement.outer")
-        select_map("as", "@local.scope", "locals")
-      end
+    if not vim.treesitter.language.add(lang or "") then
+      return
+    end
+
+    vim.treesitter.start(args.buf, lang)
+
+    if #vim.api.nvim_get_runtime_file(("queries/%s/indents.scm"):format(lang), false) > 0 then
+      vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
     end
   end,
+  desc = "Start treesitter highlighting and indenting",
 })
+
+require("nvim-treesitter-textobjects").setup()
+
+-- Movement only. Selection textobjects (af/if, ac/ic, aa/ia) come from mini.ai,
+-- which already backs them with treesitter -- see plugin/mini.lua.
+local function move_map(lhs, fn, obj, desc)
+  vim.keymap.set({ "n", "x", "o" }, lhs, function()
+    require("nvim-treesitter-textobjects.move")[fn](obj, "textobjects")
+  end, { desc = desc })
+end
+
+-- stylua: ignore start
+move_map("]m", "goto_next_start",     "@function.outer", "Next function start")
+move_map("]]", "goto_next_start",     "@class.outer",    "Next class start")
+move_map("]M", "goto_next_end",       "@function.outer", "Next function end")
+move_map("][", "goto_next_end",       "@class.outer",    "Next class end")
+move_map("[m", "goto_previous_start", "@function.outer", "Prev function start")
+move_map("[[", "goto_previous_start", "@class.outer",    "Prev class start")
+move_map("[M", "goto_previous_end",   "@function.outer", "Prev function end")
+move_map("[]", "goto_previous_end",   "@class.outer",    "Prev class end")

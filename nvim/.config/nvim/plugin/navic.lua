@@ -1,6 +1,5 @@
 vim.pack.add({
   "https://github.com/SmiteshP/nvim-navic",
-  "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/LunarVim/breadcrumbs.nvim",
 })
 
@@ -9,13 +8,6 @@ local colors = require("colors")
 local icons = require("icons")
 
 require("breadcrumbs").setup()
-
-vim.lsp.config.clangd = {
-  cmd = { "clangd" },
-  on_attach = function(client, bufnr)
-    navic.attach(client, bufnr)
-  end,
-}
 
 navic.setup({
   icons = icons.kind,

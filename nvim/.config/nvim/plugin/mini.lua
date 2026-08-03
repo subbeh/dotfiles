@@ -103,7 +103,16 @@ require("mini.statusline").setup({
       if git ~= "" and summary ~= nil and summary.root ~= nil then
         git = with_icon(icons.git.Repo, vim.fn.fnamemodify(summary.root, ":t"), "MiniStatuslineDevinfo") .. " " .. git
       end
-      local lsp = status.section_lsp({ trunc_width = 60 })
+      -- section_lsp() only renders one "+" per client; name them instead.
+      local lsp = ""
+      if not status.is_truncated(60) then
+        local names = vim.tbl_map(function(client)
+          return client.name
+        end, vim.lsp.get_clients({ bufnr = 0 }))
+        if #names > 0 then
+          lsp = with_icon(icons.ui.Flash, table.concat(names, ","), "MiniStatuslineDevinfo")
+        end
+      end
       local cwd = with_icon(icons.ui.Folder, vim.fn.fnamemodify(vim.fn.getcwd(), ":~"), "MiniStatuslineDirinfo")
       local filename = vim.fn.expand("%:.")
       filename = filename ~= "" and with_icon(icons.ui.File, filename, "MiniStatuslineFileinfo") or ""

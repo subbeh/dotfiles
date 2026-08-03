@@ -333,7 +333,6 @@ rm -rf /boot/EFI/Grub /boot/EFI/arch /boot/grub
 sbctl verify
 ```
 
-
 ## FIDO2 Enrollment (YubiKey)
 
 Enroll both a passphrase (already done during luksFormat) and the YubiKey:
@@ -468,26 +467,31 @@ umount -R /mnt
 reboot
 ```
 
-## Post-reboot Verification
+## Post-reboot
+
+### Verification
 
 1. systemd-boot menu appears with Arch UKI + Windows entries
 2. YubiKey prompt appears — touch to unlock root
-3. System boots to login prompt
-4. Log in as sysadm
-5. Verify data partition mounted: `lsblk -f | grep data`
-6. Verify snapper: `snapper -c root list`
-7. Verify networking: `nmcli device wifi list`
-8. Connect wifi: `nmcli device wifi connect <SSID> password <pass> hidden yes`
-9. Verify TRIM: `sudo fstrim -v /` (should report bytes trimmed)
-10. Verify zram: `swapon --show` (should show /dev/zram0)
+3. Data partition mounted: `lsblk -f | grep data`
+4. Snapper working: `snapper -c root list`
+5. TRIM working: `sudo fstrim -v /`
+6. zram active: `swapon --show`
 
 If Windows doesn't appear in the boot menu, create a manual entry:
 
 ```bash
-cat << 'EOF' > /boot/loader/entries/windows.conf
+sudo tee /boot/loader/entries/windows.conf << 'EOF'
 title   Windows
 efi     /EFI/Microsoft/Boot/bootmgfw.efi
 EOF
+```
+
+### Connect to WiFi
+
+```bash
+nmcli device wifi list
+nmcli device wifi connect <SSID> password <password> hidden yes
 ```
 
 ## Enable Secure Boot
