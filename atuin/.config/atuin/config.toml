@@ -196,6 +196,7 @@ common_subcommands = [
   "tmux",
   "brew",
   "yay",
+  "paru",
 ]
 
 ## Set commands that should be totally stripped and ignored from stats

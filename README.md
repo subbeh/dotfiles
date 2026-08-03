@@ -4,7 +4,7 @@ Managed with [statemate](https://github.com/subbeh/statemate).
 
 ## Setup on a new machine
 
-Run the bootstrap script. It installs prerequisites (statemate, yay/brew,
+Run the bootstrap script. It installs prerequisites (statemate, paru/brew,
 Bitwarden CLI), fetches the age key from Bitwarden, clones this repository, and
 applies the configuration:
 

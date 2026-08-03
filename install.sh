@@ -72,7 +72,7 @@ prereqs_installed() {
   for cmd in git age bw go jq; do
     command -v "$cmd" &>/dev/null || return 1
   done
-  [[ "$OS" != linux ]] || command -v yay &>/dev/null
+  [[ "$OS" != linux ]] || command -v paru &>/dev/null
 }
 
 secrets_present() {
@@ -91,11 +91,11 @@ install_darwin() {
 
 install_linux() {
   sudo pacman -S --needed --noconfirm git base-devel age bitwarden-cli go jq openssh
-  if ! command -v yay &>/dev/null; then
-    echo "==> Installing yay..."
-    git clone https://aur.archlinux.org/yay.git /tmp/yay
-    (cd /tmp/yay && makepkg -si --noconfirm)
-    rm -rf /tmp/yay
+  if ! command -v paru &>/dev/null; then
+    echo "==> Installing paru..."
+    git clone https://aur.archlinux.org/paru-bin.git /tmp/paru
+    (cd /tmp/paru && makepkg -si --noconfirm)
+    rm -rf /tmp/paru
   fi
 }
 

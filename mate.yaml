@@ -4,6 +4,8 @@
 # Default target for deployed files (default: $HOME)
 target_base: "~"
 
+aur_helper: paru
+
 include:
   - .mate/theme.yaml
 variables:

@@ -18,5 +18,5 @@ packages:
     - reflector
     - vim
   aur:
-    - yay
+    - paru
     - gnu-netcat

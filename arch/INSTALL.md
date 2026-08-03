@@ -494,6 +494,14 @@ nmcli device wifi list
 nmcli device wifi connect <SSID> password <password> hidden yes
 ```
 
+### Dotfiles
+
+Install dotfiles and apply configuration. See [README.md](../README.md) for details.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Subbeh/dotfiles/main/install.sh | bash
+```
+
 ## Enable Secure Boot
 
 After first boot, enroll your Secure Boot keys.
