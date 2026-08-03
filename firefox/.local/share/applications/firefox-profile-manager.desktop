@@ -6,4 +6,3 @@ Exec=/usr/lib/firefox/firefox -ProfileManager
 Icon=firefox
 Terminal=false
 Categories=GNOME;GTK;Network;WebBrowser;
-

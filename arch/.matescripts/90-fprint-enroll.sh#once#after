@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+read -r -n 1 -p "Create fingerprint signature? [Y/n] " reply </dev/tty || reply=""
+echo
+if [[ "${reply:-Y}" == [Yy]* ]]; then
+  fprintd-delete "$USER"
+  for finger in {left,right}-{thumb,{index,middle,ring,little}-finger}; do
+    fprintd-enroll -f "$finger" "$USER"
+  done
+fi

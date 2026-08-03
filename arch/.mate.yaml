@@ -35,3 +35,4 @@ packages:
     - zram-generator
   aur:
     - paru
+    - pam-fprint-grosshack
