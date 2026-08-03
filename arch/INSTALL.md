@@ -229,7 +229,7 @@ sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 ### AUR helper
 
 ```bash
-su sysadm -c "cd /tmp && git clone https://aur.archlinux.org/paru-bin.git && cd paru-bin && makepkg -sri --noconfirm"
+su sysadm -c "cd /tmp && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si"
 ```
 
 ## zram (swap)

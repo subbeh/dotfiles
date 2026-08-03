@@ -93,8 +93,8 @@ install_linux() {
   sudo pacman -S --needed --noconfirm git base-devel age bitwarden-cli go jq openssh
   if ! command -v paru &>/dev/null; then
     echo "==> Installing paru..."
-    git clone https://aur.archlinux.org/paru-bin.git /tmp/paru
-    (cd /tmp/paru && makepkg -si --noconfirm)
+    git clone https://aur.archlinux.org/paru.git /tmp/paru
+    (cd /tmp/paru && makepkg -si)
     rm -rf /tmp/paru
   fi
 }
