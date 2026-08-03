@@ -47,6 +47,7 @@ profiles:
       - tailscale
       - starship
       - statemate
+      - syncthing
       - tmux
       - zsh
     variables:

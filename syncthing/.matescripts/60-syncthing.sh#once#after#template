@@ -3,10 +3,8 @@
 
 set -euo pipefail
 
-WORKSPACE_DIR="/data/workspace"
-DOTFILES_DIR="$WORKSPACE_DIR/dotfiles"
-DOTFILES_BACKUP="/tmp/dotfiles-backup-$$"
-SYNC_TIMEOUT=1800  # 30 minutes
+WORKSPACE_DIR="{{ .Vars.workspaceDir }}"
+SYNC_TIMEOUT=1800 # 30 minutes
 POLL_INTERVAL=5
 
 # --- prompt helpers ---
@@ -25,6 +23,12 @@ prompt() {
   echo "$reply"
 }
 
+prompt_default() {
+  local prompt="$1" default="$2" reply
+  read -r -e -i "$default" -p "$prompt " reply </dev/tty || reply="$default"
+  echo "${reply:-$default}"
+}
+
 # --- syncthing helpers ---
 wait_for_syncthing() {
   local timeout="${1:-30}"
@@ -39,11 +43,6 @@ wait_for_syncthing() {
     fi
   done
   echo "Syncthing is ready."
-}
-
-get_folder_status() {
-  local folder_id="$1"
-  syncthing cli show system 2>/dev/null | grep -A5 "\"$folder_id\"" | grep -oP '"state":\s*"\K[^"]+' || echo "unknown"
 }
 
 wait_for_sync() {
@@ -70,16 +69,6 @@ wait_for_sync() {
   done
 }
 
-cleanup_on_failure() {
-  echo "Restoring dotfiles from backup..."
-  if [[ -d "$DOTFILES_BACKUP" ]]; then
-    rm -rf "$DOTFILES_DIR" 2>/dev/null || true
-    mv "$DOTFILES_BACKUP" "$DOTFILES_DIR"
-    echo "Dotfiles restored to $DOTFILES_DIR"
-  fi
-  systemctl --user stop syncthing.service 2>/dev/null || true
-}
-
 # --- main ---
 if ! confirm "Initialize Syncthing?" Y; then
   exit 0
@@ -90,6 +79,19 @@ if [[ -f "$HOME/.local/state/syncthing/config.xml" ]]; then
   if ! confirm "Syncthing config already exists. Reconfigure?" N; then
     echo "Skipping Syncthing setup."
     exit 0
+  fi
+fi
+
+# Handle existing workspace directory
+if [[ -d "$WORKSPACE_DIR" ]]; then
+  echo "Workspace directory already exists: $WORKSPACE_DIR"
+  if confirm "Rename existing directory to allow Syncthing to sync?" Y; then
+    NEW_NAME=$(prompt_default "New name for existing directory:" "${WORKSPACE_DIR}.local")
+    mv "$WORKSPACE_DIR" "$NEW_NAME"
+    echo "Renamed to: $NEW_NAME"
+  else
+    echo "Cannot proceed with existing workspace directory." >&2
+    exit 1
   fi
 fi
 
@@ -118,7 +120,7 @@ VPS_DEVICE_ID=$(prompt "VPS device ID:")
 
 # Get existing folder ID
 echo ""
-FOLDER_ID=$(prompt "Folder ID for /data/workspace (from Mac/VPS):")
+FOLDER_ID=$(prompt "Folder ID for $WORKSPACE_DIR (from Mac/VPS):")
 
 # Start Syncthing service
 echo ""
@@ -137,15 +139,8 @@ echo "Adding peer devices..."
 syncthing cli config devices add --device-id "$MAC_DEVICE_ID" --name "Mac"
 syncthing cli config devices add --device-id "$VPS_DEVICE_ID" --name "VPS"
 
-# Move dotfiles aside if they exist
-if [[ -d "$DOTFILES_DIR" ]]; then
-  echo "Moving dotfiles to temporary location..."
-  mv "$DOTFILES_DIR" "$DOTFILES_BACKUP"
-  trap cleanup_on_failure EXIT
-fi
-
-# Ensure workspace directory exists
-mkdir -p "$WORKSPACE_DIR"
+# Ensure parent directory exists
+mkdir -p "$(dirname "$WORKSPACE_DIR")"
 
 # Add folder configuration
 echo "Configuring workspace folder..."
@@ -165,22 +160,9 @@ echo "Waiting for initial sync..."
 echo "(Make sure you've added this device on your Mac and VPS)"
 echo ""
 
-if wait_for_sync "$FOLDER_ID" "$SYNC_TIMEOUT"; then
-  # Verify dotfiles arrived
-  if [[ -d "$DOTFILES_DIR" ]]; then
-    echo "Dotfiles synced successfully!"
-    # Remove backup
-    rm -rf "$DOTFILES_BACKUP"
-    trap - EXIT
-  else
-    echo "Warning: Sync completed but dotfiles directory not found" >&2
-    echo "Check if the folder is shared correctly on peers" >&2
-    cleanup_on_failure
-    exit 1
-  fi
-else
+if ! wait_for_sync "$FOLDER_ID" "$SYNC_TIMEOUT"; then
   echo "Sync timed out or failed" >&2
-  cleanup_on_failure
+  echo "Check Syncthing web GUI at http://127.0.0.1:8384 for details" >&2
   exit 1
 fi
 
