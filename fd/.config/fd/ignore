@@ -1,0 +1,5 @@
+.stfolder/
+.stversions/
+.direnv/
+.snapshots/
+__pycache__/

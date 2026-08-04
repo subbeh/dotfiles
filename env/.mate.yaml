@@ -4,9 +4,11 @@ packages:
     - git
     - less
     - lsof
+    - man
     - nmap
     - onefetch
     - sudo
+    - tldr
     - tree
     - unzip
     - vim
