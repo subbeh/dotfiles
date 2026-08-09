@@ -165,6 +165,14 @@
     "orientation": "horizontal"
   },
   //
+  // USER
+  //
+  "user": {
+    "format": " {user} 󱎫 {work_H}:{work_M}",
+    "interval": 60,
+    "icon": true
+  },
+  //
   // UPDATES
   //
   "custom/updates": {

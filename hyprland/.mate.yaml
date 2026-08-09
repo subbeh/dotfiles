@@ -1,5 +1,6 @@
 packages:
   pacman:
+    # hyprland
     - cliphist
     - hypridle
     - hyprland
@@ -8,21 +9,21 @@ packages:
     - hyprpicker
     - hyprpolkitagent
     - hyprshutdown
-    - ttf-proggyclean-nerd
-    - swaync
-    - thunar
-    - libnewt
-    - waybar
     - xdg-desktop-portal-hyprland
+    # fonts
+    - ttf-proggyclean-nerd
+    - noto-fonts
+    # misc
     - flameshot
-    - rofi
-    - pipewire
-    - wireplumber
+    - libnewt
     - qt5-wayland
     - qt6-wayland
-    - noto-fonts
+    - rofi
+    - swaync
+    - thunar
+    - waybar
   aur:
-    - siji-ng
+    - siji-ng # font
 ignore:
   - .luacheckrc
   - .luarc.json

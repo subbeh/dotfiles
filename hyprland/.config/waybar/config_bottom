@@ -11,6 +11,8 @@
   "modules-left": [
     "battery",
     "custom/sep",
+    "user",
+    "custom/sep",
     "group/hardware",
     "custom/sep",
     "custom/syncthing",
@@ -21,8 +23,8 @@
     "custom/playerctl"
   ],
   "modules-right": [
-    "custom/k8s",
-    "custom/sep",
+    // "custom/k8s",
+    // "custom/sep",
     "custom/network"
   ]
 }

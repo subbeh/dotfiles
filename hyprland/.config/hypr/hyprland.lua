@@ -25,11 +25,15 @@ PROFILES = {
   {
     name = "docked",
     monitors = {
-      internal_x1 = {},
+      internal_x1 = {
+        pos = 1,
+      },
       lg_27 = {
+        pos = 2,
         ws = { 1 },
       },
       lg_32 = {
+        pos = 3,
         ws = { 2, 3 },
         waybar = true,
       },
@@ -39,6 +43,7 @@ PROFILES = {
     name = "undocked",
     monitors = {
       internal_x1 = {
+        pos = 1,
         ws = { 1, 2, 3 },
         waybar = true,
       },
@@ -48,6 +53,7 @@ PROFILES = {
     name = "xps",
     monitors = {
       internal_xps = {
+        pos = 1,
         ws = { 1, 2, 3 },
         waybar = true,
       },

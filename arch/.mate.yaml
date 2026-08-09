@@ -2,37 +2,46 @@ targets:
   etc: /etc
 packages:
   pacman:
+    # core
     - base
     - base-devel
-    - dhcpcd
-    - fprintd
-    - fwupd
-    - go
-    - grub
-    - jq
-    - keyd
-    - linux
-    - openssh
-    - os-prober
-    - reflector
     - btrfs-progs
     - dosfstools
     - efibootmgr
+    - fprintd
+    - grub
     - intel-ucode
     - libfido2
+    - linux
     - linux-firmware
     - linux-headers
-    - mpv
-    - networkmanager
-    - npm
-    - proton-vpn-cli
+    - openssh
+    - os-prober
     - sbctl
     - snap-pac
     - snapper
-    - sof-firmware
-    - tlp
     - systemd-ukify
+    - tlp
     - zram-generator
+    # network
+    - dhcpcd
+    - networkmanager
+    - proton-vpn-cli
+    # tools
+    - go
+    - jq
+    - keyd
+    - npm
+    - reflector
+    # misc
+    - fwupd
+    - mpv
+    # sound
+    - pavucontrol
+    - pipewire
+    - pipewire-pulse
+    - sof-firmware
+    - wireplumber
   aur:
     - paru
     - pam-fprint-grosshack

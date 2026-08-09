@@ -195,6 +195,7 @@ vim.keymap.set("n", "<leader>e",        function() snacks.picker.explorer() end,
 vim.keymap.set("n", "<leader>fc",       function() snacks.picker.commands() end,                        { desc = "Commands" })
 vim.keymap.set("n", "<leader>fD",       function() snacks.picker.diagnostics_buffer() end,              { desc = "Diagnostics (buffer)" })
 vim.keymap.set("n", "<leader>fd",       function() snacks.picker.diagnostics() end,                     { desc = "Diagnostics" })
+vim.keymap.set("n", "<leader>ff",       function() snacks.picker.smart() end,                           { desc = "Find files (global)" })
 vim.keymap.set("n", "<leader>fg",       function() snacks.picker.grep() end,                            { desc = "Grep" })
 vim.keymap.set("n", "<leader>fh",       function() snacks.picker.help() end,                            { desc = "Help" })
 vim.keymap.set("n", "<leader>fh",       function() snacks.picker.highlights() end,                      { desc = "Highlights" })

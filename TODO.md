@@ -8,15 +8,17 @@
 - [x] tmux: dropped in tmux session when exiting hyprland into TTY
 - [ ] hypr: monitor reloading with hypr reload
 - [ ] arch: repeated login prompt and "issue" after boot
-- [ ] hypr: monitor layout
+- [x] hypr: monitor layout
 - [ ] hypr: monitor layout when docked / undocked
 - [ ] hypr: monitor color mismatch
 - [ ] waybar: workspace clicking
 - [ ] hypr: disable explorer trash
+- [x] nvim: when search reaches bottom -> continue at top
 
 # MINOR
 - [ ] nvim: change cursor if in insert mode
 - [ ] nvim: follow root cwd in explorer
+- [ ] nvim: shift-j -> remove space
 
 # SETUP
 

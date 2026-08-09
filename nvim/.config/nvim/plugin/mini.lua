@@ -4,6 +4,23 @@ local colors = require("colors")
 local icons = require("icons")
 
 require("mini.icons").setup()
+require("mini.align").setup()
+
+-- With cmdheight=0 the interactive status/hints mini.align echoes flash and get
+-- wiped on the next redraw. align_user() runs the interactive loop synchronously,
+-- so temporarily give the command line a row while it runs, then restore.
+local align_user = MiniAlign.align_user
+MiniAlign.align_user = function(mode)
+  local saved = vim.o.cmdheight
+  if saved == 0 then
+    vim.o.cmdheight = 1
+  end
+  local ok, err = pcall(align_user, mode)
+  vim.o.cmdheight = saved
+  if not ok then
+    error(err)
+  end
+end
 require("mini.git").setup()
 require("mini.pairs").setup()
 require("mini.sessions").setup()

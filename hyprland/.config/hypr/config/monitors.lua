@@ -42,38 +42,47 @@ end
 local function apply_profile(profile, live)
   for _, p in ipairs(PROFILES) do
     if p.name == profile then
-      local x = 0
+      local active = {}
       for _, mon in ipairs(live) do
         local name = get_monitor(mon.description)
         local role = name and p.monitors[name]
         if role then
-          local cat = MONITORS[name]
-          local scale = cat.scale or 1
-          hl.monitor({
-            output = "desc:" .. mon.description,
-            mode = cat.mode,
-            position = x .. "x0",
-            scale = tostring(scale),
-          })
-          if role.ws then
-            for _, n in ipairs(role.ws) do
-              hl.workspace_rule({
-                workspace = tostring(n),
-                monitor = "desc:" .. mon.description,
-                persistent = true,
-              })
-            end
-          end
-          if role.waybar then
-            StartWaybar(mon.description)
-          end
-          x = x + logical_width(cat)
+          table.insert(active, { mon = mon, name = name, role = role })
         else
           hl.monitor({
             output = "desc:" .. mon.description,
             disabled = true,
           })
         end
+      end
+      table.sort(active, function(a, b)
+        return (a.role.pos or 0) < (b.role.pos or 0)
+      end)
+      local x = 0
+      for _, item in ipairs(active) do
+        local mon = item.mon
+        local role = item.role
+        local cat = MONITORS[item.name]
+        local scale = cat.scale or 1
+        hl.monitor({
+          output = "desc:" .. mon.description,
+          mode = cat.mode,
+          position = x .. "x0",
+          scale = tostring(scale),
+        })
+        if role.ws then
+          for _, n in ipairs(role.ws) do
+            hl.workspace_rule({
+              workspace = tostring(n),
+              monitor = "desc:" .. mon.description,
+              persistent = true,
+            })
+          end
+        end
+        if role.waybar then
+          StartWaybar(mon.description)
+        end
+        x = x + logical_width(cat)
       end
     end
   end
