@@ -1,5 +1,3 @@
 packages:
   brew:
     - claude-code
-  aur:
-    - claude-code
