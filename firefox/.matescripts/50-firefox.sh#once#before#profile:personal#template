@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+firefox_dir="{{ .Vars.firefoxDir }}"
+dest="$HOME/.mozilla/firefox"
+
+if [[ -z "$firefox_dir" ]]; then
+  echo "ERROR: firefoxDir variable not set." >&2
+  exit 1
+elif [[ ! -d "$firefox_dir" ]]; then
+  echo "ERROR: Directory $firefox_dir does not exist." >&2
+  exit 1
+fi
+
+read -r -n 1 -p "Set up Firefox? [Y/n] " reply </dev/tty || reply=""
+echo
+if [[ "${reply:-Y}" != [Yy]* ]]; then
+  exit 0
+fi
+
+if [[ -e "$dest" ]]; then
+  if [[ -L "$dest" ]]; then
+    echo "$dest already links to $(readlink "$dest"); leaving it alone."
+    exit 0
+  fi
+  if [[ -d "$dest" ]]; then
+    echo "ERROR: directory $dest already exists; cannot create symlink." >&2
+    exit 1
+  fi
+fi
+
+mkdir -p "$(dirname "$dest")"
+ln -s "$firefox_dir" "$dest"
+echo "Linked $dest -> $firefox_dir"

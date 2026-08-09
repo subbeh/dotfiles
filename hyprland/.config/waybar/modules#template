@@ -13,8 +13,8 @@
   "hyprland/workspaces": {
     "all-outputs": true,
     "format": "{name}",
-    "on-scroll-up": "hyprctl dispatch workspace +1 1>/dev/null",
-    "on-scroll-down": "hyprctl dispatch workspace -1 1>/dev/null",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({workspace=\"e+1\"})' ",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({workspace=\"e-1\"})' ",
     "sort-by-number": true,
     "active-only": false,
     "show-special": true,
@@ -266,12 +266,12 @@
   },
   "custom/power_off": {
     "format": " ⏻ ",
-    "on-click": "systemctl poweroff",
+    "on-click": "hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'",
     "tooltip": false
   },
   "custom/power_reboot": {
     "format": " ",
-    "on-click": "systemctl reboot",
+    "on-click": "hyprshutdown -t 'Shutting down...' --post-cmd 'reboot'",
     "tooltip": false
   },
   "custom/power_suspend": {
@@ -322,7 +322,7 @@
     "return-type": "json",
     "interval": 10,
     "tooltip": true,
-    "on-click": "mate apply",
+    "on-click": "mate apply"
   },
   //
   // KUBERNETES

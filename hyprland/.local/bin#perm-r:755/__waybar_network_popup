@@ -152,7 +152,7 @@ if [[ -n "$selected" ]]; then
     exec protonvpn-app &
   elif [[ "$selected" =~ -\ Disconnect ]]; then
     notify-send "VPN" "Disconnecting..."
-    if sudo protonvpn disconnect; then
+    if protonvpn disconnect; then
       notify-send "VPN" "Disconnected"
     else
       notify-send "VPN" "Error disconnecting"
@@ -162,9 +162,9 @@ if [[ -n "$selected" ]]; then
     cc="${BASH_REMATCH[1]}"
     notify-send "VPN" "Connecting to $cc server..."
     if [[ "$cc" == "Fastest" ]]; then
-      sudo protonvpn connect --fastest
+      protonvpn connect --fastest
     else
-      sudo protonvpn connect --cc "$cc"
+      protonvpn connect --cc "$cc"
     fi
     if [[ "$?" -eq 0 ]]; then
       notify-send "VPN" "Connected"

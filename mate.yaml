@@ -36,6 +36,7 @@ profiles:
       - bitwarden
       - eza
       - fd
+      - firefox
       - fzf
       - git
       - gnupg
@@ -49,9 +50,11 @@ profiles:
       - statemate
       - syncthing
       - tmux
+      - vifm
       - zsh
     variables:
       workspaceDir: "/data/workspace"
+      firefoxDir: "/data/appdata/firefox"
       sshKeys:
         - laptop-personal-ssh-key
         - github-ssh-key

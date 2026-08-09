@@ -9,7 +9,10 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("swaync")
   hl.exec_cmd("hypridle")
   hl.exec_cmd("Thunar --daemon")
-  hl.exec_cmd("kitty --hold __hypr_tmux_sessions", { workspace = "special:term silent" })
+  -- Attach here rather than in __hypr_tmux_sessions: exec_cmd inherits
+  -- Hyprland's stdio, so an attach in that script claims the login TTY and is
+  -- waiting there when Hyprland exits.
+  hl.exec_cmd("kitty --hold sh -c '__hypr_tmux_sessions && __tmuxinator_sessions'", { workspace = "special:term silent" })
   hl.exec_cmd("firefox-default.desktop", { workspace = "2" })
 end)
 

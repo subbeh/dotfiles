@@ -94,14 +94,13 @@ endif
 " ------------------------------------------------------------------------------
 
 mark c $XDG_CONFIG_HOME
-mark D $DATA_DIR
-mark d $DOT_DIR
+mark D $XDG_DATA_DIR
+mark d $XDG_DOTFILES_DIR
 mark H $HOME
-mark h $HOMELAB_DIR
-mark p $PROJECT_DIR
-mark r $REPOS_DIR
-mark t $TEMP_DIR
-mark w $WORKSPACE_DIR
+mark p $XDG_PROJECTS_DIR
+mark r $XDG_REPOS_DIR
+mark t $XDG_TEMP_DIR
+mark w $XDG_WORKSPACE_DIR
 
 " ------------------------------------------------------------------------------
 " Commands

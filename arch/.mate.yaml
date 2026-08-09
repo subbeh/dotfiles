@@ -22,8 +22,10 @@ packages:
     - libfido2
     - linux-firmware
     - linux-headers
+    - mpv
     - networkmanager
     - npm
+    - proton-vpn-cli
     - sbctl
     - snap-pac
     - snapper

@@ -1,10 +1,11 @@
 packages:
   common:
+    - docx2txt
+    - feh
+    - inkscape
     - poppler
     - qutebrowser
-    - inkscape
-    - feh
-    - docx2txt
+    - vifm
   pacman:
     - zathura
     - zathura-pdf-poppler

@@ -7,6 +7,7 @@ mkdir -p "$CACHE_DIR"
 COLOR_FG="#{{ .Vars.color.fg.default }}"
 COLOR_CONNECTED="#{{ .Vars.color.green.bright }}"
 COLOR_DISCONNECTED="#{{ .Vars.color.fg.darkest }}"
+COLOR_MISC="#{{ .Vars.color.orange.base }}"
 
 # Function to check if a service is enabled and cache its status
 is_enabled() {
@@ -88,7 +89,7 @@ declare -A icons=(
   ["eth"]="󰈀"
   ["wifi"]=""
   ["tailscale"]="󱗼"
-  ["vpn"]="󰒄"
+  ["vpn"]="󰒃"
   ["inet"]="󰇧"
   ["dns"]=""
 )
@@ -126,7 +127,13 @@ for service in eth wifi tailscale vpn inet dns; do
     if [[ "$service" == "inet" && -f "$CACHE_DIR/$service" ]]; then
       country_iso=$(grep "country_iso=" "$CACHE_DIR/$service" | cut -d= -f2 | head -n1)
       country=$(grep "country=" "$CACHE_DIR/$service" | cut -d= -f2 | head -n1 | sed 's/"//g')
-      output+="<span color='$COLOR_FG'>${country_iso}</span> "
+      if [[ -n "$country_iso" ]]; then
+        if [[ "$country_iso" == "AU" ]]; then
+          output+="<span color='$COLOR_FG'>${country_iso}</span> "
+        else
+          output+="<span color='$COLOR_MISC'>${country_iso}</span> "
+        fi
+      fi
     fi
 
     tooltip+="${names[$service]} : Connected\n"

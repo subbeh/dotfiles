@@ -3,6 +3,8 @@
 ThinkPad X1 Carbon Gen 11+ | systemd-boot | LUKS2 + FIDO2 | BTRFS | Dual-boot Windows
 
 https://wiki.archlinux.org/title/Lenovo_ThinkPad_X1_Carbon_(Gen_11)
+https://wiki.archlinux.org/title/User:ZachHilman/Installation_-_Btrfs_%2B_LUKS2_%2B_Secure_Boot
+https://wiki.archlinux.org/title/User:Altercation/Bullet_Proof_Arch_Install
 
 ## Pre-install
 
