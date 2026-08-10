@@ -163,7 +163,7 @@ rm -rf /mnt/boot/EFI/Linux /mnt/boot/loader
 timedatectl set-ntp true
 
 # Install base system (archiso mirrorlist is read-only; run reflector after chroot)
-pacstrap -K /mnt base base-devel linux linux-headers linux-firmware intel-ucode \
+pacstrap -K /mnt base base-devel linux linux-headers linux-lts linux-lts-headers linux-firmware intel-ucode \
   git sudo vim openssh networkmanager reflector \
   btrfs-progs snapper snap-pac \
   sbctl efibootmgr dosfstools \
@@ -314,6 +314,20 @@ default_uki="/boot/EFI/Linux/arch-linux.efi"
 fallback_uki="/boot/EFI/Linux/arch-linux-fallback.efi"
 fallback_options="-S autodetect"
 EOF
+```
+
+The `linux-lts` package ships a default preset that builds plain initramfs images. Override it to build a UKI so systemd-boot auto-discovers it as a fallback boot entry. Only the `default` preset is built (no `fallback`): the LTS kernel is itself the recovery kernel, and the 512M EFI partition cannot hold a second ~200M fallback UKI.
+
+```bash
+cat << 'EOF' > /etc/mkinitcpio.d/linux-lts.preset
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-lts"
+ALL_microcode=(/boot/*-ucode.img)
+
+PRESETS=('default')
+
+default_uki="/boot/EFI/Linux/arch-linux-lts.efi"
+EOF
 
 mkdir -p /boot/EFI/Linux
 mkinitcpio -P
@@ -325,6 +339,7 @@ mkinitcpio -P
 # Sign UKIs
 sbctl sign -s /boot/EFI/Linux/arch-linux.efi
 sbctl sign -s /boot/EFI/Linux/arch-linux-fallback.efi
+sbctl sign -s /boot/EFI/Linux/arch-linux-lts.efi
 
 # Sign systemd-boot
 sbctl sign -s /boot/EFI/systemd/systemd-bootx64.efi

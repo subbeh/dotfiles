@@ -123,6 +123,8 @@ require("snacks").setup({
       },
       explorer = {
         hidden = true,
+        trash = false,
+        replace_netrw = true,
         layout = {
           layout = {
             width = 30,

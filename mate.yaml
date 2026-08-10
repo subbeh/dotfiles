@@ -43,6 +43,7 @@ profiles:
       - gnupg
       - hyprland
       - kitty
+      - mpv
       - nvim
       - ripgrep
       - ssh

@@ -1,0 +1,7 @@
+{
+  "name": "Custom",
+  "base": "dark-ansi",
+  "overrides": {
+    "claude": "#{{ .Vars.color.blue.base }}"
+  }
+}

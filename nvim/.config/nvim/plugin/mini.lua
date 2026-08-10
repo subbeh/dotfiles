@@ -79,6 +79,42 @@ require("mini.ai").setup({
   },
 })
 
+local hipatterns = require('mini.hipatterns')
+
+-- Resolve a dotted palette path ("yellow.base") against the generated colors
+-- module (which mirrors .mate/theme.yaml). Returns a "#rrggbb" string or nil.
+local function palette_hex(path)
+  local node = colors
+  for key in path:gmatch('[^.]+') do
+    if type(node) ~= 'table' then return nil end
+    node = node[key]
+  end
+  return type(node) == 'string' and node or nil
+end
+
+hipatterns.setup({
+  highlighters = {
+    fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+    hack  = { pattern = '%f[%w]()HACK()%f[%W]',  group = 'MiniHipatternsHack'  },
+    todo  = { pattern = '%f[%w]()TODO()%f[%W]',  group = 'MiniHipatternsTodo'  },
+    note  = { pattern = '%f[%w]()NOTE()%f[%W]',  group = 'MiniHipatternsNote'  },
+
+    -- Highlight hex color strings (`#rrggbb`) using that color
+    hex_color = hipatterns.gen_highlighter.hex_color(),
+
+    -- Highlight statemate template refs like `{{ .Vars.color.yellow.base }}`
+    -- with the colour they resolve to via .mate/theme.yaml (looked up in the
+    -- generated `colors` module, which shares the same keys).
+    template_color = {
+      pattern = '{{%s*%.Vars%.color%.[%w.]+%s*}}',
+      group = function(_, _, data)
+        local hex = palette_hex(data.full_match:match('%.color%.([%w.]+)'))
+        return hex and hipatterns.compute_hex_color_group(hex, 'bg') or nil
+      end,
+    },
+  },
+})
+
 -- statusline --
 -- stylua: ignore start
 local mode_names = {
