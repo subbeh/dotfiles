@@ -7,6 +7,7 @@
 - [ ] hypr: monitor color mismatch
 - [ ] waybar: workspace clicking
 - [ ] nvim: disable explorer trash
+- [ ] waybar: fix package updates module
 
 # MINOR
 
