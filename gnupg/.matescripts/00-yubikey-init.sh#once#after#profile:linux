@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# description: Enable and start pcscd service (YubiKey Smart Card Daemon)
 
 set -euo pipefail
 

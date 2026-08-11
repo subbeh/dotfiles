@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
+# description: Update packages
 
 set -euo pipefail
 
-read -r -n 1 -p "Update packages? [Y/n] " reply </dev/tty || reply=""
-echo
-if [[ "${reply:-Y}" == [Yy]* ]]; then
-  paru && echo "Packages have been updated."
-fi
+paru && echo "Packages have been updated."

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# description: Import GPG keys
 
 set -euo pipefail
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# description: Enable and start keyd service
 
 set -euo pipefail
 

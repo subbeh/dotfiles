@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# description: Create symlink to Firefox profiles
 
 set -euo pipefail
 
@@ -11,12 +12,6 @@ if [[ -z "$firefox_dir" ]]; then
 elif [[ ! -d "$firefox_dir" ]]; then
   echo "ERROR: Directory $firefox_dir does not exist." >&2
   exit 1
-fi
-
-read -r -n 1 -p "Set up Firefox? [Y/n] " reply </dev/tty || reply=""
-echo
-if [[ "${reply:-Y}" != [Yy]* ]]; then
-  exit 0
 fi
 
 if [[ -e "$dest" ]]; then

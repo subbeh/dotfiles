@@ -1,19 +1,9 @@
 #!/usr/bin/env bash
-# Bootstrap Tailscale and connect to tailnet
+# description: Bootstrap Tailscale and connect to tailnet
 
 set -euo pipefail
 
-CONNECT_TIMEOUT=120  # 2 minutes
-
-# --- helpers ---
-confirm() {
-  local prompt="$1" default="${2:-Y}" reply hint
-  if [[ "$default" == [Yy] ]]; then hint="[Y/n]"; else hint="[y/N]"; fi
-  read -r -n 1 -p "$prompt $hint " reply </dev/tty || reply=""
-  echo >&2
-  reply="${reply:-$default}"
-  [[ "$reply" == [Yy]* ]]
-}
+CONNECT_TIMEOUT=120 # 2 minutes
 
 wait_for_tailscale() {
   local timeout="$1"
@@ -43,11 +33,6 @@ wait_for_tailscale() {
     fi
   done
 }
-
-# --- main ---
-if ! confirm "Set up Tailscale?" Y; then
-  exit 0
-fi
 
 # Enable and start the daemon
 echo "Starting Tailscale daemon..."

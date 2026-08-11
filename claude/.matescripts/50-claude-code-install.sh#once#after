@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# description: Install Claude Code
 
 set -euo pipefail
 
