@@ -1,6 +1,7 @@
 vim.pack.add({
   { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
+  { src = "https://github.com/Wansmer/treesj" },
 })
 
 -- The `main` branch has no module system: setup() only configures install_dir, and
@@ -68,6 +69,10 @@ local function move_map(lhs, fn, obj, desc)
   end, { desc = desc })
 end
 
+require("treesj").setup({
+  disable_when_zoomed = true,
+})
+
 -- stylua: ignore start
 move_map("]m", "goto_next_start",     "@function.outer", "Next function start")
 move_map("]]", "goto_next_start",     "@class.outer",    "Next class start")
@@ -77,3 +82,4 @@ move_map("[m", "goto_previous_start", "@function.outer", "Prev function start")
 move_map("[[", "goto_previous_start", "@class.outer",    "Prev class start")
 move_map("[M", "goto_previous_end",   "@function.outer", "Prev function end")
 move_map("[]", "goto_previous_end",   "@class.outer",    "Prev class end")
+vim.keymap.set("n", "<leader>cj", require('treesj').toggle, { desc = "Toggle TreeJS" })

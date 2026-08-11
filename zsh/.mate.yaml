@@ -2,3 +2,4 @@ packages:
   common:
     - zsh
     - fzf
+    - zoxide

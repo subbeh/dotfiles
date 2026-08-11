@@ -6,7 +6,7 @@
 - [ ] hypr: monitor layout when docked / undocked
 - [ ] hypr: monitor color mismatch
 - [ ] waybar: workspace clicking
-- [ ] nvim: disable explorer trash
+- [x] nvim: disable explorer trash
 - [ ] waybar: fix package updates module
 
 # MINOR
@@ -14,16 +14,16 @@
 - [x] nvim: change cursor if in insert mode
 - [ ] nvim: follow root cwd in explorer
 - [ ] nvim: shift-j -> remove space
-- [ ] nvim: disable ctrl-c in snacks explorer
+- [x] nvim: disable ctrl-c in snacks explorer
+- [ ] nvim: disable tab in snacks explorer
 - [ ] nvim: buffer delete shortcut
-- [ ] vifm: change view to
+- [ ] nvim: remove completion for snacks picker (i.e. add file option in explorer)
 
 # SETUP
 
 - [ ] nvim: linting and completion
 - [ ] work profile
-- [ ] mpv
-- [ ] pass
+- [x] mpv
 - [ ] dunst
 - [ ] z
 - [ ] backups to storagebox

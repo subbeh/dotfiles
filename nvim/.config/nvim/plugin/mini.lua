@@ -3,8 +3,15 @@ vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
 local colors = require("colors")
 local icons = require("icons")
 
-require("mini.icons").setup()
 require("mini.align").setup()
+require("mini.bracketed").setup()
+require("mini.git").setup()
+require("mini.icons").setup()
+require("mini.pairs").setup()
+require("mini.sessions").setup()
+require("mini.surround").setup()
+require("mini.bufremove").setup()
+require("mini.comment").setup()
 
 -- With cmdheight=0 the interactive status/hints mini.align echoes flash and get
 -- wiped on the next redraw. align_user() runs the interactive loop synchronously,
@@ -21,10 +28,6 @@ MiniAlign.align_user = function(mode)
     error(err)
   end
 end
-require("mini.git").setup()
-require("mini.pairs").setup()
-require("mini.sessions").setup()
-require("mini.surround").setup()
 
 -- autocmds --
 vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
@@ -33,6 +36,7 @@ vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
       local disabled = {
         help = true,
         snacks_picker_input = true,
+        snacks_input = true,
       }
       if disabled[vim.bo.filetype] then
         vim.b.miniindentscope_disable = true
@@ -40,6 +44,26 @@ vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
       end
     end)
   end,
+})
+
+-- animate --
+require("mini.animate").setup({
+  cursor = {
+    timing = require("mini.animate").gen_timing.linear({ duration = 100, unit = 'total' }),
+  },
+  scroll = {
+    timing = require("mini.animate").gen_timing.linear({ duration = 150, unit = 'total' }),
+  },
+  resize = {
+    enable = false
+  },
+})
+
+-- cmdline -- 
+require("mini.cmdline").setup({
+  autocorrect = {
+    enable = false,
+  }
 })
 
 -- completion --

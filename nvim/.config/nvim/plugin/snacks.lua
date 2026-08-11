@@ -37,6 +37,12 @@ require("snacks").setup({
   -- misc
   bigfile = { enabled = true },
 
+  -- explorer
+  explorer = {
+    trash = false,
+    replace_netrw = true,
+  },
+
   -- dashboard
   dashboard = {
     enabled = true,
@@ -123,8 +129,6 @@ require("snacks").setup({
       },
       explorer = {
         hidden = true,
-        trash = false,
-        replace_netrw = true,
         layout = {
           layout = {
             width = 30,
@@ -136,6 +140,7 @@ require("snacks").setup({
               ["-"] = "explorer_up",
               ["W"] = "explorer_close_all",
               ["<C-]>"] = "tcd",
+              ["<C-c>"] = "",
             }),
           },
           input = {

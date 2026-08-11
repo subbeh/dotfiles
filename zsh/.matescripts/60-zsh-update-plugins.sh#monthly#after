@@ -6,8 +6,10 @@ set -euo pipefail
 ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
 if [[ -r "$ZINIT_HOME/zinit.zsh" ]]; then
   # zinit is a zsh function, so run the updates inside zsh with it sourced.
-  zsh -c "source '$ZINIT_HOME/zinit.zsh'; zinit self-update; zinit update --all" &&
+  zsh -c "source '$ZINIT_HOME/zinit.zsh'; zinit self-update; zinit update --all" && {
+    pkill -u "$USER" zsh --signal=USR2 || true
     echo "zinit and plugins have been updated."
+  }
 else
   echo "zinit is not installed yet; skipping."
 fi

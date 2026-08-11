@@ -28,6 +28,9 @@ map("n", "<C-w>-", "<cmd>split<cr>", { desc = "Split horizontal" })
 -- Select all
 map("n", "==", "gg<S-v>G")
 
+-- Clear highlights
+map('n', '<Esc>', '<cmd>noh<cr>', { silent = true })
+
 -- Clipboard
 map({ "n", "v" }, "<leader>xy", '"+y', { desc = "Yank to clipboard" })
 map({ "n", "v" }, "<leader>xd", '"_d', { desc = "Delete to void" })

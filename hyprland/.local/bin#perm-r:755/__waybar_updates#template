@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+set -x
 
-if command -v checkupdates_all &>/dev/null; then
-  updates=$(checkupdates_all)
+if command -v checkupdates &>/dev/null; then
+  updates=$(checkupdates)
 
   if [[ -z "$(echo "$updates" | tr -d '[:space:]')" ]]; then
     updates_fmt=""

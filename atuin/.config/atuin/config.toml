@@ -197,6 +197,7 @@ common_subcommands = [
   "brew",
   "yay",
   "paru",
+  "hermes",
 ]
 
 ## Set commands that should be totally stripped and ignored from stats
