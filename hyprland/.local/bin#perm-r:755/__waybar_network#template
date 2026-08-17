@@ -58,7 +58,7 @@ is_enabled() {
     "inet")
       if ping -c 1 1.1.1.1 &>/dev/null; then
         status=true
-        ifconfig="$(curl -s -4 ifconfig.co/json)"
+        ifconfig="$(curl -s -4 ipconfig.io/json)"
         ip_addrs="$(echo "$ifconfig" | jq -r '.ip')"
         country_iso=$(echo "$ifconfig" | jq -r '.country_iso')
         country="$(echo "$ifconfig" | jq -r '.country')"

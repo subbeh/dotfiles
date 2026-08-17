@@ -78,6 +78,7 @@ get_vpn_status() {
     echo "  VPN Disconnected"
     echo "    - Server: Fastest"
     echo "    - Server: AU"
+    echo "    - Server: SG"
     echo "    - Server: NL"
   fi
 }
@@ -164,7 +165,7 @@ if [[ -n "$selected" ]]; then
     if [[ "$cc" == "Fastest" ]]; then
       protonvpn connect --fastest
     else
-      protonvpn connect --cc "$cc"
+      protonvpn connect --country "$cc"
     fi
     if [[ "$?" -eq 0 ]]; then
       notify-send "VPN" "Connected"

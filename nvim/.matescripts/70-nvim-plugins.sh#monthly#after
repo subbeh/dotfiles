@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# description: Install/update Neovim plugins
+
+set -euo pipefail
+
+echo "Setting environment..."
+source $(find "${0%/*}/../.config/profile.d" -name "*.sh")
+
+echo "Installing plugins..."
+nvim --headless -c ':lua vim.pack.update(nil, { force = true, target = "lockfile" })' -c qa
+echo
+
+echo "Cleaning inactive plugins..."
+nvim --headless -c ':lua vim.pack.clean(nil, { inactive = true })' -c qa

@@ -26,9 +26,13 @@ packages:
     - tlp
     - zram-generator
     # network
+    - bind-tools
     - dhcpcd
+    - inetutils
     - networkmanager
+    - openbsd-netcat
     - proton-vpn-cli
+    - whois
     # tools
     - go
     - jq

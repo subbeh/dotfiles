@@ -13,7 +13,7 @@ alias g='grep -Ri'
 alias grep='grep --color=auto'
 alias mv='mv -nv'
 alias httpserver='python3 -m http.server'
-alias lip='curl -sw "\n" -4 ifconfig.me'
+alias lip='curl -sw "\n" -4 ipconfig.io/json'
 alias sdiff='diff --color=always --side-by-side'
 alias watch='watch -dc'
 
