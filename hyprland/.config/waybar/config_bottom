@@ -16,7 +16,8 @@
     "group/hardware",
     "custom/sep",
     "custom/syncthing",
-    "custom/chezmoi",
+    "custom/restic",
+    "custom/statemate",
     "custom/updates"
   ],
   "modules-center": [

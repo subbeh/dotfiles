@@ -323,9 +323,21 @@
     "tooltip": true
   },
   //
+  // RESTIC
+  //
+  "custom/restic": {
+    "exec": "__waybar_restic",
+    "return-type": "json",
+    "interval": 60,
+    "tooltip": true,
+    "signal": 9,
+    "on-click": "kitty --hold journalctl -fu restic-backup.service",
+    "on-click-right": "pkill -SIGRTMIN+9 waybar"
+  },
+  //
   // STATEMATE
   //
-  "custom/chezmoi": {
+  "custom/statemate": {
     "exec": "__statemate_status waybar",
     "return-type": "json",
     "interval": 10,

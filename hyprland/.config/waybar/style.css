@@ -149,43 +149,43 @@ window#waybar.bottom :first-child {
   color: @white;
 }
 
-/* BORGMATIC */
+/* RESTIC */
 
-#custom-borgmatic {
+#custom-restic {
   padding: 0 5px;
 }
 
-#custom-borgmatic.running {
+#custom-restic.running {
   color: @orange;
 }
 
-#custom-borgmatic.error {
+#custom-restic.error {
   color: @red;
 }
 
-#custom-borgmatic.success {
+#custom-restic.success {
   color: @green;
 }
 
-#custom-borgmatic.stale {
+#custom-restic.stale {
   color: @white;
 }
 
-#custom-borgmatic.unknown {
+#custom-restic.unknown {
   color: @white;
 }
 
 /* CHEZMOI */
 
-#custom-chezmoi {
+#custom-statemate {
   padding: 0 5px;
 }
 
-#custom-chezmoi.clean {
+#custom-statemate.clean {
   color: @green;
 }
 
-#custom-chezmoi.dirty {
+#custom-statemate.dirty {
   color: @orange;
 }
 

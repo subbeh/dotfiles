@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+# Waybar module: restic backup status.
+# Reads systemd unit properties only -- no privileges, no network, no secrets.
+set -uo pipefail
+
+# Swap glyphs to taste
+ICON_IDLE='󰁯'
+ICON_RUNNING='󰑐'
+
+# Flag a green-forever module whose timer silently stopped firing
+STALE_HOURS=48
+
+BACKUP_SVC=restic-backup.service
+BACKUP_TMR=restic-backup.timer
+CHECK_SVC=restic-check.service
+CHECK_TMR=restic-check.timer
+
+prop() { systemctl show "$1" --property="$2" --value 2>/dev/null; }
+
+epoch() {
+  [[ -n ${1:-} ]] || { echo 0; return; }
+  date -d "$1" +%s 2>/dev/null || echo 0
+}
+
+stamp() {
+  (($1 > 0)) || { printf 'never'; return; }
+  date -d "@$1" '+%a %d %b %H:%M'
+}
+
+duration() {
+  local s=$1
+  if ((s < 60)); then printf '%ds' "$s"
+  elif ((s < 3600)); then printf '%dm %ds' $((s / 60)) $((s % 60))
+  elif ((s < 86400)); then printf '%dh %dm' $((s / 3600)) $(((s % 3600) / 60))
+  else printf '%dd %dh' $((s / 86400)) $(((s % 86400) / 3600)); fi
+}
+
+# One tooltip line per unit: state, whether it is enabled, and last result
+unit_line() {
+  local unit=$1 state enabled result
+  state=$(prop "$unit" ActiveState)
+  [[ -n $state ]] || {
+    printf '%-24s %s' "$unit" "not installed"
+    return
+  }
+  enabled=$(prop "$unit" UnitFileState)
+  result=$(prop "$unit" Result)
+
+  local detail="$state"
+  [[ -n $enabled && $enabled != enabled ]] && detail="$detail ($enabled)"
+  [[ -n $result && $result != success ]] && detail="$detail · $result"
+  # Result defaults to "success" on a unit that has never executed
+  if [[ $state == inactive && $result == success ]]; then
+    [[ -n $(prop "$unit" ExecMainStartTimestamp) ]] && detail="success" || detail="never run"
+  fi
+
+  printf '%-24s %s' "$unit" "$detail"
+}
+
+b_state=$(prop "$BACKUP_SVC" ActiveState)
+b_result=$(prop "$BACKUP_SVC" Result)
+b_ever=$(prop "$BACKUP_SVC" ExecMainStartTimestamp)
+b_started=$(epoch "$(prop "$BACKUP_SVC" InactiveExitTimestamp)")
+b_ended=$(epoch "$(prop "$BACKUP_SVC" InactiveEnterTimestamp)")
+c_result=$(prop "$CHECK_SVC" Result)
+next=$(epoch "$(prop "$BACKUP_TMR" NextElapseUSecRealtime)")
+c_ended=$(epoch "$(prop "$CHECK_SVC" InactiveEnterTimestamp)")
+
+now=$(date +%s)
+age=$((now - b_ended))
+
+# Precedence: running > failed > never ran > stale > ok
+if [[ $b_state == activating || $b_state == active ]]; then
+  class=running
+  label="backing up"
+elif [[ $b_state == failed || ($b_result != success && -n $b_result) ]]; then
+  class=error
+  label="backup failed: $b_result"
+elif [[ $c_result != success && -n $c_result ]]; then
+  class=error
+  label="integrity check failed: $c_result"
+elif [[ -z $b_state || -z $b_ever ]] || ((b_ended == 0)); then
+  class=unknown
+  label="never run"
+elif ((age > STALE_HOURS * 3600)); then
+  class=stale
+  label="last backup $(duration $age) ago"
+else
+  class=success
+  label="ok"
+fi
+
+[[ $class == running ]] && icon=$ICON_RUNNING || icon=$ICON_IDLE
+
+# Optional extras -- both silently omitted when unavailable
+added=$(journalctl -u "$BACKUP_SVC" -n 200 --no-pager -o cat 2>/dev/null |
+  sed -n 's/.*Added to the repo[^ ]* *//p' | tail -1)
+repo=$(sed -n 's/^RESTIC_REPOSITORY=//p' /etc/restic/env 2>/dev/null)
+
+{
+  printf '<tt><b>restic</b>  %s\n\n' "$label"
+  if ((b_ended > 0)); then
+    printf '%-11s%s  (%s ago)\n' "Last run" "$(stamp "$b_ended")" "$(duration $age)"
+    ((b_started > 0 && b_ended > b_started)) &&
+      printf '%-11s%s\n' "Duration" "$(duration $((b_ended - b_started)))"
+  fi
+  [[ -n $added ]] && printf '%-11s%s\n' "Added" "$added"
+  ((next > 0)) && printf '%-11s%s\n' "Next run" "$(stamp "$next")"
+  [[ -n $repo ]] && printf '%-11s%s\n' "Repo" "$repo"
+
+  printf '\n<b>units</b>\n'
+  printf '%s\n' "$(unit_line "$BACKUP_TMR")"
+  printf '%s\n' "$(unit_line "$BACKUP_SVC")"
+  printf '%s\n' "$(unit_line "$CHECK_TMR")"
+  printf '%s' "$(unit_line "$CHECK_SVC")"
+  ((c_ended > 0)) && printf ' · %s' "$(stamp "$c_ended")"
+  printf '</tt>'
+} | {
+  tooltip=$(cat)
+  jq -nc --arg text "$icon" --arg class "$class" --arg tooltip "$tooltip" \
+    '{text: $text, class: $class, tooltip: $tooltip}'
+}

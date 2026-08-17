@@ -48,5 +48,5 @@ rand() {
   else
     file="$(find . -type f -name "*$1*" | shuf -n 1)"
   fi
-  echo "$file"
+  printf "%q" "$file"
 }
