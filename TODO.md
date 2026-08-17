@@ -16,17 +16,18 @@
 - [ ] nvim: shift-j -> remove space
 - [x] nvim: disable ctrl-c in snacks explorer
 - [ ] nvim: disable tab in snacks explorer
-- [ ] nvim: buffer delete shortcut
-- [ ] nvim: remove completion for snacks picker (i.e. add file option in explorer)
+- [x] nvim: buffer delete shortcut
+- [x] nvim: remove completion for snacks picker (i.e. add file option in explorer)
 
 # SETUP
 
-- [ ] nvim: linting and completion
+- [ ] nvim: lsp, linting, completion, and formatting
 - [ ] work profile
 - [x] mpv
 - [ ] dunst
-- [ ] z
-- [ ] backups to storagebox
+- [x] z
+- [x] backups to storagebox
+- [x] restic module in waybar
 
 # ARCH
 

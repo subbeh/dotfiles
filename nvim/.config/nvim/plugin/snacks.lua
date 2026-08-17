@@ -141,6 +141,7 @@ require("snacks").setup({
               ["W"] = "explorer_close_all",
               ["<C-]>"] = "tcd",
               ["<C-c>"] = "",
+              ["<Tab>"] = "",
             }),
           },
           input = {
@@ -198,6 +199,8 @@ require("snacks").setup({
 -- Keymaps
 vim.keymap.set("n", "<leader><leader>", function() snacks.picker.smart({ filter = { cwd = true }}) end, { desc = "Find files" })
 vim.keymap.set("n", "<tab>",            function() snacks.picker.buffers({ focus = "list" }) end,       { desc = "Buffers" })
+vim.keymap.set("n", "<leader>bd",       function() snacks.bufdelete.delete() end,                       { desc = "Delete buffer" })
+vim.keymap.set("n", "<leader>bD",       function() snacks.bufdelete.other() end,                        { desc = "Delete buffers (other)" })
 vim.keymap.set("n", "<leader>e",        function() snacks.picker.explorer() end,                        { desc = "Explorer" })
 vim.keymap.set("n", "<leader>fc",       function() snacks.picker.commands() end,                        { desc = "Commands" })
 vim.keymap.set("n", "<leader>fD",       function() snacks.picker.diagnostics_buffer() end,              { desc = "Diagnostics (buffer)" })
@@ -213,11 +216,12 @@ vim.keymap.set("n", "<leader>fm",       function() snacks.picker.marks() end,   
 vim.keymap.set("n", "<leader>fn",       function() snacks.picker.notifications() end,                   { desc = "Notifications" })
 vim.keymap.set("n", "<leader>fp",       function() snacks.picker.projects() end,                        { desc = "Projects" })
 vim.keymap.set("n", "<leader>fx",       function() snacks.picker.cliphist() end,                        { desc = "Clipboard" })
+vim.keymap.set("n", "<leader>gd",       function() snacks.picker.git_diff() end,                        { desc = "Git Diff" })
 vim.keymap.set("n", "<leader>gg",       function() snacks.picker.git_grep() end,                        { desc = "Git Grep" })
 vim.keymap.set("n", "<leader>gha",      function() snacks.picker.gh_actions() end,                      { desc = "GitHub Actions" })
 vim.keymap.set("n", "<leader>ghd",      function() snacks.picker.gh_diff() end,                         { desc = "GitHub Diff" })
-vim.keymap.set("n", "<leader>ghd",      function() snacks.picker.git_diff() end,                        { desc = "Git Diff" })
 vim.keymap.set("n", "<leader>ghi",      function() snacks.picker.gh_issue() end,                        { desc = "GitHub Issue" })
+vim.keymap.set("n", "<leader>gho",      function() snacks.gitbrowse.open() end,                         { desc = "GitHub Open URL" })
 vim.keymap.set("n", "<leader>ghp",      function() snacks.picker.gh_pr() end,                           { desc = "GitHub PR" })
 vim.keymap.set("n", "<leader>gl",       function() snacks.picker.git_log_file() end,                    { desc = "Git Log (file)" })
 vim.keymap.set("n", "<leader>gL",       function() snacks.picker.git_log_line() end,                    { desc = "Git Log (line)" })

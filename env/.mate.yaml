@@ -5,6 +5,7 @@ packages:
     - less
     - lsof
     - man
+    - ncdu
     - nmap
     - onefetch
     - sudo

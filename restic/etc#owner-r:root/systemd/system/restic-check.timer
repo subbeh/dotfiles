@@ -1,0 +1,11 @@
+[Unit]
+Description=Monthly restic repository integrity check
+
+[Timer]
+OnCalendar=monthly
+Persistent=true
+RandomizedDelaySec=6h
+Unit=restic-check.service
+
+[Install]
+WantedBy=timers.target

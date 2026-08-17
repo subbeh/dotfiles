@@ -1,0 +1,5 @@
+# Repository lives under the Storage Box sub-account home directory.
+# "storagebox" is the ssh alias from /etc/ssh/ssh_config.d/50-storagebox.conf
+RESTIC_REPOSITORY=sftp:storagebox:restic/laptop
+RESTIC_PASSWORD_FILE=/etc/restic/password
+RESTIC_CACHE_DIR=/var/cache/restic

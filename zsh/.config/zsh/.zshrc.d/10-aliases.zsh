@@ -13,6 +13,7 @@ alias -g X='| xargs'
 alias -g X-='| xargs -I--'
 alias -g Y='| yq -r'
 alias -g Z='| fzf'
+alias -g _rand='$(rand)'
 
 chkcmd pbcopy && alias -g CP='| pbcopy'
 chkcmd wl-copy && alias -g CP='| wl-copy -n'

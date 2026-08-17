@@ -1,0 +1,25 @@
+[Unit]
+Description=restic repository integrity check
+Documentation=https://restic.readthedocs.io/en/stable/045_working_with_repos.html
+Wants=network-online.target
+After=network-online.target
+OnFailure=restic-failure@%n.service
+ConditionACPower=true
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/restic/env
+CacheDirectory=restic
+TimeoutStartSec=infinity
+
+Nice=19
+IOSchedulingClass=idle
+
+# Verifies all metadata plus a 5% sample of pack data, so a silently corrupted
+# repository surfaces here rather than at restore time.
+ExecStart=/usr/bin/restic check --read-data-subset=5%%
+
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes

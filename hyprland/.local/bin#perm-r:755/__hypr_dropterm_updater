@@ -13,8 +13,8 @@ tmux select-window -t dropterm:updates
 
 # send keys
 pgrep paru || tmux send-keys -t dropterm:updates 'clear;
-paru --noconfirm && pkill -SIGRTMIN+8 waybar;
+paru -Syu --noconfirm && pkill -SIGRTMIN+8 waybar;
 tmux select-window -t dropterm:1 && \
 hyprctl activewindow -j | jq -c ".class" | grep -q dropterm && \
-hyprctl dispatch togglespecialworkspace dropterm && \
+hyprctl dispatch togglespecialworkspace dropterm \
 ' Enter

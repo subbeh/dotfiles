@@ -40,3 +40,13 @@ chkcmd machinectl && chusr() {
 # calculator
 _calc() { printf "%s\n" "$*" | bc -l; }
 alias calc='noglob _calc'
+
+# random file generator
+rand() {
+  if [[ -z "$1" ]]; then
+    file="$(find . -type f | shuf -n 1)"
+  else
+    file="$(find . -type f -name "*$1*" | shuf -n 1)"
+  fi
+  echo "$file"
+}

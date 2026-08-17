@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# description: Initialise the restic repository and enable backup timers
+
+set -euo pipefail
+
+set -a
+# shellcheck disable=SC1091
+source /etc/restic/env
+set +a
+
+# Also created by the units' StateDirectory=, but the first SSH connection below
+# needs somewhere to record the host key.
+sudo install -d -m 0700 /var/lib/restic
+
+if ! sudo -E ssh -q -o ConnectTimeout=10 storagebox version 2>/dev/null; then
+  echo "Cannot reach the Storage Box over SSH."
+  echo "Register this machine's public key first (asks for the account password):"
+  echo ""
+  echo "  sudo ssh-keygen -y -f /etc/restic/ssh_key |" \
+    "ssh -p23 $(awk '/User /{print $2}' /etc/ssh/ssh_config.d/50-storagebox.conf)@$(awk '/HostName /{print $2}' /etc/ssh/ssh_config.d/50-storagebox.conf) install-ssh-key"
+  echo ""
+  echo "Then re-run: mate scripts run restic.sh"
+  exit 1
+fi
+
+if ! sudo -E restic cat config >/dev/null 2>&1; then
+  echo "Initialising restic repository at ${RESTIC_REPOSITORY}..."
+  sudo -E restic init
+fi
+
+sudo systemctl enable --now restic-backup.timer restic-check.timer
+
+echo ""
+echo "=========================================="
+echo "restic backups scheduled."
+echo "  first run:  sudo systemctl start restic-backup.service"
+echo "  progress:   journalctl -fu restic-backup.service"
+echo "  snapshots:  sudo -E restic snapshots"
+echo "=========================================="

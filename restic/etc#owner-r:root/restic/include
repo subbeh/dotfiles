@@ -1,0 +1,16 @@
+# Paths to back up (restic --files-from).
+# Scope: everything statemate cannot regenerate. EXAMPLES -- adjust to taste.
+
+/etc
+/root
+/home
+/data/appdata
+/data/workspace
+
+# Package lists and disk layout dumped by restic-backup.service
+/var/lib/restic
+
+# Uncomment whichever of these you actually use
+#/var/lib/libvirt
+#/var/lib/docker/volumes
+#/var/lib/systemd/timers

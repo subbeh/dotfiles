@@ -1,0 +1,15 @@
+{{- /* Sub-account logins are uNNNNNN-subN; the host is always the parent uNNNNNN. */ -}}
+{{- $user := bitwarden "hetzner.com" "field" "storage-box-laptop-user" }}
+Host storagebox
+  HostName {{ (splitList "-" $user) | first }}.your-storagebox.de
+  User {{ $user }}
+  Port 23
+  IdentityFile /etc/restic/ssh_key
+  IdentitiesOnly yes
+  BatchMode yes
+  # BatchMode cannot answer a host-key prompt, so trust on first use into a
+  # known_hosts file of our own rather than root's.
+  StrictHostKeyChecking accept-new
+  UserKnownHostsFile /var/lib/restic/known_hosts
+  ServerAliveInterval 30
+  ServerAliveCountMax 4

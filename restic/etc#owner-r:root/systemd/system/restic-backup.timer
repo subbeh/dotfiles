@@ -1,0 +1,12 @@
+[Unit]
+Description=Daily restic backup to Hetzner Storage Box
+
+[Timer]
+OnCalendar=daily
+# Laptop is not always awake at 00:00, so catch up on the next boot
+Persistent=true
+RandomizedDelaySec=1h
+Unit=restic-backup.service
+
+[Install]
+WantedBy=timers.target

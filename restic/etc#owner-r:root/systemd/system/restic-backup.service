@@ -1,0 +1,49 @@
+[Unit]
+Description=restic backup to Hetzner Storage Box
+Documentation=https://restic.readthedocs.io/en/stable/040_backup.html
+Wants=network-online.target
+After=network-online.target
+OnFailure=restic-failure@%n.service
+ConditionACPower=true
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/restic/env
+StateDirectory=restic
+CacheDirectory=restic
+
+# A full backup can take a long time; oneshot units are otherwise killed at
+# DefaultTimeoutStartSec.
+TimeoutStartSec=infinity
+
+# Stay out of the way of interactive use
+Nice=19
+IOSchedulingClass=idle
+CPUSchedulingPolicy=idle
+
+# Capture what statemate cannot regenerate, so a rebuild is one command
+ExecStartPre=/bin/sh -c 'pacman -Qqen > /var/lib/restic/pkglist-native.txt'
+ExecStartPre=/bin/sh -c 'pacman -Qqem > /var/lib/restic/pkglist-foreign.txt'
+ExecStartPre=/bin/sh -c 'lsblk -o NAME,SIZE,FSTYPE,UUID,MOUNTPOINT > /var/lib/restic/lsblk.txt'
+
+ExecStart=/usr/bin/restic backup \
+    --verbose \
+    --one-file-system \
+    --exclude-caches \
+    --files-from /etc/restic/include \
+    --exclude-file /etc/restic/excludes \
+    --tag scheduled
+
+# Only prunes when the backup above succeeded
+ExecStartPost=/usr/bin/restic forget --prune \
+    --keep-daily 7 \
+    --keep-weekly 5 \
+    --keep-monthly 12
+
+# Needs to read the whole filesystem, so keep hardening to read-only protections
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes

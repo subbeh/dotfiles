@@ -45,6 +45,7 @@ profiles:
       - kitty
       - mpv
       - nvim
+      - restic
       - ripgrep
       - ssh
       - tailscale

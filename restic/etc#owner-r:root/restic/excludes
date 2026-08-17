@@ -1,0 +1,15 @@
+# restic --exclude-file patterns. EXAMPLES -- adjust to taste.
+
+# Caches and other reproducible state
+**/.cache
+**/Cache
+**/CachedData
+**/.local/share/Trash
+**/vifm/trash
+
+# Build artefacts and vendored dependencies
+**/node_modules
+**/.venv
+**/__pycache__
+**/target/debug
+**/target/release

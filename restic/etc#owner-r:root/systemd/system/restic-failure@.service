@@ -1,0 +1,10 @@
+[Unit]
+Description=Report failure of %i
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemd-cat -t restic -p err \
+    /bin/echo "%i failed -- run: journalctl -u %i -e"
+
+# Swap in a real notification channel here, e.g.
+# ExecStart=/usr/bin/curl -fsS -d "%i failed" https://ntfy.sh/your-topic

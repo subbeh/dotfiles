@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 
 if command -v checkupdates &>/dev/null; then
   updates=$(checkupdates)
