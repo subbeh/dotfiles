@@ -17,5 +17,6 @@ vim.diagnostic.config({
     scope = "cursor",
     source = true,
   },
+  update_in_insert = true,
   severity_sort = true,
 })

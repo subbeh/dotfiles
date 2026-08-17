@@ -36,6 +36,7 @@ end
 require("snacks").setup({
   -- misc
   bigfile = { enabled = true },
+  toggle = { enabled = true },
 
   -- explorer
   explorer = {
@@ -48,20 +49,22 @@ require("snacks").setup({
     enabled = true,
     preset = {
       keys = {
-        { icon = icons.ui.FindFile, key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.getcwd() })" },
-        { icon = icons.ui.NewFile, key = "n", desc = "New File", action = ":ene | startinsert" },
-        { icon = icons.ui.FindText, key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-        { icon = icons.ui.Files, key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-        { icon = icons.ui.Config, key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.stdpath('config' )})" },
-        { icon = icons.ui.Refresh, key = "s", desc = "Restore Session", action = ":lua require('persistence').load({ last = true })" },
-        { icon = icons.ui.Exit, key = "q", desc = "Quit", action = ":qa" },
+        -- stylua: ignore start
+        { icon = icons.ui.FindFile, key = "f", desc = "Find File",       action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.getcwd() })" },
+        { icon = icons.ui.NewFile,  key = "n", desc = "New File",        action = ":ene | startinsert" },
+        { icon = icons.ui.FindText, key = "g", desc = "Find Text",       action = ":lua Snacks.dashboard.pick('live_grep')" },
+        { icon = icons.ui.Files,    key = "r", desc = "Recent Files",    action = ":lua Snacks.dashboard.pick('oldfiles')" },
+        { icon = icons.ui.Config,   key = "c", desc = "Config",          action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.stdpath('config' )})" },
+        { icon = icons.ui.Refresh,  key = "s", desc = "Restore Session", action = ":lua require('persistence').load({ last = true })" },
+        { icon = icons.ui.Exit,     key = "q", desc = "Quit",            action = ":qa" },
       },
     },
     sections = {
       { section = "header" },
-      { icon = icons.ui.Keyboard, title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-      { icon = icons.ui.Files, title = "Recent Files", section = "recent_files", indent = 2, padding = 1, cwd = true },
-      { icon = icons.ui.FolderOpen, title = "Projects", section = "projects", indent = 2, padding = 1 },
+      -- stylua: ignore start
+      { icon = icons.ui.Keyboard,   title = "Keymaps",      section = "keys",         indent = 2, padding = 1 },
+      { icon = icons.ui.Files,      title = "Recent Files", section = "recent_files", indent = 2, padding = 1, cwd = true },
+      { icon = icons.ui.FolderOpen, title = "Projects",     section = "projects",     indent = 2, padding = 1 },
       {
         pane = 2,
         icon = " ",
@@ -231,6 +234,13 @@ vim.keymap.set("n", "<leader>ld",       function() snacks.picker.lsp_declaration
 vim.keymap.set("n", "<leader>lf",       function() snacks.picker.lsp_definitions() end,                 { desc = "List Definitions" })
 vim.keymap.set("n", "<leader>li",       function() snacks.picker.lsp_implementations() end,             { desc = "List Implementations" })
 vim.keymap.set("n", "<leader>lr",       function() snacks.picker.lsp_references() end,                  { desc = "List References" })
+snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+snacks.toggle.inlay_hints():map("<leader>uh")
+snacks.toggle.line_number():map("<leader>ul")
+snacks.toggle.animate():map("<leader>ua")
+snacks.toggle.diagnostics():map("<leader>cd")
+snacks.toggle.indent():map("<leader>ci")
+snacks.toggle.treesitter():map("<leader>ct")
 
 -- Highlighting
 local set = vim.api.nvim_set_hl

@@ -4,6 +4,10 @@
       "rev": "a59e3ee12818135098e5ce8efeb7b58b675b09ec",
       "src": "https://github.com/LunarVim/breadcrumbs.nvim"
     },
+    "conform.nvim": {
+      "rev": "016802de402556da54c36bd7359b441266b01cdd",
+      "src": "git@github.com:stevearc/conform.nvim"
+    },
     "fidget.nvim": {
       "rev": "6f793b2bcd2d35e201c09520f698bb763220908a",
       "src": "https://github.com/j-hui/fidget.nvim"
@@ -12,14 +16,25 @@
       "rev": "c106c9472154d6b2c74b74565616b877ae8ed31d",
       "src": "https://github.com/projekt0n/github-nvim-theme"
     },
+    "mason-conform.nvim": {
+      "rev": "48da2ebd5efbaf8a99566eadc3ece82d523f03c5",
+      "src": "https://github.com/zapling/mason-conform.nvim"
+    },
+    "mason-nvim-lint": {
+      "rev": "cafbc5d82d8eb4af0daf0057332a325ddf2f436b",
+      "src": "https://github.com/rshkarin/mason-nvim-lint"
+    },
     "mason.nvim": {
       "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
-      "src": "https://github.com/mason-org/mason.nvim",
-      "version": ">=0.0.0"
+      "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.nvim": {
       "rev": "629bf6792187e11b4829411c1648f86f28df3963",
       "src": "https://github.com/nvim-mini/mini.nvim"
+    },
+    "nvim-lint": {
+      "rev": "9b99aad869102ac01775187abd8d49017b148612",
+      "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-navic": {
       "rev": "f5eba192f39b453675d115351808bd51276d9de5",
@@ -50,6 +65,10 @@
     "rainbow-delimiters.nvim": {
       "rev": "012f1480cd9a5fc99fce7678e0a536421a53fc46",
       "src": "https://github.com/HiPhish/rainbow-delimiters.nvim"
+    },
+    "schemastore.nvim": {
+      "rev": "7e3f6dd6ef6da93f74974521c81d8d5bff0443c5",
+      "src": "https://github.com/b0o/schemastore.nvim"
     },
     "snacks.nvim": {
       "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",

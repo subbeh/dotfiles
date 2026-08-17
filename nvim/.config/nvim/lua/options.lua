@@ -1,6 +1,7 @@
 local opt = vim.opt
 local g = vim.g
 
+-- stylua: ignore start
 g.mapleader = " "                  --  Use space as the leader key
 g.maplocalleader = vim.g.mapleader --  Match the local leader to the leader
 g.loaded_perl_provider = 0         --  Disable the unused Perl provider
@@ -74,7 +75,7 @@ opt.undolevels = 500                                                            
 opt.updatetime = 100                                                                           --  Faster completion
 opt.updatetime = 500                                                                           --  Idle delay (ms) before CursorHold / swap write
 opt.wildignore:append({ "*.o", "*.rej", "*.so", "*~", "*.pyc", "*pycache*", "Cargo.lock" })    --  Ignore these in file completion
-opt.wildmode = { "longest:full", "full", "noselect" }                                          --  Command-line completion behaviour
+-- opt.wildmode = { "longest:full", "full", "noselect" }                                          --  Command-line completion behaviour
 opt.winborder = "single"                                                                       --  Default border for floating windows
 opt.wrap = false                                                                               --  Disable line wrap
 

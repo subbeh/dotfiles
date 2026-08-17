@@ -1,8 +1,6 @@
 -- Installs language servers into ~/.local/share/nvim/mason/bin, which mason
 -- prepends to vim.env.PATH so the bare `cmd` names in lsp/*.lua resolve.
-vim.pack.add({
-  { src = "https://github.com/mason-org/mason.nvim", version = vim.version.range("*") },
-})
+vim.pack.add({ "https://github.com/mason-org/mason.nvim" })
 
 local icons = require("icons")
 
@@ -15,8 +13,6 @@ require("mason").setup({
     },
   },
 })
-
-vim.keymap.set("n", "<leader>sm", "<cmd>Mason<cr>", { desc = "Mason" })
 
 --- Servers from lua/servers.lua whose `cmd` executable is not on PATH.
 --- @return { server: string, exe: string }[]
@@ -89,3 +85,5 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
   desc = "Install missing language servers",
 })
+
+vim.keymap.set("n", "<leader>sm", "<cmd>Mason<cr>", { desc = "Mason" })

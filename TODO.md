@@ -28,6 +28,7 @@
 - [x] z
 - [x] backups to storagebox
 - [x] restic module in waybar
+- [ ] statemate service to run `mate status` and safe the output for other programs to use
 
 # ARCH
 

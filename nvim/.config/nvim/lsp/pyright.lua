@@ -13,7 +13,6 @@ return {
   },
   settings = {
     pyright = {
-      -- ruff owns import organization
       disableOrganizeImports = true,
     },
     python = {
@@ -21,6 +20,7 @@ return {
         autoSearchPaths = true,
         useLibraryCodeForTypes = true,
         diagnosticMode = "openFilesOnly",
+        ignore = { "*" },
       },
     },
   },

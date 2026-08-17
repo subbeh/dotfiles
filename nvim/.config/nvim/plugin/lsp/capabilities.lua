@@ -1,48 +1,94 @@
 local ms = vim.lsp.protocol.Methods
 local augroup = vim.api.nvim_create_augroup("user.lsp", { clear = true })
 
--- Opt-in LSP features, keyed by the capability that has to be present for them to
--- work. Completion and signature help are deliberately absent: mini.completion
--- owns both (see plugin/mini.lua).
----@type table<string, fun(bufnr: integer, client: vim.lsp.Client)>
+-- Map of LSP capabilites and setup functions for supporting clients
+---@type table<vim.lsp.protocol.Method.ClientToServer.Request, fun(bufnr:number, client:vim.lsp.Client)>
 local capabilities = {
+  [ms.completionItem_resolve] = function(bufnr, client)
+    vim.api.nvim_create_autocmd("CompleteChanged", {
+      group = augroup,
+      buffer = bufnr,
+      callback = function()
+        local info = vim.fn.complete_info({ "selected" })
+        local item = vim.tbl_get(vim.v.completed_item, "user_data", "nvim", "lsp", "completion_item")
+        if item == nil then
+          return
+        end
+        client:request(ms.completionItem_resolve, item, function(err, result)
+          if err ~= nil then
+            vim.notify(vim.inspect(err), vim.log.levels.ERROR)
+            return
+          end
+          if result and result.documentation then
+            local popup = vim.api.nvim__complete_set(info.selected, {
+              info = result.documentation.value,
+            })
+            if popup.winid ~= nil and vim.api.nvim_win_is_valid(popup.winid) then
+              vim.api.nvim_win_set_config(popup.winid, {
+                height = #vim.api.nvim_buf_get_lines(popup.bufnr, 0, vim.o.pumheight or -1, false),
+                border = vim.o.winborder:gsub("^$", "none"),
+                title = item.label,
+              })
+              vim.wo[popup.winid].conceallevel = 3
+            end
+            if popup.bufnr ~= nil and vim.api.nvim_buf_is_valid(popup.bufnr) then
+              vim.bo[popup.bufnr].filetype = result.documentation.kind
+            end
+          end
+        end, bufnr)
+      end,
+    })
+  end,
+  [ms.dollar_progress] = function(_, client)
+    -- See: https://github.com/neovim/neovim/pull/26098
+    client.progress = vim.ringbuf(2048) --[[@as vim.lsp.Client.Progress]]
+    client.progress.pending = {}
+  end,
   [ms.textDocument_documentHighlight] = function(bufnr)
     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-      group = augroup,
       buffer = bufnr,
       callback = vim.lsp.buf.document_highlight,
-      desc = "Highlight references under cursor",
+      desc = "vim.lsp.buf.document_highlight()",
     })
-    vim.api.nvim_create_autocmd({ "CursorMoved", "InsertLeave" }, {
-      group = augroup,
+    vim.api.nvim_create_autocmd("CursorMoved", {
       buffer = bufnr,
       callback = vim.lsp.buf.clear_references,
-      desc = "Clear reference highlights",
+      desc = "vim.lsp.buf.clear_references()",
     })
+  end,
+  [ms.textDocument_completion] = function(bufnr, client)
+    vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
   end,
   [ms.textDocument_inlayHint] = function(_, client)
     vim.lsp.inlay_hint.enable(true, { client_id = client.id })
   end,
+  [ms.textDocument_linkedEditingRange] = function(_, client)
+    vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
+  end,
+  [ms.textDocument_inlineCompletion] = function(_, client)
+    vim.lsp.inline_completion.enable(true, { client_id = client.id })
+  end,
   [ms.textDocument_documentColor] = function(_, client)
     vim.lsp.document_color.enable(true, { client_id = client.id }, { style = "virtual" })
   end,
-  [ms.textDocument_linkedEditingRange] = function(_, client)
-    vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
+  [ms.textDocument_colorPresentation] = function(bufnr)
+    vim.api.nvim_buf_create_user_command(bufnr, "ColorPresentation", vim.lsp.document_color.color_presentation, {
+      desc = "Select from a list of presentations for the color under the cursor.",
+    })
   end,
 }
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = augroup,
-  desc = "Enable supported LSP capabilities",
+  desc = "setup lsp capabilities",
   callback = function(args)
     local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if not client then
-      return
-    end
-
-    for method, setup in pairs(capabilities) do
-      if client:supports_method(method, args.buf) then
-        setup(args.buf, client)
+    if client then
+      ---@cast capabilities table<vim.lsp.protocol.Method.ClientToServer.Request, fun(bufnr:number, client:vim.lsp.Client)>
+      for method, setup in pairs(capabilities) do
+        if client:supports_method(method, args.buf) then
+          setup(args.buf, client)
+        end
       end
     end
   end,

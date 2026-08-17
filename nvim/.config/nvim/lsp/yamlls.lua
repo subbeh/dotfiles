@@ -12,4 +12,7 @@ return {
       keyOrdering = false,
     },
   },
+  server_capabilities = {
+    documentFormattingProvider = true,
+  },
 }
