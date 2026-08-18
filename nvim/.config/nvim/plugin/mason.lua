@@ -14,11 +14,13 @@ require("mason").setup({
   },
 })
 
---- Servers from lua/servers.lua whose `cmd` executable is not on PATH.
+--- Servers with a lsp/<name>.lua config on 'runtimepath' whose `cmd`
+--- executable is not on PATH.
 --- @return { server: string, exe: string }[]
 local function missing_servers()
   local missing = {}
-  for _, server in ipairs(require("servers")) do
+  for _, file in ipairs(vim.api.nvim_get_runtime_file("lsp/*.lua", true)) do
+    local server = vim.fn.fnamemodify(file, ":t:r")
     local config = vim.lsp.config[server]
     local cmd = config and config.cmd
     -- `cmd` may be a function (custom rpc launcher); those are not mason-managed.

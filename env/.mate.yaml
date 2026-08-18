@@ -8,6 +8,7 @@ packages:
     - ncdu
     - nmap
     - onefetch
+    - shellcheck
     - sudo
     - tldr
     - tree
