@@ -1,3 +1,5 @@
+# vi: ft=gitconfig
+
 [user]
   email = git@sbbh.cloud
   name = Steven Terwindt
@@ -6,6 +8,11 @@
 
 [sendemail]
   from = Steven Terwindt <steven@sbbh.cloud>
+
+{{- if eq .Profile "work" }}
+[includeIf "gitdir:{{ .Vars.workspaceDir }}/jamf/"]
+	path = config-work.inc
+{{- end }}
 
 [credential]
   helper = cache

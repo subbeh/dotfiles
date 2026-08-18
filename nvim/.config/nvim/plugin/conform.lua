@@ -27,3 +27,7 @@ require("conform").setup({
 require("mason-conform").setup()
 
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
+vim.keymap.set({ "n", "v" }, "<leader>cf", function()
+  require("conform").format({ async = true, lsp_format = "fallback" })
+end, { desc = "Format" })

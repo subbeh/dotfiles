@@ -1,0 +1,6 @@
+packages:
+  brew:
+    - font-fira-code-nerd-font
+    - font-fira-mono-nerd-font
+    - font-hack-nerd-font
+    - inetutils

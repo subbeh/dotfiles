@@ -12,7 +12,7 @@ vim.cmd("colorscheme github_dark")
 
 local set = vim.api.nvim_set_hl
 -- stylua: ignore start
-set(0, "LineNr", { fg = colors.fg.darker })
+set(0, "LineNr", { fg = colors.fg.darkest })
 set(0, "Visual", { bg = colors.bg.lighter })
 set(0, "Function", { fg = colors.magenta.bright })
 set(0, "DiagnosticInfo", { fg = colors.blue.base })

@@ -60,8 +60,8 @@ require("snacks").setup({
       },
     },
     sections = {
-      { section = "header" },
       -- stylua: ignore start
+      { section = "header" },
       { icon = icons.ui.Keyboard,   title = "Keymaps",      section = "keys",         indent = 2, padding = 1 },
       { icon = icons.ui.Files,      title = "Recent Files", section = "recent_files", indent = 2, padding = 1, cwd = true },
       { icon = icons.ui.FolderOpen, title = "Projects",     section = "projects",     indent = 2, padding = 1 },

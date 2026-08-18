@@ -15,46 +15,56 @@ variables:
   gpgKeys:
     - D70DB41617DF61F1
 
-sources:
-  - env
+age:
+  identity: "~/.config/statemate/key.txt"
+  recipients:
+    - age14lue9m7wkjynpke4290yjnk36ztm6fdvj65dhudprc4rj8yajgxqxawmnf
 
 ignore:
-  - "*.md"
+  - INSTALL.md
+
+sources:
+  - env
+  - atuin
+  - bitwarden
+  - claude
+  - eza
+  - fd
+  - fzf
+  - git
+  - gnupg
+  - k9s
+  - kitty
+  - nvim
+  - ripgrep
+  - ssh
+  - tailscale
+  - starship
+  - statemate
+  - task
+  - tmux
+  - vifm
+  - zsh
 
 # Profiles for machine-specific configuration
 profiles:
   linux:
     detection:
       os: linux
+  macos:
+    detection:
+      os: darwin
   personal:
     extends: linux
     detection:
       command: "test -f /etc/arch-release"
     sources:
       - arch
-      - atuin
-      - bitwarden
-      - claude
-      - eza
-      - fd
-      - firefox
-      - fzf
-      - git
-      - gnupg
       - hyprland
-      - kitty
       - mpv
-      - nvim
       - restic
-      - ripgrep
-      - ssh
-      - tailscale
-      - starship
-      - statemate
+      - firefox
       - syncthing
-      - tmux
-      - vifm
-      - zsh
     variables:
       workspaceDir: "/data/workspace"
       firefoxDir: "/data/appdata/firefox"
@@ -63,9 +73,16 @@ profiles:
         - github-ssh-key
         - home-ops-ssh-key
         - aur-ssh-key
-
-# Age encryption for sensitive files
-age:
-  identity: "~/.config/statemate/key.txt"
-  recipients:
-    - age14lue9m7wkjynpke4290yjnk36ztm6fdvj65dhudprc4rj8yajgxqxawmnf
+  work:
+    extends: macos
+    detection:
+      user: steven.terwindt
+    sources:
+      - macos
+      - work
+    variables:
+      workspaceDir: "~/workspace"
+      sshKeys:
+        - laptop-work-ssh-key
+        - github-ssh-key
+        - home-ops-ssh-key

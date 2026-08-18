@@ -1,0 +1,14 @@
+packages:
+  brew:
+    - 1password
+    - aws-sso-util
+    - awscli
+    - azure-cli
+    - jamf/internal-tap/cloudtools
+    - jamf/internal-tap/hermes
+    - k9s
+    - logi-options+
+    - postman
+    - slack
+    - swiftbar
+    - zoom

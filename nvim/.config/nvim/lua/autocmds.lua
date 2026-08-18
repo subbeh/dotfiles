@@ -19,6 +19,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "lspinfo",
     "man",
     "netrw",
+    "qf",
     "",
   },
   callback = function()
