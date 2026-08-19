@@ -4,59 +4,43 @@ vim.pack.add({
   { src = "https://github.com/Wansmer/treesj" },
 })
 
--- The `main` branch has no module system: setup() only configures install_dir, and
--- highlighting/indenting are driven by core vim.treesitter in the autocmd below.
--- Install hangs when the tree-sitter CLI is missing.
--- See: https://github.com/nvim-treesitter/nvim-treesitter/issues/8010
-if vim.fn.executable("tree-sitter") == 1 then
-  local install = require("nvim-treesitter").install({
-    "bash",
-    "comment",
-    "css",
-    "dockerfile",
-    "gitignore",
-    "go",
-    "gomod",
-    "gosum",
-    "graphql",
-    "html",
-    "javascript",
-    "json",
-    "lua",
-    "luadoc",
-    "make",
-    "markdown",
-    "markdown_inline",
-    "python",
-    "query",
-    "regex",
-    "sql",
-    "terraform",
-    "vim",
-    "vimdoc",
-    "yaml",
-  })
-
-  if #vim.api.nvim_list_uis() == 0 then
-    install:wait(300000)
-  end
+local available_langs = {}
+for _, l in ipairs(require("nvim-treesitter").get_available()) do
+  available_langs[l] = true
 end
 
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("user.treesitter", { clear = true }),
   callback = function(args)
     local lang = vim.treesitter.language.get_lang(args.match)
-    if not vim.treesitter.language.add(lang or "") then
+    if not lang then
       return
     end
 
-    vim.treesitter.start(args.buf, lang)
+    local function attach()
+      if not vim.api.nvim_buf_is_valid(args.buf) then
+        return
+      end
 
-    if #vim.api.nvim_get_runtime_file(("queries/%s/indents.scm"):format(lang), false) > 0 then
-      vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      vim.treesitter.start(args.buf, lang)
+
+      if #vim.api.nvim_get_runtime_file(("queries/%s/indents.scm"):format(lang), false) > 0 then
+        vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end
+    end
+
+    if vim.treesitter.language.add(lang) then
+      attach()
+    elseif available_langs[lang] and vim.fn.executable("tree-sitter") == 1 then
+      require("nvim-treesitter").install(lang):await(function(err)
+        if err or not vim.treesitter.language.add(lang) then
+          return
+        end
+        vim.schedule(attach)
+      end)
     end
   end,
-  desc = "Start treesitter highlighting and indenting",
+  desc = "Start treesitter highlighting and indenting, installing missing parsers in the background",
 })
 
 require("treesj").setup({
