@@ -9,7 +9,9 @@ require("oil").setup({
   view_options = {
     show_hidden = true,
     natural_order = "fast",
-    is_always_hidden = function(name, _) return name == ".." or name == ".git" end,
+    is_always_hidden = function(name, _)
+      return name == ".." or name == ".git"
+    end,
   },
   float = {
     padding = 2,
@@ -24,6 +26,15 @@ require("oil").setup({
     ["<C-c>"] = false,
     ["q"] = "actions.close",
   },
+})
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "OilActionsPost",
+  callback = function(event)
+    if event.data.actions[1].type == "move" then
+      require("snacks").rename.on_rename_file(event.data.actions[1].src_url, event.data.actions[1].dest_url)
+    end
+  end,
 })
 
 -- keymaps --
