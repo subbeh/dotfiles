@@ -1,6 +1,16 @@
 packages:
   brew:
+    # utils
+    - inetutils
+    # apps
+    - alt-tab
+    - google-chrome
+    - karabiner-elements
+    - raycast
+    - rectangle
+    - dimentium/autoraise/autoraise
+    - middleclick
+    # fonts
     - font-fira-code-nerd-font
     - font-fira-mono-nerd-font
     - font-hack-nerd-font
-    - inetutils

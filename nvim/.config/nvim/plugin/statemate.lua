@@ -2,9 +2,10 @@
 --
 -- Three things happen here:
 --
---   1. Opening a deployed file redirects to its source. `nvim ~/.ssh/config`
---      edits ssh/.ssh/config#encrypted in the dotfiles repo instead, so you are
---      never editing a file that `mate apply` will overwrite.
+--   1. Opening a deployed file prompts for source or target. `nvim ~/.ssh/config`
+--      offers ssh/.ssh/config#encrypted in the dotfiles repo, so you do not edit
+--      a file that `mate apply` will overwrite by accident. Picking the target,
+--      or dismissing the prompt, leaves the buffer as-is.
 --
 --   2. Filetype detection is fixed for source files. Statemate keeps metadata in
 --      the filename (settings.json#profile:work#encrypted), so nvim reads the
@@ -23,8 +24,12 @@
 
 local augroup = vim.api.nvim_create_augroup("statemate", { clear = true })
 
+-- Matched as a substring, not a suffix: #encrypted is not always the last
+-- attribute, hence the trailing '*' in the autocmd patterns below.
 local AGE_ATTR = "#encrypted"
-local IDENTITY = vim.fn.expand("~/.config/statemate/key.txt")
+-- $STATEMATE_KEY_FILE is exported by the statemate profile.d snippet. The
+-- hardcoded path is the fallback for sessions that never sourced it.
+local IDENTITY = vim.env.STATEMATE_KEY_FILE or vim.fn.expand("~/.config/statemate/key.txt")
 
 ---Strip statemate #attrs from a path, returning the logical filename.
 ---"a/settings.json#profile:work#encrypted" -> "a/settings.json"
@@ -36,13 +41,6 @@ local function strip_attrs(path)
     dir, base = "", path
   end
   return dir .. (base:gsub("#.*$", ""))
-end
-
----@param path string
----@return boolean
-local function is_encrypted(path)
-  -- Substring rather than suffix: #encrypted is not always the last attribute.
-  return path:find(AGE_ATTR, 1, true) ~= nil
 end
 
 ---Whether a path carries statemate attrs, i.e. looks like a source file.
@@ -89,6 +87,55 @@ local function source_dir()
   local out = mate({ "config", "source-dir" })
   source_dir_cache = (out and out[1]) and vim.trim(out[1]) or ""
   return source_dir_cache ~= "" and source_dir_cache or nil
+end
+
+---Every directory that holds statemate sources: the repo mate reports, plus
+---$XDG_DOTFILES_DIR. Usually the same path, but the env var keeps things working
+---when `mate config source-dir` cannot answer (mate missing, no mate.yaml in the
+---cwd it is run from).
+---@return string[]
+local function source_roots()
+  local roots, seen = {}, {}
+  -- "" rather than nil for the misses: a nil hole would end the ipairs walk
+  -- early and silently drop the $XDG_DOTFILES_DIR fallback.
+  for _, dir in ipairs({ source_dir() or "", vim.env.XDG_DOTFILES_DIR or "" }) do
+    if dir ~= "" then
+      -- ":p" on a directory leaves a trailing slash; drop it so callers can
+      -- append "/" themselves.
+      local abs = vim.fn.fnamemodify(vim.fn.expand(dir), ":p"):gsub("/$", "")
+      if not seen[abs] then
+        seen[abs] = true
+        table.insert(roots, abs)
+      end
+    end
+  end
+  return roots
+end
+
+---Whether a path lives inside one of the source trees, i.e. is itself a source.
+---@param path string
+---@return boolean
+local function in_source_tree(path)
+  for _, root in ipairs(source_roots()) do
+    if vim.startswith(path, root .. "/") then
+      return true
+    end
+  end
+  return false
+end
+
+---The repo's mate.yaml, searched across every source root.
+---@return string|nil
+local function config_file()
+  for _, root in ipairs(source_roots()) do
+    for _, name in ipairs({ "mate.yaml", "mate.yml" }) do
+      local path = root .. "/" .. name
+      if vim.fn.filereadable(path) == 1 then
+        return path
+      end
+    end
+  end
+  return nil
 end
 
 ---Resolve a deployed target path to its source file.
@@ -142,17 +189,9 @@ end
 ---parsing YAML structure, which keeps this robust against formatting changes.
 ---@return string[]
 local function recipients()
-  local root = source_dir()
-  if not root then
+  local cfg = config_file()
+  if not cfg then
     return {}
-  end
-
-  local cfg = root .. "/mate.yaml"
-  if vim.fn.filereadable(cfg) == 0 then
-    cfg = root .. "/mate.yml"
-    if vim.fn.filereadable(cfg) == 0 then
-      return {}
-    end
   end
 
   local found = {}
@@ -201,19 +240,17 @@ local function notify_later(msg, level)
   end)
 end
 
--- Redirect a deployed target to its source file.
+-- Offer the source file when a deployed target is opened.
 vim.api.nvim_create_autocmd("BufReadPost", {
   group = augroup,
   callback = function(args)
     local path = vim.fn.fnamemodify(args.file, ":p")
 
-    -- Source files already carry attrs; nothing to redirect.
+    -- Source files already carry attrs; they are not targets.
     if path == "" or has_attrs(path) then
       return
     end
-    -- Files inside the repo are sources, not targets.
-    local root = source_dir()
-    if not root or vim.startswith(path, root .. "/") then
+    if in_source_tree(path) then
       return
     end
 
@@ -222,21 +259,39 @@ vim.api.nvim_create_autocmd("BufReadPost", {
       return
     end
 
-    local display = vim.fn.fnamemodify(src, ":t")
-    vim.schedule(function()
-      -- Replace the buffer rather than opening a split, so the target buffer
-      -- does not linger and get written by accident.
-      vim.cmd("keepalt edit " .. vim.fn.fnameescape(src))
-      vim.bo.buflisted = true
+    local choices = {
+      { label = "source: " .. vim.fn.fnamemodify(src, ":t"), path = src },
+      { label = "target: " .. vim.fn.fnamemodify(path, ":~") },
+    }
 
-      local msg = ("editing source %s"):format(display)
-      if is_template then
-        msg = msg .. " (template: {{ }} is unrendered)"
-      end
-      vim.notify("statemate: " .. msg, vim.log.levels.INFO)
+    vim.schedule(function()
+      vim.ui.select(choices, {
+        prompt = "statemate: managed file, edit which?",
+        format_item = function(item)
+          return item.label
+        end,
+      }, function(choice)
+        -- Dismissed, or the target was picked: leave the buffer alone, but say
+        -- why editing it here is a dead end.
+        if not choice or not choice.path then
+          vim.notify("statemate: editing the target; `mate apply` will overwrite it", vim.log.levels.WARN)
+          return
+        end
+
+        -- Replace the buffer rather than opening a split, so the target buffer
+        -- does not linger and get written by accident.
+        vim.cmd("keepalt edit " .. vim.fn.fnameescape(choice.path))
+        vim.bo.buflisted = true
+
+        local msg = ("editing source %s"):format(vim.fn.fnamemodify(choice.path, ":t"))
+        if is_template then
+          msg = msg .. " (template: {{ }} is unrendered)"
+        end
+        vim.notify("statemate: " .. msg, vim.log.levels.INFO)
+      end)
     end)
   end,
-  desc = "statemate: redirect a deployed file to its source",
+  desc = "statemate: offer the source file when a deployed file is opened",
 })
 
 -- Fix filetype for every mate-managed source file, encrypted or not.
@@ -301,6 +356,10 @@ vim.api.nvim_create_autocmd("BufReadCmd", {
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
     vim.bo[buf].modified = false
     apply_filetype(buf, path)
+
+    -- Say so: the buffer looks like an ordinary file, and it is worth knowing
+    -- that what is on screen is plaintext that gets re-encrypted on write.
+    notify_later("decrypted " .. vim.fn.fnamemodify(path, ":t"), vim.log.levels.INFO)
   end,
   desc = "statemate: decrypt age-encrypted file on read",
 })

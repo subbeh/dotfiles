@@ -25,8 +25,10 @@ packages:
     - systemd-ukify
     - tlp
     - zram-generator
+    # apps
+    - chromium
     # network
-    - bind-tools
+    - bind
     - dhcpcd
     - inetutils
     - networkmanager
@@ -34,8 +36,6 @@ packages:
     - proton-vpn-cli
     - whois
     # tools
-    - go
-    - jq
     - keyd
     - npm
     - reflector
@@ -47,6 +47,9 @@ packages:
     - pipewire-pulse
     - sof-firmware
     - wireplumber
+    # bluetooth
+    - bluez
+    - bluez-utils
   aur:
     - paru
     - pam-fprint-grosshack

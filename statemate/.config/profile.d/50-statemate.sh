@@ -1,5 +1,7 @@
 #!/bin/sh
 
+test -r "$XDG_CONFIG_HOME/statemate/key.txt" && STATEMATE_KEY_FILE="$_" && export STATEMATE_KEY_FILE
+
 alias cd.="cd $(cut -d: -f2 "$XDG_CONFIG_HOME/statemate/mate.yaml" | sed 's/~/$HOME/')"
 alias ds='mate status'
 alias da='mate apply'

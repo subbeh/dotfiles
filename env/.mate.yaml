@@ -1,19 +1,43 @@
 packages:
   common:
     - age
+    - arp-scan
+    - bat
+    - btop
+    - dialog
+    - direnv
+    - duf
+    - dust
+    - ffmpeg
+    - gawk
     - git
-    - less
+    - go
+    - gron
+    - htop
+    - iperf3
+    - jq
     - lsof
-    - man
+    - man-db
+    - mtr
     - ncdu
     - nmap
     - onefetch
     - shellcheck
-    - sudo
+    - socat
+    - speedtest-cli
     - tldr
     - tree
     - unzip
     - vim
     - vivid
+    - wget
+    - yq
+  pacman:
+    - less
+    - sudo
   brew:
     - coreutils
+    - gnu-sed
+    - rar
+    - watch
+    - xh

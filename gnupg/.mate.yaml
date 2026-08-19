@@ -1,7 +1,6 @@
 packages:
   common:
     - gnupg
-    - yubikey-personalization
   brew:
     - ykman
     - pinentry-mac

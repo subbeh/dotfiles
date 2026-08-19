@@ -244,6 +244,6 @@ snacks.toggle.treesitter():map("<leader>ct")
 
 -- Highlighting
 local set = vim.api.nvim_set_hl
-set(0, "SnacksPicker",       { bg = colors.bg.light })
-set(0, "SnacksPickerBorder", { fg = colors.fg.default })
+set(0, "SnacksPicker",          { bg = colors.bg.light })
+set(0, "SnacksPickerBorder",    { fg = colors.fg.default })
 set(0, "SnacksPickerDirectory", { fg = colors.fg.darker })

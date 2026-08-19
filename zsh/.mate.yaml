@@ -1,5 +1,7 @@
 packages:
   common:
-    - zsh
     - fzf
     - zoxide
+    - zsh-completions
+  pacman:
+    - zsh

@@ -59,6 +59,10 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "Start treesitter highlighting and indenting",
 })
 
+require("treesj").setup({
+  disable_when_zoomed = true,
+})
+
 require("nvim-treesitter-textobjects").setup()
 
 -- Movement only. Selection textobjects (af/if, ac/ic, aa/ia) come from mini.ai,
@@ -68,10 +72,6 @@ local function move_map(lhs, fn, obj, desc)
     require("nvim-treesitter-textobjects.move")[fn](obj, "textobjects")
   end, { desc = desc })
 end
-
-require("treesj").setup({
-  disable_when_zoomed = true,
-})
 
 -- stylua: ignore start
 move_map("]m", "goto_next_start",     "@function.outer", "Next function start")
@@ -83,3 +83,14 @@ move_map("[[", "goto_previous_start", "@class.outer",    "Prev class start")
 move_map("[M", "goto_previous_end",   "@function.outer", "Prev function end")
 move_map("[]", "goto_previous_end",   "@class.outer",    "Prev class end")
 vim.keymap.set("n", "<leader>cj", require('treesj').toggle, { desc = "Toggle TreeJS" })
+
+-- highlighting
+local set = vim.api.nvim_set_hl
+local colors = require("colors")
+set(0, "@field.yaml",            { fg = colors.green.base })
+set(0, "@property.yaml",         { fg = colors.green.bright })
+set(0, "@label.yaml",            { fg = colors.magenta.base })
+set(0, "@boolean.yaml",          { fg = colors.blue.bright })
+set(0, "@markup.list.unchecked", { fg = colors.fg.darker })
+set(0, "@markup.list.checked",   { fg = colors.green.bright })
+set(0, "@tag",                   { fg = colors.green.bright })

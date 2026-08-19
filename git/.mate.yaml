@@ -1,4 +1,7 @@
 packages:
   common:
-    - github-cli
     - lazygit
+  brew:
+    - gh
+  pacman:
+    - github-cli

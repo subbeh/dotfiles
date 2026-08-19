@@ -2,12 +2,6 @@
 packages:
   common:
     - neovim
-    - luacheck
-    - npm
-    - stylua
-    - tree-sitter-cli
-    - yaml-language-server
 ignore:
-  - .luacheckrc
-  - .luarc.json
   - .stylua.toml
+  - selene.toml
