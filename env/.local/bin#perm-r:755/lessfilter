@@ -10,6 +10,14 @@ md | MD | mkd | markdown | rst)
 	[ "$(tput colors)" -gt 8 ] && fmt='ansi'
 	pandoc -t "${fmt:-plain}" "$1"
 	;;
-*) exit 1 ;;
+*)
+	[ "$(tput colors)" -gt 8 ] || exit 1
+	# Leave binaries (and empty files) to less
+	grep -qI . "$1" || exit 1
+	# Keep less's direct file access (instant G, accurate %) on large files
+	[ "$(wc -c < "$1")" -gt $((5 * 1024 * 1024)) ] && exit 1
+	# --wrap=never so less does the wrapping, not bat
+	bat --color=always --style=plain --paging=never --wrap=never "$1"
+	;;
 esac
 

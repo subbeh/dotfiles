@@ -34,10 +34,12 @@ packages:
     - yq
   pacman:
     - less
+    - pandoc-cli
     - sudo
   brew:
     - coreutils
     - gnu-sed
+    - pandoc
     - rar
     - watch
     - xh

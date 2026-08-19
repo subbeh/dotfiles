@@ -1,5 +1,13 @@
 {
   "plugins": {
+    "blink.cmp": {
+      "rev": "e116ff9c5c1c2ed6bcdb2e0a6e547099876a8116",
+      "src": "https://github.com/saghen/blink.cmp"
+    },
+    "blink.lib": {
+      "rev": "c8fdc12c8a2fab6cf786dd7141a283f8079f902b",
+      "src": "https://github.com/saghen/blink.lib"
+    },
     "breadcrumbs.nvim": {
       "rev": "a59e3ee12818135098e5ce8efeb7b58b675b09ec",
       "src": "https://github.com/LunarVim/breadcrumbs.nvim"

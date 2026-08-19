@@ -18,10 +18,14 @@ require("mini.comment").setup()
 local align_user = MiniAlign.align_user
 MiniAlign.align_user = function(mode)
   local saved = vim.o.cmdheight
-  if saved == 0 then vim.o.cmdheight = 1 end
+  if saved == 0 then
+    vim.o.cmdheight = 1
+  end
   local ok, err = pcall(align_user, mode)
   vim.o.cmdheight = saved
-  if not ok then error(err) end
+  if not ok then
+    error(err)
+  end
 end
 
 -- autocmds --
@@ -65,13 +69,13 @@ require("mini.cmdline").setup({
 })
 
 -- completion --
-require("mini.completion").setup({
-  delay = { completion = 100, info = 100, signature = 50 },
-  window = {
-    info = { border = "single" },
-    signature = { border = "single" },
-  },
-})
+-- require("mini.completion").setup({
+--   delay = { completion = 100, info = 100, signature = 50 },
+--   window = {
+--     info = { border = "single" },
+--     signature = { border = "single" },
+--   },
+-- })
 
 -- diff --
 require("mini.diff").setup({
@@ -108,7 +112,9 @@ local hipatterns = require("mini.hipatterns")
 local function palette_hex(path)
   local node = colors
   for key in path:gmatch("[^.]+") do
-    if type(node) ~= "table" then return nil end
+    if type(node) ~= "table" then
+      return nil
+    end
     node = node[key]
   end
   return type(node) == "string" and node or nil
@@ -148,7 +154,9 @@ local mode_names = {
 
 -- Color an icon separately from its section text: switch to "<hl>Icon", draw the
 -- icon, then switch back so the rest of the section keeps the section highlight.
-local function with_icon(icon, text, hl) return "%#" .. hl .. "Icon#" .. icon .. "%#" .. hl .. "#" .. text end
+local function with_icon(icon, text, hl)
+  return "%#" .. hl .. "Icon#" .. icon .. "%#" .. hl .. "#" .. text
+end
 
 -- mini.icons highlight groups define only `fg`, so using one directly would leave
 -- the icon on the default background. Derive a cached group per icon color that
@@ -176,12 +184,18 @@ require("mini.statusline").setup({
         icon = with_icon(vim.trim(icons.git.Branch), "", "MiniStatuslineDevinfo"),
       })
       local summary = vim.b.minigit_summary
-      if git ~= "" and summary ~= nil and summary.root ~= nil then git = with_icon(icons.git.Repo, vim.fn.fnamemodify(summary.root, ":t"), "MiniStatuslineDevinfo") .. " " .. git end
+      if git ~= "" and summary ~= nil and summary.root ~= nil then
+        git = with_icon(icons.git.Repo, vim.fn.fnamemodify(summary.root, ":t"), "MiniStatuslineDevinfo") .. " " .. git
+      end
       -- section_lsp() only renders one "+" per client; name them instead.
       local lsp = ""
       if not status.is_truncated(60) then
-        local names = vim.tbl_map(function(client) return client.name end, vim.lsp.get_clients({ bufnr = 0 }))
-        if #names > 0 then lsp = with_icon(icons.ui.Flash, table.concat(names, ","), "MiniStatuslineDevinfo") end
+        local names = vim.tbl_map(function(client)
+          return client.name
+        end, vim.lsp.get_clients({ bufnr = 0 }))
+        if #names > 0 then
+          lsp = with_icon(icons.ui.Flash, table.concat(names, ","), "MiniStatuslineDevinfo")
+        end
       end
       local cwd = with_icon(icons.ui.Folder, vim.fn.fnamemodify(vim.fn.getcwd(), ":~"), "MiniStatuslineDirinfo")
       local filename = vim.fn.expand("%:.")
