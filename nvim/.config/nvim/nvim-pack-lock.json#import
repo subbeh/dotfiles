@@ -6,7 +6,7 @@
     },
     "conform.nvim": {
       "rev": "016802de402556da54c36bd7359b441266b01cdd",
-      "src": "git@github.com:stevearc/conform.nvim"
+      "src": "https://github.com/stevearc/conform.nvim"
     },
     "fidget.nvim": {
       "rev": "6f793b2bcd2d35e201c09520f698bb763220908a",
@@ -26,7 +26,7 @@
     },
     "mason.nvim": {
       "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
-      "src": "https://github.com/mason-org/mason.nvim"
+      "src": "https://github.com/williamboman/mason.nvim"
     },
     "mini.nvim": {
       "rev": "629bf6792187e11b4829411c1648f86f28df3963",
@@ -53,6 +53,10 @@
       "rev": "898ee307df58f854d11cd7edd06472574d48014e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
+    },
+    "oil.nvim": {
+      "rev": "b73018b75affd13fa38e2fc94ef753b465f770d7",
+      "src": "https://github.com/stevearc/oil.nvim"
     },
     "persistence.nvim": {
       "rev": "b20b2a7887bd39c1a356980b45e03250f3dce49c",

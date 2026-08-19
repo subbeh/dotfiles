@@ -12,3 +12,7 @@ echo
 
 echo "Cleaning inactive plugins..."
 nvim --headless -c ':lua vim.pack.clean(nil, { inactive = true })' -c qa
+
+echo "Updating Treesitter languages..."
+nvim --headless -c ':TSUpdate' -c qa
+echo

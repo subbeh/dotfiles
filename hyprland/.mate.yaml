@@ -8,13 +8,13 @@ packages:
     - hyprpaper
     - hyprpicker
     - hyprpolkitagent
+    - hyprshot
     - hyprshutdown
     - xdg-desktop-portal-hyprland
     # fonts
     - ttf-proggyclean-nerd
     - noto-fonts
     # misc
-    - flameshot
     - libnewt
     - qt5-wayland
     - qt6-wayland
