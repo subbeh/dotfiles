@@ -59,14 +59,14 @@ require("mini.animate").setup({
 })
 
 -- cmdline --
-require("mini.cmdline").setup({
-  -- autocorrect = {
-  -- 	enable = false,
-  -- },
-  -- autocomplete = {
-  -- 	enable = false,
-  -- },
-})
+-- require("mini.cmdline").setup({
+--   autocorrect = {
+--     enable = false,
+--   },
+--   autocomplete = {
+--     enable = false,
+--   },
+-- })
 
 -- completion --
 -- require("mini.completion").setup({

@@ -30,3 +30,8 @@ set(0, "LspReferenceTarget", { underline = true, bold = true })
 set(0, "Cursor", { fg = colors.bg.default, bg = colors.fg.default })
 set(0, "CursorInsert", { fg = colors.bg.default, bg = colors.green.bright })
 set(0, "CursorVisual", { fg = colors.bg.default, bg = colors.yellow.bright })
+-- Pmenu
+set(0, "Pmenu", { bg = colors.bg.light })
+set(0, "PmenuSel", { bg = colors.bg.lightest })
+set(0, "PmenuThumb", { bg = colors.blue.base })
+set(0, "PmenuSelSbar", { bg = colors.bg.light })

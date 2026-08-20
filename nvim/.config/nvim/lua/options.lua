@@ -76,7 +76,7 @@ opt.updatetime = 100                                                            
 opt.updatetime = 500                                                                           --  Idle delay (ms) before CursorHold / swap write
 opt.wildignore:append({ "*.o", "*.rej", "*.so", "*~", "*.pyc", "*pycache*", "Cargo.lock" })    --  Ignore these in file completion
 -- opt.wildmode = { "longest:full", "full", "noselect" }                                          --  Command-line completion behaviour
-opt.winborder = "single"                                                                       --  Default border for floating windows
+opt.winborder = "none"                                                                         --  Default border for floating windows
 opt.wrap = false                                                                               --  Disable line wrap
 
 vim.cmd("set whichwrap+=<,>,[,],h,l") --  Allow these keys to move across line ends

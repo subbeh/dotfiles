@@ -40,6 +40,10 @@
       "rev": "629bf6792187e11b4829411c1648f86f28df3963",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
+    "nvim-bqf": {
+      "rev": "c282a62bec6c0621a1ef5132aa3f4c9fc4dcc2c7",
+      "src": "https://github.com/kevinhwang91/nvim-bqf"
+    },
     "nvim-lint": {
       "rev": "9b99aad869102ac01775187abd8d49017b148612",
       "src": "https://github.com/mfussenegger/nvim-lint"
