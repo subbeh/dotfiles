@@ -24,7 +24,7 @@ ignore:
   - INSTALL.md
 
 sources:
-  - env
+  - core
   - atuin
   - bitwarden
   - claude

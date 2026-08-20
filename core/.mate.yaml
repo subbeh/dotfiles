@@ -22,6 +22,7 @@ packages:
     - ncdu
     - nmap
     - onefetch
+    - openssh
     - shellcheck
     - socat
     - speedtest-cli

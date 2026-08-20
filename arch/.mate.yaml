@@ -17,7 +17,6 @@ packages:
     - linux-headers
     - linux-lts
     - linux-lts-headers
-    - openssh
     - os-prober
     - sbctl
     - snap-pac
