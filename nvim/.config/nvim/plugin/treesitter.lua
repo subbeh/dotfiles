@@ -44,7 +44,8 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 require("treesj").setup({
-  disable_when_zoomed = true,
+  use_default_keymaps = false,
+  max_join_length = 240,
 })
 
 require("nvim-treesitter-textobjects").setup()

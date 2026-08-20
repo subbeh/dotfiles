@@ -26,17 +26,14 @@ packages:
     - zram-generator
     # apps
     - chromium
+    - spotify-launcher
     # network
     - bind
     - dhcpcd
-    - inetutils
     - networkmanager
-    - openbsd-netcat
     - proton-vpn-cli
-    - whois
     # tools
     - keyd
-    - npm
     - reflector
     # misc
     - fwupd

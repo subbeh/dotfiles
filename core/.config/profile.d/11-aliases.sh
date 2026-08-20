@@ -6,6 +6,7 @@ alias pg='pgrep -fa'
 alias reset='reset && printf "\e[3J"'
 
 # tools
+alias cl="clear"
 alias diff='diff --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'

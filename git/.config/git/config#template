@@ -34,5 +34,16 @@
   rebase = true
 
 [merge]
-  ff = only
   tool = nvimdiff
+  ff = only
+
+[diff]
+  tool = nvimdiff
+  colorMoved = default
+  colorMovedWS = allow-indentation-change
+
+[difftool]
+  prompt = true
+[difftool "nvimdiff"]
+  cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+

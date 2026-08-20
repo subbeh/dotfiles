@@ -6,6 +6,7 @@ packages:
     - btop
     - dialog
     - direnv
+    - coreutils
     - duf
     - dust
     - ffmpeg
@@ -14,6 +15,7 @@ packages:
     - go
     - gron
     - htop
+    - inetutils
     - iperf3
     - jq
     - lsof
@@ -32,14 +34,17 @@ packages:
     - vim
     - vivid
     - wget
+    - whois
     - yq
   pacman:
     - less
+    - npm
+    - openbsd-netcat
     - pandoc-cli
     - sudo
   brew:
-    - coreutils
     - gnu-sed
+    - node
     - pandoc
     - rar
     - watch

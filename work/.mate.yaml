@@ -6,7 +6,6 @@ packages:
     - azure-cli
     - jamf/internal-tap/cloudtools
     - jamf/internal-tap/hermes
-    - k9s
     - logi-options+
     - postman
     - slack

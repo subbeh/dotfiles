@@ -1,6 +1,9 @@
 -- Installs language servers into ~/.local/share/nvim/mason/bin, which mason
 -- prepends to vim.env.PATH so the bare `cmd` names in lsp/*.lua resolve.
-vim.pack.add({ "https://github.com/mason-org/mason.nvim" })
+vim.pack.add({
+  "https://github.com/mason-org/mason.nvim",
+  "https://github.com/RubixDev/mason-update-all",
+})
 
 local icons = require("icons")
 
@@ -89,3 +92,5 @@ vim.api.nvim_create_autocmd("VimEnter", {
 })
 
 vim.keymap.set("n", "<leader>sm", "<cmd>Mason<cr>", { desc = "Mason" })
+
+require("mason-update-all").setup()

@@ -32,6 +32,10 @@
       "rev": "cafbc5d82d8eb4af0daf0057332a325ddf2f436b",
       "src": "https://github.com/rshkarin/mason-nvim-lint"
     },
+    "mason-update-all": {
+      "rev": "332aa2586295f93a32643eb2b580f899458215a1",
+      "src": "https://github.com/RubixDev/mason-update-all"
+    },
     "mason.nvim": {
       "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
       "src": "https://github.com/williamboman/mason.nvim"

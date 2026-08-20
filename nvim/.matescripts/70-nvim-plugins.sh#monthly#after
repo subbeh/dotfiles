@@ -16,3 +16,7 @@ nvim --headless -c ':lua vim.pack.clean(nil, { inactive = true })' -c qa
 echo "Updating Treesitter languages..."
 nvim --headless -c ':TSUpdate' -c qa
 echo
+
+echo "Updating Mason packages..."
+nvim --headless -c ':MasonUpdate' -c qa
+nvim --headless -c 'autocmd User MasonUpdateAllComplete qa' -c 'MasonUpdateAll'

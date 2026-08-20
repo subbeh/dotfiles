@@ -2,6 +2,7 @@
 packages:
   common:
     - neovim
+    - tree-sitter-cli
 ignore:
   - .stylua.toml
   - selene.toml

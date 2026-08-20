@@ -32,7 +32,7 @@ hash -d ws=${XDG_WORKSPACE_DIR}
 hash -d tmp=${XDG_TEMP_DIR}
 hash -d data=${XDG_DATA_DIR}
 
-source "$XDG_CONFIG_HOME/zsh/keybinds"
+source "$XDG_CONFIG_HOME/zsh/keybinds.zsh"
 
 # Adopt the behavior of the system wide configuration for application specific settings
 #

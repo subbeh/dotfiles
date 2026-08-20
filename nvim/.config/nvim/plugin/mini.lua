@@ -252,6 +252,7 @@ require("mini.clue").setup({
     require("mini.clue").gen_clues.registers(),
     require("mini.clue").gen_clues.windows(),
     require("mini.clue").gen_clues.z(),
+    { mode = "n", keys = "<Leader>b", desc = "+Buffers" },
     { mode = "n", keys = "<Leader>c", desc = "+Code" },
     { mode = "n", keys = "<Leader>f", desc = "+Find" },
     { mode = "n", keys = "<Leader>g", desc = "+Git" },

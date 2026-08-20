@@ -7,3 +7,5 @@ if chkcmd loginctl && ! loginctl show-user "$USER" | grep -q "Linger=yes"; then
 fi
 
 alias mux=__tmuxinator_sessions
+
+alias cl="clear && tmux clear-history"

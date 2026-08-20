@@ -1,3 +1,4 @@
 packages:
   brew:
+    - claude
     - claude-code

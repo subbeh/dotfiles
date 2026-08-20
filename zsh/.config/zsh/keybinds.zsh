@@ -22,18 +22,18 @@ key[PageDown]="${terminfo[knp]}"
 key[ShiftTab]="${terminfo[kcbt]}"
 
 # setup key accordingly
-[[ -n "${key[Home]}"          ]] && bindkey -- "${key[Home]}"          beginning-of-line
-[[ -n "${key[End]}"           ]] && bindkey -- "${key[End]}"           end-of-line
-[[ -n "${key[Insert]}"        ]] && bindkey -- "${key[Insert]}"        overwrite-mode
-[[ -n "${key[Backspace]}"     ]] && bindkey -- "${key[Backspace]}"     backward-delete-char
-[[ -n "${key[Delete]}"        ]] && bindkey -- "${key[Delete]}"        delete-char
-[[ -n "${key[Up]}"            ]] && bindkey -- "${key[Up]}"            up-line-or-beginning-search
-[[ -n "${key[Down]}"          ]] && bindkey -- "${key[Down]}"          down-line-or-beginning-search
-[[ -n "${key[Left]}"          ]] && bindkey -- "${key[Left]}"          backward-char
-[[ -n "${key[Right]}"         ]] && bindkey -- "${key[Right]}"         forward-char
-[[ -n "${key[PageUp]}"        ]] && bindkey -- "${key[PageUp]}"        beginning-of-buffer-or-history
-[[ -n "${key[PageDown]}"      ]] && bindkey -- "${key[PageDown]}"      end-of-buffer-or-history
-[[ -n "${key[ShiftTab]}"      ]] && bindkey -- "${key[ShiftTab]}"      reverse-menu-complete
+[[ -n "${key[Home]}" ]] && bindkey -- "${key[Home]}" beginning-of-line
+[[ -n "${key[End]}" ]] && bindkey -- "${key[End]}" end-of-line
+[[ -n "${key[Insert]}" ]] && bindkey -- "${key[Insert]}" overwrite-mode
+[[ -n "${key[Backspace]}" ]] && bindkey -- "${key[Backspace]}" backward-delete-char
+[[ -n "${key[Delete]}" ]] && bindkey -- "${key[Delete]}" delete-char
+[[ -n "${key[Up]}" ]] && bindkey -- "${key[Up]}" up-line-or-beginning-search
+[[ -n "${key[Down]}" ]] && bindkey -- "${key[Down]}" down-line-or-beginning-search
+[[ -n "${key[Left]}" ]] && bindkey -- "${key[Left]}" backward-char
+[[ -n "${key[Right]}" ]] && bindkey -- "${key[Right]}" forward-char
+[[ -n "${key[PageUp]}" ]] && bindkey -- "${key[PageUp]}" beginning-of-buffer-or-history
+[[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
+[[ -n "${key[ShiftTab]}" ]] && bindkey -- "${key[ShiftTab]}" reverse-menu-complete
 
 # Modifier prefixes for bindkey sequences:
 #   ^x  / \C-x   Ctrl+X       (letters case-insensitive: ^A == ^a)
@@ -43,31 +43,32 @@ key[ShiftTab]="${terminfo[kcbt]}"
 #   \M-x         Meta+x       (8-bit meta; prefer \ex on modern terminals)
 # Special: ^I Tab, ^M Enter, ^[ Esc, ^? Backspace, ^ /^@ Ctrl+Space
 # Discover a key's sequence at the prompt with Ctrl+V then the key combo.
-bindkey '^[q'     push-input          # Esc+Q
-bindkey '^A'      beginning-of-line
-bindkey '^E'      end-of-line
-bindkey '^Z'      fancy-ctrl-z
+bindkey '^[q' push-input # Esc+Q
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^Z' fancy-ctrl-z
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5A' kill-line
-bindkey '^[t'     transpose-words
+bindkey '^[t' transpose-words
+bindkey -s '^[l' "clear\n"
 
-bindkey -M vicmd '^[q'     push-line
-bindkey -M vicmd '^A'      beginning-of-line
-bindkey -M vicmd '^E'      end-of-line
+bindkey -M vicmd '^[q' push-line
+bindkey -M vicmd '^A' beginning-of-line
+bindkey -M vicmd '^E' end-of-line
 bindkey -M vicmd '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5D' backward-word
-bindkey -M vicmd '^[t'     transpose-words
-bindkey -M vicmd '^v'      edit-command-line
+bindkey -M vicmd '^[t' transpose-words
+bindkey -M vicmd '^v' edit-command-line
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
-if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
-    autoload -Uz add-zle-hook-widget
-    function zle_application_mode_start { echoti smkx }
-    function zle_application_mode_stop { echoti rmkx }
-    add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
-    add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
+if ((${+terminfo[smkx]} && ${+terminfo[rmkx]})); then
+  autoload -Uz add-zle-hook-widget
+  function zle_application_mode_start { echoti smkx; }
+  function zle_application_mode_stop { echoti rmkx; }
+  add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
+  add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
 
 # History navigation
