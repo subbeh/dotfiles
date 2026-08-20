@@ -7,6 +7,9 @@ require("mini.align").setup()
 require("mini.bracketed").setup()
 require("mini.git").setup()
 require("mini.icons").setup()
+-- breadcrumbs.nvim only draws the winbar filetype icon if it can require
+-- nvim-web-devicons; the mock routes that lookup to mini.icons.
+require("mini.icons").mock_nvim_web_devicons()
 require("mini.pairs").setup()
 require("mini.sessions").setup()
 require("mini.surround").setup()

@@ -132,6 +132,7 @@ require("snacks").setup({
       },
       explorer = {
         hidden = true,
+        ignored = true,
         layout = {
           layout = {
             width = 30,

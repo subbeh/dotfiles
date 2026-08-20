@@ -342,7 +342,9 @@
     "return-type": "json",
     "interval": 10,
     "tooltip": true,
-    "on-click": "mate apply"
+    "signal": 6,
+    "on-click": "mate apply",
+    "on-click-right": "pkill -SIGRTMIN+6 waybar"
   },
   //
   // KUBERNETES

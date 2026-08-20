@@ -20,6 +20,6 @@ navic.setup({
 
 -- stylua: ignore start
 local set = vim.api.nvim_set_hl
-set(0, "WinBar",         { bg = colors.bg.default, fg = colors.fg.dark, bold = true })
-set(0, "NavicText",      { bg = colors.bg.default, fg = colors.fg.darker })
+set(0, "WinBar",         { bg = colors.bg.default, fg = colors.fg.default, bold = true })
+set(0, "NavicText",      { bg = colors.bg.default, fg = colors.fg.darkest, bold = false })
 set(0, "NavicSeparator", { bg = colors.bg.default, fg = colors.fg.darker })

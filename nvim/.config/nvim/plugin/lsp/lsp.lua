@@ -30,4 +30,12 @@ local function set_lsp_enabled(state)
   end
 end
 
-require("snacks").toggle.new({ name = "LSP", get = function() return #vim.lsp.get_clients({ bufnr = 0 }) > 0 end, set = set_lsp_enabled }):map("<leader>lt")
+require("snacks").toggle
+  .new({
+    name = "LSP",
+    get = function()
+      return #vim.lsp.get_clients({ bufnr = 0 }) > 0
+    end,
+    set = set_lsp_enabled,
+  })
+  :map("<leader>lt")
