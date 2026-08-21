@@ -339,10 +339,7 @@ vim.api.nvim_create_autocmd("BufReadCmd", {
       -- ciphertext with an empty buffer.
       vim.bo[buf].modifiable = false
       vim.bo[buf].readonly = true
-      notify_later(
-        ("could not decrypt %s: %s"):format(vim.fn.fnamemodify(path, ":t"), vim.trim(result.stderr or "")),
-        vim.log.levels.ERROR
-      )
+      notify_later(("could not decrypt %s: %s"):format(vim.fn.fnamemodify(path, ":t"), vim.trim(result.stderr or "")), vim.log.levels.ERROR)
       return
     end
 
@@ -406,10 +403,7 @@ vim.api.nvim_create_autocmd("BufWriteCmd", {
     end
 
     vim.bo[buf].modified = false
-    notify_later(
-      ("encrypted %s (%d recipient%s)"):format(vim.fn.fnamemodify(path, ":t"), #to, #to == 1 and "" or "s"),
-      vim.log.levels.INFO
-    )
+    notify_later(("encrypted %s (%d recipient%s)"):format(vim.fn.fnamemodify(path, ":t"), #to, #to == 1 and "" or "s"), vim.log.levels.INFO)
   end,
   desc = "statemate: re-encrypt age file on write",
 })

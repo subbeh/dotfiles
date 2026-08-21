@@ -33,6 +33,30 @@ local function explorer_nav_keys()
   return keys
 end
 
+-- Keep the snacks explorer and vim's cwd in sync in both directions: cwd
+-- changes elsewhere (:cd, project.nvim's <Leader>r) re-root an open explorer,
+-- and re-rooting the explorer itself (focus/up) updates cwd.
+vim.api.nvim_create_autocmd("DirChanged", {
+  group = vim.api.nvim_create_augroup("user.snacks_explorer_cwd", { clear = true }),
+  callback = function()
+    -- Deferred: DirChanged can fire synchronously from inside an in-flight
+    -- explorer action (e.g. <C-]> tcd), and rerooting the picker mid-action
+    -- corrupts its tree state (duplicated nodes).
+    vim.schedule(function()
+      local picker = snacks.picker.get({ source = "explorer" })[1]
+      if picker and picker:cwd() ~= vim.fn.getcwd() then
+        picker:set_cwd(vim.fn.getcwd())
+        picker:find()
+      end
+    end)
+  end,
+  desc = "Re-root snacks explorer to cwd",
+})
+
+local function explorer_chdir(picker)
+  vim.fn.chdir(picker:cwd())
+end
+
 require("snacks").setup({
   -- misc
   bigfile = { enabled = true },
@@ -133,6 +157,16 @@ require("snacks").setup({
       explorer = {
         hidden = true,
         ignored = true,
+        actions = {
+          explorer_focus = function(picker, item)
+            require("snacks.explorer.actions").actions.explorer_focus(picker, item)
+            explorer_chdir(picker)
+          end,
+          explorer_up = function(picker, item)
+            require("snacks.explorer.actions").actions.explorer_up(picker, item)
+            explorer_chdir(picker)
+          end,
+        },
         layout = {
           layout = {
             width = 30,

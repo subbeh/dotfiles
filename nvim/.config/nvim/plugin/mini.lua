@@ -184,11 +184,11 @@ require("mini.statusline").setup({
       local mode = mode_names[vim.fn.mode()] or "MISC"
       local git = status.section_git({
         trunc_width = 40,
-        icon = with_icon(vim.trim(icons.git.Branch), "", "MiniStatuslineDevinfo"),
+        icon = with_icon(vim.trim(icons.git.Branch), "", "MiniStatuslineDevinfoGit"),
       })
       local summary = vim.b.minigit_summary
       if git ~= "" and summary ~= nil and summary.root ~= nil then
-        git = with_icon(icons.git.Repo, vim.fn.fnamemodify(summary.root, ":t"), "MiniStatuslineDevinfo") .. " " .. git
+        git = with_icon(icons.git.Repo, vim.fn.fnamemodify(summary.root, ":t"), "MiniStatuslineDevinfoRepo") .. " " .. git
       end
       -- section_lsp() only renders one "+" per client; name them instead.
       local lsp = ""
@@ -197,7 +197,21 @@ require("mini.statusline").setup({
           return client.name
         end, vim.lsp.get_clients({ bufnr = 0 }))
         if #names > 0 then
-          lsp = with_icon(icons.ui.Flash, table.concat(names, ","), "MiniStatuslineDevinfo")
+          lsp = with_icon(icons.ui.Flash, table.concat(names, ","), "MiniStatuslineDevinfoLsp")
+        end
+      end
+      local formatter = ""
+      local linter = ""
+      if not status.is_truncated(60) then
+        local formatter_names = vim.tbl_map(function(f)
+          return f.name
+        end, require("conform").list_formatters(0))
+        if #formatter_names > 0 then
+          formatter = with_icon(icons.ui.Pencil, table.concat(formatter_names, ","), "MiniStatuslineDevinfoFormatter")
+        end
+        local linter_names = require("lint").linters_by_ft[vim.bo.filetype] or {}
+        if #linter_names > 0 then
+          linter = with_icon(icons.ui.Bug, table.concat(linter_names, ","), "MiniStatuslineDevinfoLinter")
         end
       end
       local cwd = with_icon(icons.ui.Folder, vim.fn.fnamemodify(vim.fn.getcwd(), ":~"), "MiniStatuslineDirinfo")
@@ -211,7 +225,7 @@ require("mini.statusline").setup({
 
       return status.combine_groups({
         { hl = mode_hl, strings = { mode } },
-        { hl = "MiniStatuslineDevinfo", strings = { git, lsp } },
+        { hl = "MiniStatuslineDevinfo", strings = { git, lsp, formatter, linter } },
         "%#StatusLine#%=",
         { hl = "MiniStatuslineFilename", strings = {} },
         "%#StatusLine#%=",
@@ -298,9 +312,18 @@ set(0, "MiniStatuslineModeReplace",  { bg = colors.red.bright,     fg = colors.b
 set(0, "MiniStatuslineModeCommand",  { bg = colors.magenta.bright, fg = colors.bg.default, bold = true, cterm = { bold = true } })
 set(0, "MiniStatuslineModeOther",    { bg = colors.fg.default,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
 set(0, "MiniStatuslineDevinfo",      { bg = colors.bg.lighter,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoGit",           { bg = colors.bg.lighter, fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoGitIcon",       { bg = colors.bg.lighter, fg = colors.yellow.base })
+set(0, "MiniStatuslineDevinfoRepo",          { bg = colors.bg.lighter, fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoRepoIcon",      { bg = colors.bg.lighter, fg = colors.magenta.base })
+set(0, "MiniStatuslineDevinfoLsp",           { bg = colors.bg.lighter, fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoLspIcon",       { bg = colors.bg.lighter, fg = colors.blue.base })
+set(0, "MiniStatuslineDevinfoFormatter",     { bg = colors.bg.lighter, fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoFormatterIcon", { bg = colors.bg.lighter, fg = colors.green.base })
+set(0, "MiniStatuslineDevinfoLinter",        { bg = colors.bg.lighter, fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoLinterIcon",    { bg = colors.bg.lighter, fg = colors.cyan.base })
 set(0, "MiniStatuslineDirinfo",      { bg = colors.bg.default,     fg = colors.fg.darkest })
 set(0, "MiniStatuslineFileinfo",     { bg = colors.bg.default,     fg = colors.fg.default })
-set(0, "MiniStatuslineDevinfoIcon",  { bg = colors.bg.lighter,     fg = colors.red.base })
 set(0, "MiniStatuslineDirinfoIcon",  { bg = colors.bg.default,     fg = colors.blue.base })
 set(0, "MiniStatuslineFileinfoIcon", { bg = colors.bg.default,     fg = colors.blue.base })
 
