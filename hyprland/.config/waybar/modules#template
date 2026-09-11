@@ -311,7 +311,8 @@
     "exec": "__waybar_network",
     "on-click": "pkill -x rofi || __waybar_network_popup",
     "interval": 60,
-    "signal": 7
+    "signal": 7,
+    "on-click-right": "pkill -SIGRTMIN+7 waybar"
   },
   //
   // SYNCTHING

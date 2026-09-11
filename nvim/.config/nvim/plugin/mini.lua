@@ -61,25 +61,6 @@ require("mini.animate").setup({
   },
 })
 
--- cmdline --
--- require("mini.cmdline").setup({
---   autocorrect = {
---     enable = false,
---   },
---   autocomplete = {
---     enable = false,
---   },
--- })
-
--- completion --
--- require("mini.completion").setup({
---   delay = { completion = 100, info = 100, signature = 50 },
---   window = {
---     info = { border = "single" },
---     signature = { border = "single" },
---   },
--- })
-
 -- diff --
 require("mini.diff").setup({
   view = {

@@ -5,6 +5,7 @@ packages:
     - dimentium/autoraise/autoraise
     - google-chrome
     - karabiner-elements
+    - logi-options+
     - middleclick
     - raycast
     - rectangle
