@@ -54,6 +54,8 @@ profiles:
   macos:
     detection:
       os: darwin
+    variables:
+      workspaceDir: "/Users/Shared/data/workspace"
   personal:
     extends: linux
     detection:
@@ -81,7 +83,6 @@ profiles:
       - macos
       - work
     variables:
-      workspaceDir: "~/workspace"
       sshKeys:
         - laptop-work-ssh-key
         - github-ssh-key

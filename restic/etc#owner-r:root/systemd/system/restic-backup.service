@@ -4,7 +4,7 @@ Documentation=https://restic.readthedocs.io/en/stable/040_backup.html
 Wants=network-online.target
 After=network-online.target
 OnFailure=restic-failure@%n.service
-ConditionACPower=true
+; ConditionACPower=true
 
 [Service]
 Type=oneshot
@@ -37,7 +37,7 @@ ExecStart=/usr/bin/restic backup \
 # Only prunes when the backup above succeeded
 ExecStartPost=/usr/bin/restic forget --prune \
     --keep-daily 7 \
-    --keep-weekly 5 \
+    --keep-weekly 4 \
     --keep-monthly 12
 
 # Needs to read the whole filesystem, so keep hardening to read-only protections

@@ -31,6 +31,7 @@ packages:
     - bind
     - dhcpcd
     - networkmanager
+    - nm-connection-editor
     - proton-vpn-cli
     # tools
     - keyd
