@@ -9,11 +9,13 @@ if [[ -z "$zsh_path" ]]; then
   exit 1
 fi
 
+{{- if eq .OS "linux" }}
 current_shell="$(getent passwd "$USER" | cut -d: -f7)"
 if [[ "$current_shell" != "$zsh_path" ]]; then
   chsh -s "$zsh_path"
   echo "Login shell changed to zsh (takes effect on next login)."
 fi
+{{- end }}
 
 mkdir -pv "${XDG_CACHE_HOME:-$HOME/.cache}/zsh" "${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
 pkill -u "$USER" zsh --signal=USR1 || true

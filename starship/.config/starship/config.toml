@@ -42,22 +42,19 @@ truncation_symbol = '+/'
 style = 'bold bright-blue'
 format = '[$truncation_symbol](bold bright-purple)[$path](bold bright-blue)[$read_only]($read_only_style) '
 read_only = ' 󰌾'
-
-[directory.substitutions]
-'~/.config/' = '[] '
-'~/.config' = '[]'
-'~/workspace/dotfiles/' = '[󰇘] '
-'~/workspace/dotfiles' = '[󰇘]'
-'~/workspace/' = '[󱧽] '
-'~/workspace' = '[󱧽]'
-'~/' = '[] '
-'~' = '[]'
-'/data/workspace/dotfiles/' = '[󰇘] '
-'/data/workspace/dotfiles' = '[󰇘]'
-'/data/workspace/' = '[󱧽] '
-'/data/workspace' = '[󱧽]'
-'/data/' = '[] '
-'/data' = '[]'
+substitutions = [
+  { from = "~/.config$",                  to = "[]",    regex = true },
+  { from = "~/.config/",                  to = "[] ",   regex = true },
+  { from = "^~$",                         to = "[]",    regex = true },
+  { from = "^~/",                         to = "[] ",   regex = true },
+  { from = "^(/data|/Users/Shared/data)", to = "<data>", regex = true },
+  { from = "^<data>/workspace/dotfiles$", to = "[󰇘]",    regex = true },
+  { from = "^<data>/workspace/dotfiles/", to = "[󰇘] ",   regex = true },
+  { from = "^<data>/workspace$",          to = "[󱧽]",    regex = true },
+  { from = "^<data>/workspace/",          to = "[󱧽] ",   regex = true },
+  { from = "^<data>$",                    to = "[]",    regex = true },
+  { from = "^<data>/",                    to = "[] ",   regex = true },
+]
 
 [character]
 success_symbol = '[❯](bold purple)'

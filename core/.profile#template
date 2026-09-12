@@ -4,6 +4,7 @@
 # Most of this script is a user scoped version of /etc/profile from the
 # Arch Linux's 'filesystem' package
 
+{{- if eq .OS "linux" }}
 # Use systemd-environment-d-generator(8) to generate environment, and export
 # those variables
 #
@@ -15,6 +16,7 @@ for generator in /usr/lib/systemd/user-environment-generators/*; do
 	EOF
   set +a
 done
+{{- end }}
 
 # Load profiles from $XDG_CONFIG_HOME/profile.d (also sourced by zsh's .zshrc
 # for interactive non-login shells, which do not run this file)

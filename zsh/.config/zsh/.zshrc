@@ -4,6 +4,13 @@
 # setopt xtrace
 # zmodload zsh/zprof
 
+# Adopt the behavior of the system wide configuration for application specific settings
+#
+# See: https://wiki.archlinux.org/title/Command-line_shell#/etc/profile
+if [[ ! -o login ]]; then
+  emulate sh -c 'test -r "${XDG_CONFIG_HOME:-$HOME/.config}/sh/profile.d.sh" && . "$_"'
+fi
+
 FPATH="$XDG_DATA_HOME"/zsh/site-functions:$FPATH
 HISTDUP=erase
 HISTFILE="${XDG_STATE_HOME}/zsh/history"
@@ -34,14 +41,6 @@ hash -d data=${XDG_DATA_DIR}
 
 source "$XDG_CONFIG_HOME/zsh/keybinds.zsh"
 
-# Adopt the behavior of the system wide configuration for application specific settings
-#
-# See: https://wiki.archlinux.org/title/Command-line_shell#/etc/profile
-
-if [[ ! -o login ]]; then
-  emulate sh -c 'test -r "$XDG_CONFIG_HOME/sh/profile.d.sh" && . "$_"'
-fi
-
 typeset -ga __compdef_replay=()
 function compdef { __compdef_replay+=("${(j: :)${(q)@}}"); }
 
@@ -50,6 +49,19 @@ for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
     source "$script"
   fi
 done
+
+# Re-assert our own bin dir now that the .zshrc.d scripts have had their say.
+# brew shellenv prepends /opt/homebrew/bin unconditionally, which would otherwise
+# leave ~/.local/bin behind it and shadow the binaries we deploy there.
+#
+# typeset -U keeps the first occurrence of a duplicate, so prepending a directory
+# already in $path moves it to the front rather than adding a second copy.
+#
+# -g is required: _reload() sources this file from inside a function, where a bare
+# typeset would declare a *local* (and initially empty) path, blanking $PATH for
+# the rest of the reload.
+typeset -gU path PATH
+path=("${XDG_BIN_HOME:-$HOME/.local/bin}" $path)
 
 zstyle :completion:* use-cache true
 zstyle :completion:* cache-path "$XDG_CACHE_HOME/zsh/zcompcache"

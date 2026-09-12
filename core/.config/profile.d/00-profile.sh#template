@@ -2,6 +2,12 @@
 
 {{ if eq .OS "darwin" -}}
 export PROFILE_OS=darwin
+
+set -o allexport
+for file in "$HOME"/.config/environment.d/*.conf; do
+  source "$file"
+done
+set +o allexport
 {{ else if eq .OS "linux" -}}
 export PROFILE_OS=linux
 {{ else -}}
