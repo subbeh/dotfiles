@@ -22,6 +22,7 @@ age:
 
 ignore:
   - INSTALL.md
+  - .gitkeep
 
 sources:
   - core

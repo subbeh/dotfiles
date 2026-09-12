@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# description: Back up applications and system preferences
+
+macprefs backup
