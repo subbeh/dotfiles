@@ -41,6 +41,7 @@ sources:
   - ripgrep
   - ssh
   - tailscale
+  - television
   - starship
   - statemate
   - task
