@@ -1,8 +1,13 @@
 packages:
   common:
     - direnv
+    - docker
+    - kubectl
+    - kubectx
+    - mise
     - uv
   brew:
     - pipenv
+    - kubecolor
   pacman:
     - python-pipenv
