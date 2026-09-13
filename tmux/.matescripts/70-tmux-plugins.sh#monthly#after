@@ -2,6 +2,7 @@
 # description: Install/update tmux plugins
 
 if command -v tpack &>/dev/null; then
+  tpack clean
   tpack install
   tpack update all
 fi
