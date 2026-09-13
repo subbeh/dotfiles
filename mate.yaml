@@ -31,6 +31,7 @@ sources:
   - fzf
   - git
   - gnupg
+  - herdr
   - k9s
   - kitty
   - statemate

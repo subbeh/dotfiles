@@ -15,7 +15,6 @@ $character\
 """
 
 right_format = """
-$cmd_duration\
 ${custom.hermes}\
 ${custom.k8shome}\
 $sudo\
