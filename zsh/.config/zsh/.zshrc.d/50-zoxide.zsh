@@ -3,7 +3,9 @@
 if chkcmd zoxide; then
   export _ZO_DATA_DIR="$XDG_DATA_HOME/zoxide"
   eval "$(zoxide init --no-cmd zsh)"
-  alias z=__zoxide_zi
-fi
 
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -l --color=always $realpath'
+  alias z=__zoxide_z
+  alias zz=__zoxide_zi
+
+  zstyle ':fzf-tab:complete:__zoxide_zi:*' fzf-preview 'eza -l --color=always $realpath'
+fi
