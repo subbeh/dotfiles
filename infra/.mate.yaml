@@ -1,6 +1,7 @@
 packages:
   common:
     - direnv
+    - uv
   brew:
     - pipenv
   pacman:
