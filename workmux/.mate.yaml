@@ -1,0 +1,3 @@
+packages:
+  brew:
+    - raine/workmux/workmux

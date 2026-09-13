@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# description: Install workmux
+
+set -euo pipefail
+
+cargo install workmux # TODO: replace with AUR package

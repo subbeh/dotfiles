@@ -1,0 +1,9 @@
+nerdfont: true
+merge_strategy: rebase
+merge_keep: true
+agent: claude
+
+panes:
+  - command: <agent>
+    focus: true
+  - split: horizontal
