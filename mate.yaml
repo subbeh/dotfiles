@@ -34,6 +34,7 @@ sources:
   - fzf
   - git
   - gnupg
+  - infra
   - k9s
   - kitty
   - nvim

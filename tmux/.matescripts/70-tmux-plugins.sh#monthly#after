@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# description: Install/update tmux plugins
+
+if command -v tpack &>/dev/null; then
+  tpack install
+  tpack update all
+fi
