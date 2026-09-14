@@ -4,69 +4,10 @@ local icons = require("icons")
 local snacks = require("snacks")
 local colors = require("colors")
 
--- Explorer pane navigation.
---
--- The explorer's list and input are floating windows, so `wincmd h/j/k/l` does
--- not see them and nvim-tmux-navigation moves to the wrong window (or is
--- shadowed outright: <c-j>/<c-k> are list_down/list_up by default). The
--- explorer is docked on the left, so hand C-h/C-j/C-k straight to tmux and let
--- C-l focus the file window the picker was opened from.
-local function explorer_nav_keys()
-  local keys = {}
-  for lhs, dir in pairs({ ["<c-h>"] = "h", ["<c-j>"] = "j", ["<c-k>"] = "k" }) do
-    keys[lhs] = function()
-      local tmux = require("nvim-tmux-navigation.tmux_util")
-      -- Matches disable_when_zoomed in plugin/tmux.lua.
-      if vim.env.TMUX and tmux.should_tmux_control(true, true) then
-        tmux.tmux_change_pane(dir)
-      end
-    end
-  end
-  keys["<c-l>"] = function()
-    -- A key handler receives the snacks.win, not the picker, so look the
-    -- picker up to reach the window it was opened from.
-    local picker = snacks.picker.get({ source = "explorer" })[1]
-    if picker and picker.main and vim.api.nvim_win_is_valid(picker.main) then
-      vim.api.nvim_set_current_win(picker.main)
-    end
-  end
-  return keys
-end
-
--- Keep the snacks explorer and vim's cwd in sync in both directions: cwd
--- changes elsewhere (:cd, project.nvim's <Leader>r) re-root an open explorer,
--- and re-rooting the explorer itself (focus/up) updates cwd.
-vim.api.nvim_create_autocmd("DirChanged", {
-  group = vim.api.nvim_create_augroup("user.snacks_explorer_cwd", { clear = true }),
-  callback = function()
-    -- Deferred: DirChanged can fire synchronously from inside an in-flight
-    -- explorer action (e.g. <C-]> tcd), and rerooting the picker mid-action
-    -- corrupts its tree state (duplicated nodes).
-    vim.schedule(function()
-      local picker = snacks.picker.get({ source = "explorer" })[1]
-      if picker and picker:cwd() ~= vim.fn.getcwd() then
-        picker:set_cwd(vim.fn.getcwd())
-        picker:find()
-      end
-    end)
-  end,
-  desc = "Re-root snacks explorer to cwd",
-})
-
-local function explorer_chdir(picker)
-  vim.fn.chdir(picker:cwd())
-end
-
 require("snacks").setup({
   -- misc
   bigfile = { enabled = true },
   toggle = { enabled = true },
-
-  -- explorer
-  explorer = {
-    trash = false,
-    replace_netrw = true,
-  },
 
   -- dashboard
   dashboard = {
@@ -154,39 +95,6 @@ require("snacks").setup({
       grep_buffers = {
         hidden = true,
       },
-      explorer = {
-        hidden = true,
-        ignored = true,
-        actions = {
-          explorer_focus = function(picker, item)
-            require("snacks.explorer.actions").actions.explorer_focus(picker, item)
-            explorer_chdir(picker)
-          end,
-          explorer_up = function(picker, item)
-            require("snacks.explorer.actions").actions.explorer_up(picker, item)
-            explorer_chdir(picker)
-          end,
-        },
-        layout = {
-          layout = {
-            width = 30,
-          },
-        },
-        win = {
-          list = {
-            keys = vim.tbl_extend("error", explorer_nav_keys(), {
-              ["-"] = "explorer_up",
-              ["W"] = "explorer_close_all",
-              ["<C-]>"] = "tcd",
-              ["<C-c>"] = "",
-              ["<Tab>"] = "",
-            }),
-          },
-          input = {
-            keys = explorer_nav_keys(),
-          },
-        },
-      },
       icons = {
         -- Append mini.icons entries to the built-in nerd font / emoji sources so
         -- glyphs are searchable by filetype, extension, OS and LSP kind names.
@@ -240,7 +148,6 @@ map("n", "<leader><leader>", function() snacks.picker.smart({ filter = { cwd = t
 map("n", "<tab>",            function() snacks.picker.buffers({ focus = "list" }) end,       { desc = "Buffers" })
 map("n", "<leader>bd",       function() snacks.bufdelete.delete() end,                       { desc = "Delete buffer" })
 map("n", "<leader>bD",       function() snacks.bufdelete.other() end,                        { desc = "Delete buffers (other)" })
-map("n", "<leader>e",        function() snacks.picker.explorer() end,                        { desc = "Explorer" })
 map("n", "<leader>fc",       function() snacks.picker.commands() end,                        { desc = "Commands" })
 map("n", "<leader>fD",       function() snacks.picker.diagnostics_buffer() end,              { desc = "Diagnostics (buffer)" })
 map("n", "<leader>fd",       function() snacks.picker.diagnostics() end,                     { desc = "Diagnostics" })

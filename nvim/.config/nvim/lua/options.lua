@@ -5,7 +5,7 @@ local g = vim.g
 g.mapleader = " "                  --  Use space as the leader key
 g.maplocalleader = vim.g.mapleader --  Match the local leader to the leader
 g.loaded_perl_provider = 0         --  Disable the unused Perl provider
-g.loaded_netrw = 1                 --  Disable netrw in favour of the snacks explorer
+g.loaded_netrw = 1                 --  Disable netrw in favour of nvim-tree
 g.loaded_netrwPlugin = 1           --  Disable netrw's plugin half as well
 
 opt.autoindent = true                                                                          --  Enable auto-indentation

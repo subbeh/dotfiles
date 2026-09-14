@@ -60,6 +60,10 @@ return {
     base = "#{{ .Vars.color.cyan.base }}",
     bright = "#{{ .Vars.color.cyan.bright }}",
   },
+  orange = {
+    base = "#{{ .Vars.color.orange.base }}",
+    bright = "#{{ .Vars.color.orange.dark }}",
+  },
   white = {
     base = "#{{ .Vars.color.white.base }}",
     bright = "#{{ .Vars.color.white.bright }}",
