@@ -35,9 +35,12 @@ setopt nonomatch            # Pass failed filename patterns instead of error
 setopt pushd_ignore_dups    # Don't push duplicate directories onto the stack
 setopt pushd_silent         # Don't print directory stack after pushd/popd
 
-hash -d ws=${XDG_WORKSPACE_DIR}
-hash -d tmp=${XDG_TEMP_DIR}
+hash -d bin=${XDG_BIN_HOME}
 hash -d data=${XDG_DATA_DIR}
+hash -d dot=${XDG_DOTFILES_DIR}
+hash -d proj=${XDG_PROJECTS_DIR}
+hash -d tmp=${XDG_TEMP_DIR}
+hash -d ws=${XDG_WORKSPACE_DIR}
 
 source "$XDG_CONFIG_HOME/zsh/keybinds.zsh"
 
