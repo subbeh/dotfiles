@@ -43,17 +43,18 @@ style = 'bold bright-blue'
 format = '[$truncation_symbol](bold bright-purple)[$path](bold bright-blue)[$read_only]($read_only_style) '
 read_only = ' 󰌾'
 substitutions = [
-  { from = "~/.config$",                  to = "[]",    regex = true },
-  { from = "~/.config/",                  to = "[] ",   regex = true },
-  { from = "^~$",                         to = "[]",    regex = true },
-  { from = "^~/",                         to = "[] ",   regex = true },
-  { from = "^(/data|/Users/Shared/data)", to = "<data>", regex = true },
-  { from = "^<data>/workspace/dotfiles$", to = "[󰇘]",    regex = true },
-  { from = "^<data>/workspace/dotfiles/", to = "[󰇘] ",   regex = true },
-  { from = "^<data>/workspace$",          to = "[󱧽]",    regex = true },
-  { from = "^<data>/workspace/",          to = "[󱧽] ",   regex = true },
-  { from = "^<data>$",                    to = "[]",    regex = true },
-  { from = "^<data>/",                    to = "[] ",   regex = true },
+  { from = "~/.config$",                       to = "[]",    regex = true },
+  { from = "~/.config/",                       to = "[] ",   regex = true },
+  { from = "^~$",                              to = "[]",    regex = true },
+  { from = "^~/",                              to = "[] ",   regex = true },
+  { from = "^(/data|/Users/Shared/data)",      to = "<data>", regex = true },
+  { from = "^<data>/workspace/dotfiles$",      to = "[󰇘]",    regex = true },
+  { from = "^<data>/workspace/dotfiles/",      to = "[󰇘] ",   regex = true },
+  { from = "^<data>/workspace/jamf/sessions/", to = "[] ",   regex = true },
+  { from = "^<data>/workspace$",               to = "[󱧽]",    regex = true },
+  { from = "^<data>/workspace/",               to = "[󱧽] ",   regex = true },
+  { from = "^<data>$",                         to = "[]",    regex = true },
+  { from = "^<data>/",                         to = "[] ",   regex = true },
 ]
 
 [character]
