@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# description: Install the dash gh extension
+
+set -euo pipefail
+
+gh extension install dlvhdr/gh-dash
