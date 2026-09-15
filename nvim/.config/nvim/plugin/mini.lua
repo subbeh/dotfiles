@@ -54,7 +54,7 @@ require("mini.animate").setup({
     timing = require("mini.animate").gen_timing.linear({ duration = 100, unit = "total" }),
   },
   scroll = {
-    timing = require("mini.animate").gen_timing.linear({ duration = 150, unit = "total" }),
+    timing = require("mini.animate").gen_timing.linear({ duration = 10, unit = "total" }),
   },
   resize = {
     enable = false,
