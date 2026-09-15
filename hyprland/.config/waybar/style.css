@@ -175,7 +175,7 @@ window#waybar.bottom :first-child {
   color: @white;
 }
 
-/* CHEZMOI */
+/* STATEMATE */
 
 #custom-statemate {
   padding: 0 5px;
@@ -197,4 +197,3 @@ window#waybar.bottom :first-child {
 #custom-k8s.k8s-error {
   color: @red;
 }
-

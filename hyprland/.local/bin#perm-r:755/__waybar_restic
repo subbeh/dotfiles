@@ -18,20 +18,29 @@ CHECK_TMR=restic-check.timer
 prop() { systemctl show "$1" --property="$2" --value 2>/dev/null; }
 
 epoch() {
-  [[ -n ${1:-} ]] || { echo 0; return; }
+  [[ -n ${1:-} ]] || {
+    echo 0
+    return
+  }
   date -d "$1" +%s 2>/dev/null || echo 0
 }
 
 stamp() {
-  (($1 > 0)) || { printf 'never'; return; }
+  (($1 > 0)) || {
+    printf 'never'
+    return
+  }
   date -d "@$1" '+%a %d %b %H:%M'
 }
 
 duration() {
   local s=$1
-  if ((s < 60)); then printf '%ds' "$s"
-  elif ((s < 3600)); then printf '%dm %ds' $((s / 60)) $((s % 60))
-  elif ((s < 86400)); then printf '%dh %dm' $((s / 3600)) $(((s % 3600) / 60))
+  if ((s < 60)); then
+    printf '%ds' "$s"
+  elif ((s < 3600)); then
+    printf '%dm %ds' $((s / 60)) $((s % 60))
+  elif ((s < 86400)); then
+    printf '%dh %dm' $((s / 3600)) $(((s % 3600) / 60))
   else printf '%dd %dh' $((s / 86400)) $(((s % 86400) / 3600)); fi
 }
 
