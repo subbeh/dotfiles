@@ -5,6 +5,7 @@ packages:
     # core
     - base
     - base-devel
+    - bc
     - btrfs-progs
     - dosfstools
     - efibootmgr
