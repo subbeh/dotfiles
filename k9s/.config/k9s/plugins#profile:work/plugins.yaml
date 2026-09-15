@@ -11,7 +11,7 @@ plugins:
     confirm: true
     args:
       - -c
-      - "hermes jpro actions troubleshoot $(echo $NAMESPACE | sed 's/-.*//')"
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; hermes jpro actions troubleshoot $INSTANCE"
   elevate:
     shortCut: Shift-E
     description: "(Atlas) Elevate"
@@ -23,7 +23,7 @@ plugins:
     confirm: true
     args:
       - -c
-      - "hermes jpro database elevate $(echo $NAMESPACE | sed 's/-.*//')"
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; hermes jpro database elevate $INSTANCE"
   roll:
     shortCut: Shift-R
     description: "(Atlas) Roll"
@@ -36,7 +36,7 @@ plugins:
     confirm: true
     args:
       - -c
-      - "hermes jpro actions roll $(echo $NAMESPACE | sed 's/-.*//')"
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; hermes jpro actions roll $INSTANCE"
   bash-shell:
     description: "(Atlas) Shell"
     shortCut: Shift-S
@@ -47,7 +47,7 @@ plugins:
     background: false
     args:
       - -c
-      - "kubectl exec -ti $NAME -- /bin/bash"
+      - "kubectl exec -ti $NAME -- /bin/sh"
   logstream-logs:
     description: "(Logstream) Logs"
     shortCut: Shift-L
@@ -58,7 +58,7 @@ plugins:
     background: false
     args:
       - -c
-      - "kubectl logs -l app.kubernetes.io/name=fluentd -n logging | grep $(echo $NAMESPACE | sed 's/-.*//') | less -RK"
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; kubectl logs -l app.kubernetes.io/name=fluentd -n logging | grep $INSTANCE | less -RK"
   logstream-configcheck:
     description: "(Logstream) ConfigCheck"
     shortCut: Shift-C
@@ -69,7 +69,7 @@ plugins:
     background: false
     args:
       - -c
-      - "kubectl logs $(kubectl get pods -n logging --no-headers -o custom-columns=':metadata.name' | grep -m 1 '^logging-operator-fluentd-configcheck-') -n logging | grep -C1 $(echo $NAMESPACE | sed 's/-.*//') | less -RK"
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; kubectl logs $(kubectl get pods -n logging --no-headers -o custom-columns=':metadata.name' | grep -m 1 '^logging-operator-fluentd-configcheck-') -n logging | grep -C1 $INSTANCE | less -RK"
   kill:
     description: "Kill pod"
     shortCut: Shift-D
@@ -84,7 +84,7 @@ plugins:
       - "kubectl delete pod $NAME --force"
   clear:
     description: "Clear failed pods"
-    shortCut: Shift-C
+    shortCut: Shift-X
     override: true
     confirm: true
     scopes:
@@ -94,3 +94,96 @@ plugins:
     args:
       - -c
       - "kubectl delete pods --field-selector=status.phase=Failed"
+
+  # --- Cloud Ops Tools (cloudtools repo) ---
+  # These wrap thethon CLI suite (jstatus3, thundering_herd, etc.) rather
+  # than hermes, per the hermes-vs-cloudtools split: use these when you need
+  # to stitch together Atlas + Salesforce/Intercom/Jira/AWS data or run a
+  # workflow, not a raw platform-API action.
+
+  cloudtools-status:
+    description: "(CloudTools) Status (jstatus3)"
+    shortCut: Shift-J
+    override: true
+    scopes:
+      - po
+    command: bash
+    background: false
+    args:
+      - -c
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; jstatus3 -i $INSTANCE --atlas -n | less -RK"
+
+  cloudtools-thundering-herd:
+    description: "(CloudTools) Thundering Herd"
+    shortCut: Shift-H
+    override: true
+    scopes:
+      - po
+    command: bash
+    background: false
+    confirm: true
+    args:
+      - -c
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; thundering_herd -i $INSTANCE -n | less -RK"
+
+  cloudtools-processlist:
+    description: "(CloudTools) Processlist"
+    shortCut: Shift-P
+    override: true
+    scopes:
+      - po
+    command: bash
+    background: false
+    args:
+      - -c
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; get_processlist -i $INSTANCE | less -RK"
+
+  cloudtools-action-monitor:
+    description: "(CloudTools) Action Monitor (action_kraken)"
+    shortCut: Shift-K
+    override: true
+    scopes:
+      - po
+    command: bash
+    background: false
+    args:
+      - -c
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; action_kraken -i $INSTANCE -m"
+
+  cloudtools-get-logs:
+    description: "(CloudTools) Get Logs"
+    shortCut: Shift-G
+    override: true
+    scopes:
+      - po
+    command: bash
+    background: false
+    args:
+      - -c
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; get_logs -i $INSTANCE -l ERROR | less -RK"
+
+  cloudtools-prf-diagnostics:
+    description: "(CloudTools) PRF Diagnostics"
+    shortCut: Shift-F
+    override: true
+    scopes:
+      - po
+    command: bash
+    background: false
+    confirm: true
+    args:
+      - -c
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; PRF -i $INSTANCE -t -s -st -th | less -RK"
+
+  cloudtools-troubleshoot-pod:
+    description: "(CloudTools) DB Troubleshoot Pod (kubeTSpod)"
+    shortCut: Shift-U
+    override: true
+    scopes:
+      - po
+    command: bash
+    background: false
+    confirm: true
+    args:
+      - -c
+      - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; kubeTSpod --troubleshoot -i $INSTANCE"
