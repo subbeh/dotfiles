@@ -1,9 +1,69 @@
 nerdfont: true
-merge_strategy: rebase
-merge_keep: true
 agent: claude
 
+# Two sessions only (work / home): worktrees are windows in the current session.
+mode: window
+window_placement: rightmost
+window_prefix: " 󰙅 "
+worktree_dir: .worktrees
+worktree_naming: basename
+base_branch: auto
+
+auto_name:
+  command: "claude -p"
+  background: true
+  system_prompt: "Generate a kebab-case git branch name."
+
+# theme.conf owns window-status-format (it carries @jpro_status).
+status_format: false
+
+# Git is manual; this only guards an accidental `wm merge`.
+merge_keep: true
+
+# 5-pane layout mirroring the tpad-eject layout. `target` is a 0-based index
+# into this list, so a pane can split from any earlier pane.
+#
+#   +--------+----------+---------+
+#   |   0    |    1     |    4    |  80%
+#   |  25%   |  editor  | claude  |
+#   +--------+----------+---------+
+#   |   3    |        2           |  20%
+#   +--------+--------------------+
+#
+# The agent pane is defined LAST on purpose: each split leaves the new pane
+# active, so a pane created after it would steal focus from it.
 panes:
-  - command: <agent>
+  - name: shell # 0  left column, top
+  - name: editor # 1  right region, becomes the editor slot
+    command: nvim
+    split: horizontal
+    percentage: 75
+  - name: bootstrap # 2  right column, bottom
+    command: wm-bootstrap
+    split: vertical
+    target: 1
+    percentage: 20
+  - name: shell # 3  left column, bottom
+    split: vertical
+    target: 0
+    percentage: 20
+  - name: agent # 4  claude, splits the editor pane
+    command: <agent>
+    split: horizontal
+    target: 1
+    percentage: 50
     focus: true
-  - split: horizontal
+
+sidebar:
+  position: top
+  height: 1
+
+# Git is manual, so keep the dashboard's c/m keys non-destructive.
+dashboard:
+  commit: "Summarise what is staged and what committing would include. Do not commit."
+  merge: "Summarise what merging this branch into main would involve. Do not merge."
+
+status_icons:
+  working: ""
+  waiting: ""
+  done: ""

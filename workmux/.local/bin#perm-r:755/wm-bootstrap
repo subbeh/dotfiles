@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Prepare a fresh workmux worktree: a new worktree is a clean checkout, so
+# gitignored toolchains and dependencies (.venv, module cache) are missing.
+# Run from the worktree root as a pane command. Idempotent; a no-op in repos
+# with no recognised markers.
+
+set -euo pipefail
+
+ran=0
+
+# mise first: it provisions the toolchains the steps below rely on.
+if [[ -f mise.toml || -f .mise.toml ]] && command -v mise &>/dev/null; then
+  echo "==> mise install"
+  mise install
+  ran=1
+fi
+
+if [[ -f uv.lock ]] && command -v uv &>/dev/null; then
+  echo "==> uv sync"
+  uv sync
+  ran=1
+fi
+
+if [[ -f go.mod ]] && command -v go &>/dev/null; then
+  echo "==> go mod download"
+  go mod download
+  ran=1
+fi
+
+((ran)) || echo "wm-bootstrap: no recognised project markers, nothing to do"
