@@ -47,7 +47,6 @@ sources:
   - task
   - tmux
   - vifm
-  - workmux
   - zsh
 
 # Profiles for machine-specific configuration
