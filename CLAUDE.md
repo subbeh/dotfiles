@@ -138,31 +138,14 @@ across managers; otherwise split per manager — cf. `git/.mate.yaml`, where
 ## Git
 
 Work on `main` — do **not** create a branch. Commit only when asked, and never
-push unless told to. These rules override the generic grouping of the `/commit`
-skill.
+push unless told to.
 
-Conventional Commits, `type(scope): subject`:
+**Use the `/dotfiles-commit` skill** — it handles Conventional Commits format,
+intelligent file grouping, and commit splitting rules. The skill analyzes actual
+diffs, groups files logically, and creates properly formatted commits with
+interactive review.
 
-- Types: the standard set (`feat` `fix` `docs` `style` `refactor` `perf` `test`
-  `build` `ci` `chore`) plus **`pkg`** for `.mate.yaml` package-list changes.
-- Scope is the source-directory name, verbatim: a `less` tweak in
-  `core/.config/profile.d/30-less.sh` is `fix(core): …`. Use `mate` for
-  `mate.yaml` and `.mate/*`; no scope for root repo meta (`README.md`,
-  `install.sh`).
-- Subject: imperative, lower-case, no trailing period. Body only when the *why*
-  isn't obvious, as short bullets. No attribution trailer.
-
-Split one commit per source directory, with three exceptions:
-
-- A coherent cross-cutting change is **one** commit — a theme tweak touching
-  `.mate/theme.yaml`, kitty, tmux and nvim is `feat(theme): …`, because the
-  pieces don't stand alone.
-- A new source is one commit including its `mate.yaml` registration:
-  `feat(zellij): add zellij config`.
-- Machine-generated churn always gets its own `chore(<src>): sync …` commit,
-  never mixed into real work — `claude/.claude/settings.json#import`,
-  `nvim/…/nvim-pack-lock.json#import`, `work/.aws/config#encrypted`.
-
-Stage explicit paths per commit; never `git add -A` or `git commit -a`. If one
-file holds two commits' worth of changes, `git diff <file>` → trim the patch →
-`git apply --cached` (`git add -p` is interactive and can't be driven).
+**Safety**: Stage explicit paths per commit; never `git add -A` or `git commit -a`.
+The skill enforces this. If one file holds multiple commits' worth of changes,
+`git diff <file>` → trim the patch → `git apply --cached` (`git add -p` is
+interactive and can't be driven).

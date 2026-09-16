@@ -103,6 +103,7 @@ AskUserQuestion({
     options: [
       { label: "Commit", description: "Stage these files and create the commit" },
       { label: "Skip", description: "Skip this group and move to the next" },
+      { label: "Show diff", description: "View the actual diff for these files" },
       { label: "Chat", description: "Discuss or provide different instructions" },
       { label: "Quit", description: "Stop the commit workflow" }
     ]
@@ -134,6 +135,17 @@ AskUserQuestion({
 - Add to skipped list
 - Move to next group
 - Show skipped groups in final summary
+
+### Show diff Action
+
+When user selects "Show diff":
+
+1. Run `git diff <file>` for each file in the group
+2. Display the diff output (showing actual line changes)
+3. After showing the diff, present the same group again with AskUserQuestion
+4. User can now make an informed decision (Commit/Skip/Chat/Quit)
+
+**Purpose**: Lets the user review the actual code changes before deciding whether to commit the group.
 
 ### Chat Action
 

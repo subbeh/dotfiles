@@ -26,7 +26,8 @@ This skill replaces the manual commit workflow documented in CLAUDE.md. It analy
 - **Analyzes actual diffs**: Reads full diffs to understand scope, not just filenames or TODO items
 - **AI-driven grouping**: Groups by logical relationships and actual changes, not just directory
 - **Shows reasoning**: Explains WHY files were grouped together based on what changed
-- **Interactive prompts**: Uses AskUserQuestion for Commit / Skip / Chat / Quit actions
+- **Interactive prompts**: Uses AskUserQuestion for Commit / Skip / Show diff / Chat / Quit actions
+- **Show diff option**: View the actual code changes for a group before deciding
 - **Chat option**: Discuss grouping, ask questions, or provide different instructions
 - **Follows project rules**: All CLAUDE.md conventions (types, scopes, special cases)
 - **Never uses**: `git add -A`, `git add .`, `git commit -a` - always explicit file paths
