@@ -69,4 +69,3 @@ set classify+=' ::*.log::'
 set classify+=' ::*.doc,,*.dot,,*.docx,,*.docm,,*.dotx,,*.dotm,,*.adoc::'
 set classify+=' ::*.xls,,*.xlt,,*.xla,,*.xlsx,,*.xlsm,,*.xltx,,*.xltm,,*.xlam::'
 set classify+=' ::*.ppt,,*.pot,,*.ppa,,*.pptx,,*.pptm,,*.potx,,*.potm,,*.ppam::'
-
