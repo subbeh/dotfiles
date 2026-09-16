@@ -107,7 +107,7 @@ added=$(journalctl -u "$BACKUP_SVC" -n 200 --no-pager -o cat 2>/dev/null |
 repo=$(sed -n 's/^RESTIC_REPOSITORY=//p' /etc/restic/env 2>/dev/null)
 
 {
-  printf '<tt><b>restic</b>  %s\n\n' "$label"
+  printf '<b>restic</b>  %s\n\n' "$label"
   if ((b_ended > 0)); then
     printf '%-11s%s  (%s ago)\n' "Last run" "$(stamp "$b_ended")" "$(duration $age)"
     ((b_started > 0 && b_ended > b_started)) &&
@@ -122,8 +122,7 @@ repo=$(sed -n 's/^RESTIC_REPOSITORY=//p' /etc/restic/env 2>/dev/null)
   printf '%s\n' "$(unit_line "$BACKUP_SVC")"
   printf '%s\n' "$(unit_line "$CHECK_TMR")"
   printf '%s' "$(unit_line "$CHECK_SVC")"
-  ((c_ended > 0)) && printf ' · %s' "$(stamp "$c_ended")"
-  printf '</tt>'
+  if ((c_ended > 0)); then printf ' · %s' "$(stamp "$c_ended")"; fi
 } | {
   tooltip=$(cat)
   jq -nc --arg text "$icon" --arg class "$class" --arg tooltip "$tooltip" \
