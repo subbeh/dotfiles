@@ -1,0 +1,3 @@
+# Decrypt age-encrypted files for display in diffs (git diff, lazygit, etc.)
+# Files remain encrypted on disk; this only affects diff/log views.
+*#encrypted diff=age

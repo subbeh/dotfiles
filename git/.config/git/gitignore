@@ -2,7 +2,9 @@
 .direnv/
 .DS_Store/
 __pycache__/
-**/.claude/settings.local.json
+.claude/settings.local.json
+.claude/specs
 .worktrees/
 
 TODO.md
+SPEC.md

@@ -2,6 +2,7 @@ packages:
   common:
     - lazygit
     - worktrunk
+    - gitleaks
   brew:
     - gh
   pacman:

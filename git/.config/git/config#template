@@ -22,6 +22,7 @@
 
 [core]
   excludesFile = ~/.config/git/gitignore
+  attributesFile = ~/.config/git/gitattributes
 
 [init]
   defaultBranch = main
@@ -46,4 +47,7 @@
   prompt = true
 [difftool "nvimdiff"]
   cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+
+[diff "age"]
+  textconv = age --decrypt --identity ~/.config/statemate/key.txt
 

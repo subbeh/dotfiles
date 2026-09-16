@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Pre-commit hook: scan staged changes for secrets using gitleaks.
+# Warns on findings and prompts for confirmation rather than hard-blocking.
+
+set -euo pipefail
+
+# Skip if gitleaks is not installed
+if ! command -v gitleaks >/dev/null 2>&1; then
+  exit 0
+fi
+
+# Skip in non-interactive contexts (CI, git commit --no-verify, etc.)
+if [[ ! -t 0 ]]; then
+  exit 0
+fi
+
+# Run gitleaks protect on staged changes
+# Capture output; gitleaks exits non-zero when secrets are found
+OUTPUT=$(gitleaks protect --staged --redact --log-level warn 2>&1 || true)
+
+# Check if any secrets were found
+if echo "$OUTPUT" | grep -q "has leaked"; then
+  echo "⚠️  WARNING: Potential secrets detected in staged changes" >&2
+  echo "" >&2
+  echo "$OUTPUT" >&2
+  echo "" >&2
+
+  # Prompt for confirmation
+  printf "Do you want to proceed with this commit anyway? [y/N] " >&2
+  read -r response
+
+  case "$response" in
+    [yY][eE][sS]|[yY])
+      echo "Proceeding with commit..." >&2
+      exit 0
+      ;;
+    *)
+      echo "Commit aborted." >&2
+      exit 1
+      ;;
+  esac
+fi
+
+exit 0
