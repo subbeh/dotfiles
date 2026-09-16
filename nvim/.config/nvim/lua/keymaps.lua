@@ -8,6 +8,10 @@ map("n", "<leader>sh", "<cmd>checkhealth<cr>", { desc = "Health" })
 map("x", "J", ":move '>+1<CR>gv-gv", { silent = true })
 map("x", "K", ":move '<-2<CR>gv-gv", { silent = true })
 
+-- Indent, keeping the selection
+map("x", "<", "<gv", { silent = true })
+map("x", ">", ">gv", { silent = true })
+
 -- Navigate buffers
 map("n", "<S-l>", "<cmd>bn<cr>", { silent = true })
 map("n", "<S-h>", "<cmd>bp<cr>", { silent = true })
