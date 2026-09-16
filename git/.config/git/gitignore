@@ -3,5 +3,6 @@
 .DS_Store/
 __pycache__/
 **/.claude/settings.local.json
+.worktrees/
 
 TODO.md

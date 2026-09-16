@@ -1,6 +1,7 @@
 packages:
   common:
     - lazygit
+    - worktrunk
   brew:
     - gh
   pacman:

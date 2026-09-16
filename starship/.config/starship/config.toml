@@ -55,6 +55,7 @@ substitutions = [
   { from = "^<data>/workspace/",               to = "[󱧽] ",   regex = true },
   { from = "^<data>$",                         to = "[]",    regex = true },
   { from = "^<data>/",                         to = "[] ",   regex = true },
+  { from = "/\\.worktrees/?.*",                to = " [󱏒]",   regex = true },
 ]
 
 [character]
