@@ -1,0 +1,13 @@
+#!/bin/sh
+# Wrapper script for MANPAGER that uses nvim when interactive, less when piped
+
+# Check if stdout is a terminal
+if [ -t 1 ]; then
+    # Interactive: use nvim if available
+    if command -v nvim >/dev/null 2>&1; then
+        exec nvim +Man!
+    fi
+fi
+
+# Piped or nvim not available: use less with colors
+exec less -R --use-color -Dd+g -Du+b

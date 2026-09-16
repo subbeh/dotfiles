@@ -6,6 +6,6 @@ export NVIM_HOME="$HOME/.config/$NVIM_APPNAME"
 export EDITOR="nvim"
 export DIFFPROG="$EDITOR -d"
 export MERGE_EDITOR="$EDITOR -d"
-export MANPAGER='nvim +Man!'
+export MANPAGER="$XDG_BIN_HOME/manpager"
 
 alias vi=nvim
