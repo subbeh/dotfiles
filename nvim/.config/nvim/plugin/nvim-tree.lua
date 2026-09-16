@@ -84,6 +84,23 @@ require("nvim-tree").setup({
   },
 })
 
+-- Show the tree alongside the dashboard on a bare `nvim`. The tree has to open
+-- second: snacks refuses to draw the dashboard while more than one non-floating
+-- window exists, which is why `nvim -c NvimTreeOpen` loses the dashboard.
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = vim.api.nvim_create_augroup("nvim_tree_dashboard", { clear = true }),
+  callback = function()
+    if vim.fn.argc() ~= 0 then
+      return
+    end
+    vim.schedule(function()
+      if vim.bo.filetype == "snacks_dashboard" then
+        require("nvim-tree.api").tree.toggle({ focus = false })
+      end
+    end)
+  end,
+})
+
 -- Keymaps
 vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "Explorer" })
 
