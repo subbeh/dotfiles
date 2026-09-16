@@ -1,0 +1,25 @@
+poll_interval = "2s"
+
+# The editor "o" opens a directory in, arguments allowed: "code -n", or
+# "open -a 'Visual Studio Code'". Quotes group an argument that carries a
+# space; the line is run directly, never through a shell. Left unset,
+# Agent Manager takes $AGENT_MANAGER_EDITOR, then the first GUI editor on
+# PATH (code, cursor, windsurf, zed, subl, idea), then $VISUAL or $EDITOR.
+# editor = "code"
+
+# The keys the manager keeps for itself inside a session; every other key
+# reaches the agent. An action takes one key or a list, written as
+# ctrl+<key>, alt+<key> or f1..f12, and "none" hands its key to the agent.
+# [keybindings.session]
+# detach = ["ctrl+q", "ctrl+\\"]
+# review = "ctrl+r"
+# editor = "f3"
+
+# The keys of the manager's own list, one line per action; Settings > keys
+# in the manager names them all. A plain character, a key name (space,
+# enter, up, shift+up ...), ctrl+<key>, alt+<key> or f1..f12; "none" turns
+# an action off. esc and ctrl+c stay as they are.
+# [keybindings.list]
+# new_session = "N"
+# prompt = ["space", "p"]
+# quit = "none"
