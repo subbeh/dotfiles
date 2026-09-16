@@ -19,6 +19,6 @@ while true; do
   tmux list-windows -a -F '#{session_name}:#{window_index} #{@jpro_window} #{window_name}' 2>/dev/null |
     while read -r target flag name; do
       [[ "$flag" == "true" ]] || continue
-      ~/.local/bin/__tmux_update_jpro_status "$target" "$name"
+      ~/.local/bin/__tmux_jpro_status_update "$target" "$name"
     done
 done
