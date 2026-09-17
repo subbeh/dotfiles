@@ -37,8 +37,8 @@ plugins:
     args:
       - -c
       - "ns=$NAMESPACE; INSTANCE=${ns%%-*}; hermes jpro actions roll $INSTANCE"
-  bash-shell:
-    description: "(Atlas) Shell"
+  db-shell:
+    description: "(Atlas) DB Shell"
     shortCut: Shift-S
     override: true
     scopes:
@@ -47,7 +47,7 @@ plugins:
     background: false
     args:
       - -c
-      - "kubectl exec -ti $NAME -- /bin/sh"
+      - 'kubectl exec -ti $NAME -- /bin/sh -ic "db_connect -u ''$(id -un)''"'
   logstream-logs:
     description: "(Logstream) Logs"
     shortCut: Shift-L
