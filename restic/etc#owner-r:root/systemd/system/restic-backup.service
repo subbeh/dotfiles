@@ -4,7 +4,7 @@ Documentation=https://restic.readthedocs.io/en/stable/040_backup.html
 Wants=network-online.target
 After=network-online.target
 OnFailure=restic-failure@%n.service
-ConditionACPower=true
+; ConditionACPower=true
 
 [Service]
 Type=oneshot
@@ -20,6 +20,9 @@ TimeoutStartSec=infinity
 Nice=19
 IOSchedulingClass=idle
 CPUSchedulingPolicy=idle
+
+# Remove stale locks from interrupted backups (e.g., laptop shutdown)
+ExecStartPre=/usr/bin/restic unlock
 
 # Capture what statemate cannot regenerate, so a rebuild is one command
 ExecStartPre=/bin/sh -c 'pacman -Qqen > /var/lib/restic/pkglist-native.txt'

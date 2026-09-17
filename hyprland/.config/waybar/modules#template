@@ -333,7 +333,8 @@
     "tooltip": true,
     "signal": 9,
     "on-click": "kitty --hold journalctl -fu restic-backup.service",
-    "on-click-right": "pkill -SIGRTMIN+9 waybar"
+    "on-click-right": "pkill -SIGRTMIN+9 waybar",
+    "on-click-middle": "sudo systemctl start restic-backup.service"
   },
   //
   // STATEMATE

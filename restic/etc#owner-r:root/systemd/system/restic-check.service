@@ -4,7 +4,7 @@ Documentation=https://restic.readthedocs.io/en/stable/045_working_with_repos.htm
 Wants=network-online.target
 After=network-online.target
 OnFailure=restic-failure@%n.service
-ConditionACPower=true
+; ConditionACPower=true
 
 [Service]
 Type=oneshot
@@ -14,6 +14,9 @@ TimeoutStartSec=infinity
 
 Nice=19
 IOSchedulingClass=idle
+
+# Remove stale locks from interrupted backups (e.g., laptop shutdown)
+ExecStartPre=/usr/bin/restic unlock
 
 # Verifies all metadata plus a 5% sample of pack data, so a silently corrupted
 # repository surfaces here rather than at restore time.
