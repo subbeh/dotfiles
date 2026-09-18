@@ -164,8 +164,12 @@ pane_left=$(tmux new-window -P -F '#{pane_id}' -n "$window_name" -c "$selected_p
 pane_right=$(tmux split-window -h -l 75% -t "$pane_left" -c "$selected_path" -P -F '#{pane_id}')
 
 # Each column: top 80% / bottom 20%
-tmux split-window -v -l 20% -t "$pane_right" -c "$selected_path"
-tmux split-window -v -l 20% -t "$pane_left" -c "$selected_path"
+tmux split-window -v -l 20% -t "$pane_right" -c "$selected_path" -P -F '#{pane_id}'
+tmux split-window -v -l 20% -t "$pane_left" -c "$selected_path" -P -F '#{pane_id}'
+
+# Store project root as a window option
+# This is accessible to all panes via: tmux show-option -wqv @project-root
+tmux set-option -w @project-root "$selected_path"
 
 # Focus the large top-right pane
 tmux select-pane -t "$pane_right"
