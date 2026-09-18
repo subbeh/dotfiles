@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # system
-alias pa='ps -eaf | grep'
+alias pa='ps -eaf | grep -i'
 alias pg='pgrep -fa'
 alias reset='reset && printf "\e[3J"'
 
