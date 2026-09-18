@@ -4,6 +4,7 @@
 __pycache__/
 .claude/settings.local.json
 .claude/specs
+.specs
 .worktrees/
 
 TODO.md
