@@ -258,6 +258,7 @@ require("mini.clue").setup({
     { mode = "n", keys = "<Leader>l", desc = "+LSP" },
     { mode = "n", keys = "<Leader>p", desc = "+Pack" },
     { mode = "n", keys = "<Leader>s", desc = "+System" },
+    { mode = "n", keys = "<Leader>S", desc = "+Session" },
     { mode = "n", keys = "<Leader>u", desc = "+UI" },
     { mode = "n", keys = "<Leader>x", desc = "+Copy" },
   },
