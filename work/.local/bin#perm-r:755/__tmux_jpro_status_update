@@ -29,11 +29,11 @@ fi
     # No status or stopped - show nothing
     result=""
   elif [[ "$status" == "Running" ]]; then
-    result=" #[fg=#d7d7af]󰐊#[fg=default]"
+    result=" #[fg=#fab387]#[fg=default]"
   elif [[ "$status" == "Succeeded" ]]; then
     result=" #[fg=#afffaf]●#[fg=default]"
   elif [[ "$status" == "Pending" ]]; then
-    result=" #[fg=#fab387]󰏤#[fg=default]"
+    result=" #[fg=#d7d7af]󰏤#[fg=default]"
   else
     result=" #[fg=#d75f5f]󱈸#[fg=default]"
   fi
