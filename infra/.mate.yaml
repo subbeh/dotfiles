@@ -5,9 +5,11 @@ packages:
     - kubectl
     - kubectx
     - mise
+    - terraform
     - uv
   brew:
-    - pipenv
+    - hashicorp/tap/terraform
     - kubecolor
+    - pipenv
   pacman:
     - python-pipenv
