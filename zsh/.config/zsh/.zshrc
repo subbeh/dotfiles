@@ -47,6 +47,8 @@ source "$XDG_CONFIG_HOME/zsh/keybinds.zsh"
 typeset -ga __compdef_replay=()
 function compdef { __compdef_replay+=("${(j: :)${(q)@}}"); }
 
+autoload -U +X bashcompinit && bashcompinit
+
 for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
   if [ -r "$script" ]; then
     source "$script"
