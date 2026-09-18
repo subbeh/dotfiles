@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tmux-project-picker - fzf-based project and worktree picker for tmux
+# Creates a new 4-pane window or switches to existing window
+
+# Icons (nerd fonts)
+ICON_FOLDER="" # U+F07B - folder icon
+ICON_BRANCH="" # U+E0A0 - git branch icon
+
+# Validate $XDG_PROJECTS_DIR
+if [ -z "${XDG_PROJECTS_DIR:-}" ]; then
+  tmux display-message "Error: XDG_PROJECTS_DIR not set"
+  exit 1
+fi
+
+if [ ! -d "$XDG_PROJECTS_DIR" ]; then
+  tmux display-message "Error: Directory $XDG_PROJECTS_DIR does not exist"
+  exit 1
+fi
+
+# Build project list with worktrees
+build_project_list() {
+  local projects=()
+
+  # Additional repositories to include (add more paths here)
+  local additional_repos=(
+    "${JAMF_DIR}/cloud-ops-tools"
+  )
+
+  # Process additional repositories first
+  for project_dir in "${additional_repos[@]}"; do
+    if [ -d "$project_dir" ]; then
+      local basename
+      basename=$(basename "$project_dir")
+
+      # Add project entry with folder icon: basename\tfull-path (tab-separated)
+      projects+=("$ICON_FOLDER $basename"$'\t'"$project_dir")
+
+      # Check for worktrees
+      local worktrees_dir="$project_dir/.worktrees"
+      if [ -d "$worktrees_dir" ]; then
+        # Find worktrees and sort by modification time (most recent first)
+        local worktree_list=()
+        while IFS= read -r -d '' worktree; do
+          # Get modification time (epoch) and path
+          local mtime
+          mtime=$(stat -c %Y "$worktree" 2>/dev/null || stat -f %m "$worktree" 2>/dev/null)
+          worktree_list+=("$mtime"$'\t'"$worktree")
+        done < <(find "$worktrees_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+
+        # Sort by mtime (most recent first) and add to projects
+        if [ ${#worktree_list[@]} -gt 0 ]; then
+          while IFS= read -r entry; do
+            local worktree
+            worktree=$(echo "$entry" | cut -d$'\t' -f2-)
+            local branch
+            branch=$(basename "$worktree")
+            # Add worktree entry with git branch icon and indentation: "   branch\tfull-path"
+            projects+=("   $ICON_BRANCH $branch"$'\t'"$worktree")
+          done < <(printf '%s\n' "${worktree_list[@]}" | sort -rn)
+        fi
+      fi
+    fi
+  done
+
+  # Find all direct children (depth 1), excluding hidden directories
+  while IFS= read -r -d '' project_dir; do
+    local basename
+    basename=$(basename "$project_dir")
+
+    # Add project entry with folder icon: basename\tfull-path (tab-separated)
+    projects+=("$ICON_FOLDER $basename"$'\t'"$project_dir")
+
+    # Check for worktrees
+    local worktrees_dir="$project_dir/.worktrees"
+    if [ -d "$worktrees_dir" ]; then
+      # Find worktrees and sort by modification time (most recent first)
+      local worktree_list=()
+      while IFS= read -r -d '' worktree; do
+        # Get modification time (epoch) and path
+        local mtime
+        mtime=$(stat -c %Y "$worktree" 2>/dev/null || stat -f %m "$worktree" 2>/dev/null)
+        worktree_list+=("$mtime"$'\t'"$worktree")
+      done < <(find "$worktrees_dir" -mindepth 1 -maxdepth 1 -type d -print0)
+
+      # Sort by mtime (most recent first) and add to projects
+      if [ ${#worktree_list[@]} -gt 0 ]; then
+        while IFS= read -r entry; do
+          local worktree
+          worktree=$(echo "$entry" | cut -d$'\t' -f2-)
+          local branch
+          branch=$(basename "$worktree")
+          # Add worktree entry with git branch icon and indentation: "   branch\tfull-path"
+          projects+=("   $ICON_BRANCH $branch"$'\t'"$worktree")
+        done < <(printf '%s\n' "${worktree_list[@]}" | sort -rn)
+      fi
+    fi
+  done < <(find "$XDG_PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d ! -name ".*" -print0)
+
+  printf '%s\n' "${projects[@]}"
+}
+
+# Build and display fzf picker
+project_list=$(build_project_list)
+
+if [ -z "$project_list" ]; then
+  tmux display-message "No projects found in $XDG_PROJECTS_DIR"
+  exit 0
+fi
+
+# Launch fzf with preview
+selected=$(echo "$project_list" | fzf \
+  --no-multi \
+  -i \
+  --reverse \
+  --height 100% \
+  --tmux center,50%,60% \
+  --border \
+  --prompt "Projects: " \
+  --preview 'tree -C -L 2 -a --dirsfirst {2} 2>/dev/null || eza --color=always --icons --group-directories-first {2} 2>/dev/null || ls -lah {2}' \
+  --preview-window right,50% \
+  --delimiter $'\t' \
+  --with-nth 1 || true)
+
+# Handle cancellation
+if [ -z "$selected" ]; then
+  exit 0
+fi
+
+# Extract full path (second field after tab)
+selected_path=$(echo "$selected" | cut -f2)
+
+# Validate path
+if [ -z "$selected_path" ] || [ ! -d "$selected_path" ]; then
+  tmux display-message "Error: Invalid path selected"
+  exit 1
+fi
+
+selected_name=$(basename "$selected_path")
+
+# Determine if this is a worktree (path contains /.worktrees/)
+if [[ "$selected_path" == *"/.worktrees/"* ]]; then
+  # Worktree - use folder icon as prefix and branch icon as separator
+  parent_dir=$(basename "$(dirname "$(dirname "$selected_path")")")
+  window_name="$ICON_FOLDER ${parent_dir} $ICON_BRANCH ${selected_name}"
+else
+  # Regular project - use folder icon (U+F07B from nerd fonts)
+  window_name="$ICON_FOLDER $selected_name"
+fi
+
+# Check if window with this name already exists
+if tmux list-windows -F "#{window_name}" 2>/dev/null | grep -q "^${window_name}$"; then
+  # Switch to existing window
+  tmux select-window -t "$window_name"
+  exit 0
+fi
+
+# Create new window with the 4-pane layout.
+# Pane ids (%N) are used throughout because pane indexes shift as panes are added.
+pane_left=$(tmux new-window -P -F '#{pane_id}' -n "$window_name" -c "$selected_path")
+
+# Left 25% | right 75%
+pane_right=$(tmux split-window -h -l 75% -t "$pane_left" -c "$selected_path" -P -F '#{pane_id}')
+
+# Each column: top 80% / bottom 20%
+tmux split-window -v -l 20% -t "$pane_right" -c "$selected_path"
+tmux split-window -v -l 20% -t "$pane_left" -c "$selected_path"
+
+# Focus the large top-right pane
+tmux select-pane -t "$pane_right"
