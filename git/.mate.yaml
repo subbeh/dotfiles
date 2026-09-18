@@ -3,6 +3,7 @@ packages:
     - lazygit
     - worktrunk
     - gitleaks
+    - diffnav
   brew:
     - gh
   pacman:
