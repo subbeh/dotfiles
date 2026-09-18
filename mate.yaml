@@ -9,6 +9,7 @@ aur_helper: paru
 include:
   - .mate/theme.yaml
 variables:
+  configHome: "~/.config"
   authorizedSshKeys:
     - laptop-personal-ssh-key
     - laptop-work-ssh-key
@@ -60,6 +61,7 @@ profiles:
       os: darwin
     variables:
       workspaceDir: "/Users/Shared/data/workspace"
+      configHome: "~/Library/Application Support"
   personal:
     extends: linux
     detection:
