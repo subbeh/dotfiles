@@ -4,7 +4,6 @@
 
 !zsh_history
 
-.direnv/
 .terraform/
 .cache/
 .venv/
@@ -15,5 +14,6 @@ node_modules/
 (?d)__pycache__
 (?d).DS_Store
 (?d).ansible/
+(?d).direnv/
 *.log
 maintenance.lock
