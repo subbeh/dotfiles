@@ -5,6 +5,7 @@
 target_base: "~"
 
 aur_helper: paru
+diff_tool: mate-diff
 
 include:
   - .mate/theme.yaml

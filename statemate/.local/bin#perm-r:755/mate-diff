@@ -1,0 +1,10 @@
+#!/bin/sh
+# diff_tool for mate: side-by-side delta.
+#
+# mate invokes the tool as "<tool> <old> <new>" and captures its stdout, so
+# delta cannot detect the terminal width and would fall back to 80 columns.
+# Read the width from the controlling tty instead.
+
+cols=$( (stty size < /dev/tty) 2>/dev/null | cut -d' ' -f2 )
+
+exec delta --side-by-side --width="${cols:-160}" "$1" "$2"
