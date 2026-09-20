@@ -22,7 +22,6 @@
 
 [core]
   excludesFile = ~/.config/git/gitignore
-  attributesFile = ~/.config/git/gitattributes
 
 [init]
   defaultBranch = main
@@ -45,6 +44,7 @@
 
 [difftool]
   prompt = true
+
 [difftool "nvimdiff"]
   cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
 
