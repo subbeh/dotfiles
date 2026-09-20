@@ -1,0 +1,13 @@
+plugins_merge = "name"
+
+[[plugins]]
+name = "[Atlas] Troubleshoot"
+key = "shift-t"
+command = "bash"
+args = [
+  "-c",
+  "ns=$NAMESPACE; instance=${ns%%-*}; hermes jpro actions troubleshoot $instance"
+]
+scopes = ["pods"]
+output = "popup"
+mutating = false
