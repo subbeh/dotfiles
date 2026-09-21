@@ -11,7 +11,7 @@
 
 {{- if eq .Profile "work" }}
 [includeIf "gitdir:{{ .Vars.workspaceDir }}/jamf/"]
-	path = config-work.inc
+	path = config_work.inc
 {{- end }}
 
 [credential]

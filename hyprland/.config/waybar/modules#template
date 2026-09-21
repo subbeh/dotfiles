@@ -165,10 +165,10 @@
     "orientation": "horizontal"
   },
   //
-  // USER
+  // UPTIME
   //
   "user": {
-    "format": " {user} 󱎫 {work_H}:{work_M}",
+    "format": "󱎫 {work_H}:{work_M}",
     "interval": 60,
     "icon": true
   },
@@ -334,7 +334,7 @@
     "signal": 9,
     "on-click": "kitty --hold journalctl -fu restic-backup.service",
     "on-click-right": "pkill -SIGRTMIN+9 waybar",
-    "on-click-middle": "sudo systemctl start restic-backup.service"
+    "on-click-middle": "sudo systemctl start restic-backup.service; pkill -SIGRTMIN+9 waybar"
   },
   //
   // STATEMATE
