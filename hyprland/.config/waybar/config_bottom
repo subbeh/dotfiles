@@ -10,7 +10,9 @@
   ],
   "modules-left": [
     "battery",
+    "custom/sep",
     "user",
+    "custom/sep",
     "group/hardware",
     "custom/sep",
     "custom/syncthing",
