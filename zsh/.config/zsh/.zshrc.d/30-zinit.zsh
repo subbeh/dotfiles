@@ -41,7 +41,7 @@ function bgnotify_formatted {
 # syntax-highlighting last. The atload hooks configure a plugin once it loads.
 zinit wait lucid for \
   Aloxaf/fzf-tab \
-  atload'ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd); _zsh_autosuggest_start' \
+  atload'ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd); ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"; _zsh_autosuggest_start' \
   zsh-users/zsh-autosuggestions \
   OMZP::bgnotify \
   OMZP::safe-paste \
