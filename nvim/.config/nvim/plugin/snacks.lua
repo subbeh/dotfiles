@@ -158,6 +158,7 @@ map("n", "<leader>fh",       function() snacks.picker.highlights() end,         
 map("n", "<leader>fi",       function() snacks.picker.icons() end,                           { desc = "Icons" })
 map("n", "<leader>fj",       function() snacks.picker.jumps() end,                           { desc = "Jumps" })
 map("n", "<leader>fk",       function() snacks.picker.keymaps() end,                         { desc = "Keymaps" })
+map("n", "<leader>fl",       function() snacks.picker.lines() end,                           { desc = "Lines (buffer)" })
 map("n", "<leader>fm",       function() snacks.picker.marks() end,                           { desc = "Marks" })
 map("n", "<leader>fn",       function() snacks.picker.notifications() end,                   { desc = "Notifications" })
 map("n", "<leader>fp",       function() snacks.picker.projects() end,                        { desc = "Projects" })
@@ -187,6 +188,6 @@ snacks.toggle.treesitter():map("<leader>ct")
 
 -- Highlighting
 local set = vim.api.nvim_set_hl
-set(0, "SnacksPicker",          { bg = colors.bg.light })
+set(0, "SnacksPicker",          { bg = colors.bg.default })
 set(0, "SnacksPickerBorder",    { fg = colors.fg.default })
 set(0, "SnacksPickerDirectory", { fg = colors.fg.darker })

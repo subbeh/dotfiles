@@ -1,5 +1,5 @@
-@define-color fg #999999;
-@define-color bg #{{ .Vars.color.bg.default }};
+@define-color fg #{{ .Vars.color.fg.default }};
+@define-color bg #{{ .Vars.color.bg.light }};
 @define-color bglight #{{ .Vars.color.bg.lighter }};
 @define-color bgdark #{{ .Vars.color.bg.dark }};
 @define-color black #{{ .Vars.color.bg.darker }};
@@ -9,6 +9,6 @@
 @define-color dblue #{{ .Vars.color.blue.base }};
 @define-color green #{{ .Vars.color.green.base }};
 @define-color magenta #{{ .Vars.color.magenta.base }};
-@define-color yellow #{{ .Vars.color.yellow.base }};
+@define-color yellow #{{ .Vars.color.yellow.bright }};
 @define-color red #{{ .Vars.color.red.base }};
 @define-color orange #{{ .Vars.color.orange.base }};

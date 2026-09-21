@@ -149,14 +149,8 @@ window#waybar.bottom :first-child {
   color: @white;
 }
 
-/* RESTIC */
-
-#custom-restic {
-  padding: 0 5px;
-}
-
 #custom-restic.running {
-  color: @orange;
+  color: @yellow;
 }
 
 #custom-restic.error {

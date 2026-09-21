@@ -62,7 +62,7 @@ return {
   },
   orange = {
     base = "#{{ .Vars.color.orange.base }}",
-    bright = "#{{ .Vars.color.orange.dark }}",
+    bright = "#{{ .Vars.color.orange.bright }}",
   },
   white = {
     base = "#{{ .Vars.color.white.base }}",
