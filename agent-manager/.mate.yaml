@@ -1,3 +1,6 @@
+targets:
+  config: "{{ .Vars.configHome }}"
+
 packages:
   brew:
     - agent-manager
