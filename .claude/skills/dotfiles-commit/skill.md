@@ -2,6 +2,7 @@
 name: dotfiles-commit
 description: Intelligent commit workflow for dotfiles - groups changes, analyzes relationships, creates Conventional Commits
 trigger: commit|create commit|/commit
+model: sonnet
 ---
 
 # Dotfiles Commit Skill
