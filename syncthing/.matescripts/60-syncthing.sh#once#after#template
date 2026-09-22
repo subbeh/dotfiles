@@ -3,7 +3,8 @@
 
 set -euo pipefail
 
-systemctl --user enable --now syncthing.service
+command -v systemctl &>/dev/null && systemctl --user enable --now syncthing.service
+command -v brew &>/dev/null && brew services restart syncthing
 sleep 2
 
 echo ""

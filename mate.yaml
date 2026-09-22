@@ -47,6 +47,7 @@ sources:
   - television
   - starship
   - statemate
+  - syncthing
   - task
   - tmux
   - vifm
@@ -75,7 +76,6 @@ profiles:
       - mpv
       - restic
       - firefox
-      - syncthing
     variables:
       workspaceDir: "/data/workspace"
       firefoxDir: "/data/appdata/firefox"

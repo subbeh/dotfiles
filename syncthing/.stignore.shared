@@ -1,0 +1,30 @@
+// Shared Syncthing ignore patterns for the workspace folder.
+//
+// Only .stfolder, .stignore and .stversions are reserved, so this name syncs
+// like any other file -- unlike .stignore itself, which Syncthing never syncs
+// and which therefore drifts per device. Every device's .stignore is just
+// "#include .stignore.shared", so editing the patterns here reaches all of them.
+//
+// see also https://forum.syncthing.net/t/useful-stignore-patterns/1175
+
+!zsh_history
+
+.direnv/
+.terraform/
+.cache/
+.venv/
+temp/
+sessions/
+node_modules/
+
+// git worktrees are machine-local: their gitdir pointers are absolute, and the
+// workspace root differs per OS (/data on linux, /Users/Shared/data on darwin),
+// so a synced gitdir would need two different values at once.
+.worktrees/
+**/.git/worktrees/
+
+(?d)__pycache__
+(?d).DS_Store
+(?d).ansible/
+*.log
+maintenance.lock
