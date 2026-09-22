@@ -16,14 +16,20 @@ require("conform").setup({
   end,
   formatters_by_ft = {
     bash = { "shfmt" },
+    html = { "prettier", "injected" },
     json = { "prettier" },
     jsonc = { "prettier" },
     lua = { "stylua" },
-    markdown = { "prettier" },
+    markdown = { "mdformat", "injected" },
     python = { "black" },
     sh = { "shfmt" },
     yaml = { "prettier" },
     zsh = { "shfmt" },
+  },
+  formatters = {
+    prettier = {
+      prepend_args = { "--prose-wrap", "always" },
+    },
   },
 })
 
