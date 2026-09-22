@@ -27,6 +27,7 @@ build_project_list() {
   local additional_repos=(
     "${XDG_WORKSPACE_DIR}/jamf/cloud-ops-tools"
     "${XDG_WORKSPACE_DIR}/jamf/repos/k8s-hermes-cli"
+    "${XDG_WORKSPACE_DIR}/home-ops"
   )
 
   # Process additional repositories first
