@@ -16,7 +16,7 @@ set -g status-left                  "#[bold]#{?#(__tmux_is_remote #{client_pid})
 set -g status-right                 "#(__tmux_status_right '#{pane_current_path}')"
 set -g status-style                 "fg=terminal,bg=terminal"
 
-set -g window-style                 "fg=colour243,bg=terminal"
+set -g window-style                 "fg=colour243,bg=#{{ .Vars.color.bg.dark }}"
 set -g window-active-style          "fg=terminal,bg=terminal"
 set -g window-status-activity-style "fg=terminal,bg=colour12,bold"
 set -g window-status-style          "fg=colour239,bg=colour12"
