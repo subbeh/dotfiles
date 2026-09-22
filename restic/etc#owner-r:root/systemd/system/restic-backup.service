@@ -21,6 +21,11 @@ Nice=19
 IOSchedulingClass=idle
 CPUSchedulingPolicy=idle
 
+# network-online.target is only reached at boot and never deactivated, so it is
+# already active on resume from sleep -- where a Persistent= timer fires before
+# NetworkManager has reconnected. Wait for connectivity for real.
+ExecStartPre=/usr/bin/nm-online -q -t 120
+
 # Remove stale locks from interrupted backups (e.g., laptop shutdown)
 ExecStartPre=/usr/bin/restic unlock
 
