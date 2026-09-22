@@ -503,13 +503,6 @@ nnoremap <wait> weo <c-w>o
 " Exchange windows
 nnoremap <wait> wex <c-w>x
 
-" Cycle the preview pane's alternative viewers without leaving this pane
-" (a/A do this in view mode; mind that these delay the `a` create mapping)
-" Next viewer
-nnoremap <silent> aa <c-w><c-w>a<c-w><c-w>
-" Previous viewer
-nnoremap <silent> aA <c-w><c-w>A<c-w><c-w>
-
 " s-group: shell, view modes, filters, diff, restart
 " Start shell
 nnoremap ss :shell<cr>
