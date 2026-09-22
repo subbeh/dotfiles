@@ -1,55 +1,51 @@
 #!/bin/bash
-set -xeuo pipefail
-
-test -d "${XDG_CACHE_HOME:?not set}/tmux" || mkdir -p "$_"
-exec 2>"${XDG_CACHE_HOME}/tmux/jamf_session.log"
+set -euo pipefail
 
 SESH="work"
 DIR="${JAMF_DIR:?not set}"
+LOG="${XDG_CACHE_HOME:?not set}/tmux/jamf_session.log"
+
+test -d "${LOG%/*}" || mkdir -p "$_"
+
+# List sessions, most recently used first (reusable for fzf reload)
+list_sessions() {
+  ls -td "${DIR:?not set}/sessions/"*/ 2>/dev/null | sed 's|.*/\([^/]*\)/$|\1|' || true
+}
+
+exec 2>>"$LOG"
+
+# Subcommands called back from the fzf bindings; they share the picker's
+# terminal, so prompts go to /dev/tty instead of stderr.
+case "${1:-}" in
+--list)
+  list_sessions
+  exit 0
+  ;;
+--delete)
+  session_name="${2:?no session given}"
+  session_dir="${DIR}/sessions/${session_name}"
+
+  printf '\nDelete session "%s"? [y/N] ' "$session_name" >/dev/tty
+  read -r confirm </dev/tty
+  [[ "$confirm" =~ ^[Yy]$ ]] || exit 0
+
+  tmux kill-window -t "$SESH:$session_name" 2>/dev/null || true
+  rm -rf "$session_dir"
+  exit 0
+  ;;
+esac
+
+exec 2>"$LOG"
 
 if ! tmux has-session -t "${SESH:?not set}" 2>/dev/null; then
   tmuxinator start "$SESH" --no-attach
 fi
 
-# Delete a session: kill tmux window and remove directory
-delete_session() {
-  local session_name="$1"
-  local session_dir="${DIR}/sessions/${session_name}"
-
-  # Prompt for confirmation
-  printf '\nDelete session "%s"? [y/N] ' "$session_name" >&2
-  read -r confirm </dev/tty
-
-  if [[ "$confirm" =~ ^[Yy]$ ]]; then
-    # Kill tmux window if it exists
-    tmux kill-window -t "$SESH:$session_name" 2>/dev/null || true
-
-    # Remove session directory
-    if [[ -d "$session_dir" ]]; then
-      rm -rf "$session_dir"
-      printf 'Deleted session: %s\n' "$session_name" >&2
-    else
-      printf 'Session directory not found: %s\n' "$session_dir" >&2
-    fi
-  else
-    printf 'Cancelled\n' >&2
-  fi
-
-  sleep 1
-}
-export -f delete_session
-export SESH DIR
-
-# List sessions (reusable for fzf reload)
-list_sessions() {
-  basename -a "${DIR:?not set}/sessions/"* 2>/dev/null | sort -r || true
-}
-
 if [[ -z "${1:-}" ]]; then
   instance=$(
     list_sessions | fzf \
       --bind=enter:print-query,tab:accept \
-      --bind="ctrl-d:execute-silent(bash -c 'delete_session {}')+reload(bash -c 'basename -a \"\$DIR/sessions/\"* 2>/dev/null | sort -r || true')" \
+      --bind="ctrl-d:execute($0 --delete {})+reload($0 --list)" \
       --reverse \
       --header "existing sessions (tab=select, ctrl-d=delete):" \
       --tmux center,20% || exit 0
