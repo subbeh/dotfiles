@@ -1,0 +1,11 @@
+#!/bin/sh
+
+tmp=$(mktemp)
+tmux -L factory -f /dev/null new-session -d
+tmux -L factory list-keys -a >"$tmp"
+tmux -L factory kill-server
+for t in $(tmux lsk | sed 's/^bind-key....-T \([^ ]*\) .*/\1/' | sort -u); do tmux unbind-key -T "$t" -a 2>/dev/null; done
+tmux source-file "$tmp"
+tmux source-file ~/.config/tmux/tmux.conf
+rm "$tmp"
+tmux display 'Tmux config has been reset'
