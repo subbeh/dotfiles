@@ -132,6 +132,8 @@ ctrl-j = "select_next_entry"
 up = "select_prev_entry"
 ctrl-p = "select_prev_entry"
 ctrl-k = "select_prev_entry"
+ctrl-d = ["select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry","select_next_entry"]
+ctrl-u = ["select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry","select_prev_entry"]
 
 # History navigation
 # -----------------
@@ -161,7 +163,7 @@ ctrl-s = "cycle_sources"
 ctrl-t = "toggle_remote_control"
 ctrl-x = "toggle_action_picker"
 ctrl-o = "toggle_preview"
-ctrl-h = "toggle_help"
+alt-h = "toggle_help"
 f12 = "toggle_status_bar"
 ctrl-l = "toggle_layout"
 
@@ -169,7 +171,7 @@ ctrl-l = "toggle_layout"
 # ----------------------------------------
 backspace = "delete_prev_char"
 ctrl-w = "delete_prev_word"
-ctrl-u = "delete_line"
+#ctrl-u = "delete_line"
 delete = "delete_next_char"
 left = "go_to_prev_char"
 right = "go_to_next_char"

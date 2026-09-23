@@ -1,0 +1,9 @@
+[metadata]
+name = "zsh-keys"
+description = "A channel to see zsh keybindings"
+requirements = ["zsh"]
+
+[source]
+command = [
+  { name = "Default", run = "zsh -ic 'bindkey -L'" },
+]

@@ -1,0 +1,10 @@
+[metadata]
+name = "tmux-keys"
+description = "A channel to see tmux keybindings"
+requirements = ["tmux"]
+
+[source]
+command = [
+  { name = "Default", run = "tmux list-keys -N" },
+  { name = "All",  run = "tmux list-keys" },
+]
