@@ -4,6 +4,13 @@ map("n", "<Space>", "", { noremap = true, silent = true })
 map("n", "<leader>q", "<cmd>qa<cr>", { desc = "Quit all" })
 map("n", "<leader>sh", "<cmd>checkhealth<cr>", { desc = "Health" })
 
+-- Navigate visual lines instead of physical lines
+vim.keymap.set("n", "j", "gj", { noremap = true, silent = true })
+vim.keymap.set("n", "k", "gk", { noremap = true, silent = true })
+-- Remap the original physical movements to gj/gk
+vim.keymap.set("n", "gj", "j", { noremap = true, silent = true })
+vim.keymap.set("n", "gk", "k", { noremap = true, silent = true })
+
 -- Move lines
 map("x", "J", ":move '>+1<CR>gv-gv", { silent = true })
 map("x", "K", ":move '<-2<CR>gv-gv", { silent = true })
@@ -33,7 +40,7 @@ map("n", "<C-w>-", "<cmd>split<cr>", { desc = "Split horizontal" })
 map("n", "==", "gg<S-v>G")
 
 -- Clear highlights
-map('n', '<Esc>', '<cmd>noh<cr>', { silent = true })
+map("n", "<Esc>", "<cmd>noh<cr>", { silent = true })
 
 -- Clipboard
 map({ "n", "v" }, "<leader>xy", '"+y', { desc = "Yank to clipboard" })
