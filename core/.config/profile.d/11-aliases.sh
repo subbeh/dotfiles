@@ -34,6 +34,7 @@ alias cdt='cd $XDG_TEMP_DIR'
 alias cdn='cd $XDG_NOTES_DIR'
 alias cdp='cd $XDG_PROJECTS_DIR'
 alias cdr='cd $XDG_WORKSPACE_DIR/repos'
+alias cdho='cd $XDG_HOMEOPS_DIR'
 
 # misc
 alias dat='date +%Y-%m-%d'
