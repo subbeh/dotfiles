@@ -100,9 +100,9 @@ when = ''' test -n "$DIRENV_DIR" '''
 format = '[$output ](bold bright-green)'
 
 [custom.mise]
-command = 'echo '
-when = ''' test -n "$MISE_ENV" '''
-format = '[$output ](bold green)'
+command = 'echo '
+when = ''' test -n "$MISE_DIR" '''
+format = '[$output ](bold purple)'
 
 [custom.upterm]
 when = ''' test -n "$UPTERM_ADMIN_SOCKET" '''
