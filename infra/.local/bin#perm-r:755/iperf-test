@@ -1,0 +1,556 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# iperf-test - Run iperf3 tests between local and remote hosts with SSH-based server management
+
+# Global variables
+REMOTE_HOST=""        # Full SSH connection string (user@host)
+REMOTE_IP=""          # Just the IP/hostname for iperf3
+REMOTE_IPERF3_PATH="" # Full path to iperf3 on remote host
+LOCAL_SERVER=0
+PORT=5201
+DURATION=10
+PARALLEL=1
+REVERSE=0
+BIDIR=0
+UDP=0
+UDP_BANDWIDTH=""
+JSON=0
+WINDOW=""
+VERBOSE=0
+DEBUG=0
+
+# Process tracking
+SERVER_PID=""
+SSH_SERVER_PID=""
+CLEANUP_DONE=0
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Functions
+log_debug() {
+    if [[ $VERBOSE -eq 1 || $DEBUG -eq 1 ]]; then
+        echo -e "${BLUE}[DEBUG]${NC} $*" >&2
+    fi
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $*" >&2
+}
+
+log_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $*" >&2
+}
+
+log_warn() {
+    echo -e "${YELLOW}[WARN]${NC} $*" >&2
+}
+
+show_help() {
+    cat <<'EOF'
+iperf-test - Run iperf3 network performance tests between hosts
+
+USAGE:
+    iperf-test HOST [OPTIONS]
+    iperf-test [OPTIONS] HOST
+
+ARGUMENTS:
+    HOST                    Remote hostname, IP, or host:port
+                           Examples: server.local, 192.168.1.100, [::1]:5555
+
+OPTIONS:
+    Server Location:
+        --local-server      Run iperf3 server locally instead of remotely
+
+    Basic Test Parameters:
+        -t, --time SECONDS  Test duration in seconds (default: 10)
+        -p, --port PORT     Server port number (default: 5201)
+        -P, --parallel N    Number of parallel streams (default: 1)
+        -R, --reverse       Reverse mode - test download speed
+
+    Advanced Test Parameters:
+        --bidir             Run bidirectional test
+        -u, --udp [BW]      Use UDP with optional bandwidth limit (e.g., 100M)
+        -J, --json          Output results in JSON format
+        -w, --window SIZE   TCP window/socket buffer size (e.g., 1M)
+
+    Debug/Verbose:
+        -v, --verbose       Show SSH commands and progress
+        -d, --debug         Show all subprocess output and debug traces
+
+    Help:
+        -h, --help          Show this help message
+
+EXAMPLES:
+    # Basic test (remote server, 10 seconds)
+    iperf-test server.local
+
+    # 30-second test with 4 parallel streams
+    iperf-test server.local -t 30 -P 4
+
+    # Test download speed (reverse mode)
+    iperf-test server.local -R
+
+    # Bidirectional test on custom port
+    iperf-test server.local:5555 --bidir
+
+    # UDP test with 100Mbps bandwidth limit
+    iperf-test server.local -u 100M
+
+    # Run server locally, test to remote client
+    iperf-test server.local --local-server
+
+    # Verbose mode for debugging
+    iperf-test server.local -v
+
+    # Get JSON output for parsing
+    iperf-test server.local -J
+
+EOF
+}
+
+parse_host_port() {
+    local input="$1"
+    local host_part=""
+    local user_part=""
+
+    # Check for IPv6 with port: [user@][addr]:port
+    if [[ $input =~ ^(([^@]+)@)?\[([^\]]+)\]:([0-9]+)$ ]]; then
+        user_part="${BASH_REMATCH[2]}"
+        host_part="${BASH_REMATCH[3]}"
+        PORT="${BASH_REMATCH[4]}"
+        log_debug "Parsed IPv6 with port: user=$user_part, host=$host_part, port=$PORT"
+    # Check for regular host:port (not IPv6)
+    elif [[ $input =~ ^(([^@]+)@)?([^:]+):([0-9]+)$ ]]; then
+        user_part="${BASH_REMATCH[2]}"
+        host_part="${BASH_REMATCH[3]}"
+        PORT="${BASH_REMATCH[4]}"
+        log_debug "Parsed host:port: user=$user_part, host=$host_part, port=$PORT"
+    # Check for user@host (no port)
+    elif [[ $input =~ ^([^@]+)@(.+)$ ]]; then
+        user_part="${BASH_REMATCH[1]}"
+        host_part="${BASH_REMATCH[2]}"
+        log_debug "Parsed user@host: user=$user_part, host=$host_part"
+    # Just a hostname or IPv6 without port
+    else
+        host_part="$input"
+        log_debug "Parsed hostname/IP: host=$host_part"
+    fi
+
+    # Set REMOTE_HOST (for SSH) and REMOTE_IP (for iperf3)
+    if [[ -n "$user_part" ]]; then
+        REMOTE_HOST="${user_part}@${host_part}"
+        REMOTE_IP="$host_part"
+    else
+        REMOTE_HOST="$host_part"
+        REMOTE_IP="$host_part"
+    fi
+
+    log_debug "SSH target: $REMOTE_HOST, iperf3 target: $REMOTE_IP"
+}
+
+check_local_iperf3() {
+    log_debug "Checking for local iperf3..."
+    if ! command -v iperf3 &>/dev/null; then
+        log_error "iperf3 not found on local host"
+        log_error "Install with: brew install iperf3 (macOS) or your package manager"
+        exit 1
+    fi
+    log_debug "Local iperf3 found: $(command -v iperf3)"
+}
+
+check_remote_iperf3() {
+    log_debug "Checking for iperf3 on remote host: $REMOTE_HOST..."
+
+    # Try to get the full path to iperf3
+    REMOTE_IPERF3_PATH=$(ssh -o ConnectTimeout=10 -o BatchMode=no "$REMOTE_HOST" '
+        # Source common profile files to get PATH
+        for profile in ~/.profile ~/.bash_profile ~/.zprofile ~/.bashrc ~/.zshrc; do
+            [ -f "$profile" ] && source "$profile" 2>/dev/null
+        done
+        command -v iperf3 2>/dev/null && exit 0
+
+        # Fallback: check common installation locations
+        for path in /usr/bin/iperf3 /usr/local/bin/iperf3 /opt/homebrew/bin/iperf3 /home/linuxbrew/.linuxbrew/bin/iperf3; do
+            [ -x "$path" ] && echo "$path" && exit 0
+        done
+        exit 1
+    ' 2>/dev/null)
+
+    if [[ -n "$REMOTE_IPERF3_PATH" ]]; then
+        log_debug "Remote iperf3 found at: $REMOTE_IPERF3_PATH"
+        return 0
+    fi
+
+    log_error "iperf3 not found on remote host: $REMOTE_HOST"
+    log_error "Install iperf3 on the remote host first"
+    exit 1
+}
+
+check_network_connectivity() {
+    log_debug "Testing SSH connectivity to $REMOTE_HOST..."
+    if ! ssh -o ConnectTimeout=10 -o BatchMode=no "$REMOTE_HOST" 'echo connected' &>/dev/null; then
+        log_error "Cannot establish SSH connection to $REMOTE_HOST"
+        exit 1
+    fi
+    log_debug "SSH connectivity verified"
+}
+
+check_port_availability() {
+    local target_host="$1"
+    log_debug "Checking if port $PORT is available on $target_host..."
+
+    if [[ "$target_host" == "localhost" || "$target_host" == "127.0.0.1" ]]; then
+        # Check local port
+        if command -v lsof &>/dev/null; then
+            if lsof -Pi :"$PORT" -sTCP:LISTEN -t &>/dev/null; then
+                log_warn "Port $PORT is in use locally, will attempt to kill existing process"
+            fi
+        elif command -v ss &>/dev/null; then
+            if ss -ltn "sport = :$PORT" | grep -q ":$PORT"; then
+                log_warn "Port $PORT is in use locally, will attempt to kill existing process"
+            fi
+        fi
+    else
+        # Check remote port - just warn, we'll kill it anyway
+        # shellcheck disable=SC2029
+        if ssh "$target_host" "command -v lsof &>/dev/null && lsof -Pi :$PORT -sTCP:LISTEN -t &>/dev/null"; then
+            log_warn "Port $PORT is in use on $target_host, will attempt to kill existing process"
+        fi
+    fi
+}
+
+kill_existing_server() {
+    local target_host="$1"
+    log_debug "Killing existing iperf3 processes on port $PORT at $target_host..."
+
+    if [[ "$target_host" == "localhost" || "$target_host" == "127.0.0.1" ]]; then
+        # Kill local processes
+        if command -v lsof &>/dev/null; then
+            local pids
+            pids=$(lsof -ti :"$PORT" 2>/dev/null || true)
+            if [[ -n "$pids" ]]; then
+                log_debug "Killing local PIDs: $pids"
+                # shellcheck disable=SC2086
+                kill -9 $pids 2>/dev/null || true
+            fi
+        fi
+    else
+        # Kill remote processes
+        # shellcheck disable=SC2029
+        ssh "$target_host" "
+            if command -v lsof &>/dev/null; then
+                pids=\$(lsof -ti :$PORT 2>/dev/null || true)
+                if [[ -n \"\$pids\" ]]; then
+                    kill -9 \$pids 2>/dev/null || true
+                fi
+            elif command -v ss &>/dev/null; then
+                # Fallback: find and kill iperf3 processes
+                pkill -9 -f 'iperf3.*-p $PORT' 2>/dev/null || true
+            fi
+        " 2>/dev/null || true
+    fi
+
+    sleep 1  # Give processes time to die
+}
+
+start_remote_server() {
+    log_debug "Starting iperf3 server on remote host: $REMOTE_HOST:$PORT"
+
+    # Kill any existing server on this port
+    kill_existing_server "$REMOTE_HOST"
+
+    # Build server command with full path
+    local server_cmd="$REMOTE_IPERF3_PATH -s -p $PORT -1"
+
+    if [[ $DEBUG -eq 1 ]]; then
+        server_cmd="$server_cmd -d"  # Debug mode in iperf3
+    fi
+
+    log_debug "SSH command: ssh -f $REMOTE_HOST '$server_cmd'"
+
+    # Start server in background via SSH
+    ssh -f "$REMOTE_HOST" "$server_cmd" &>/dev/null &
+    SSH_SERVER_PID=$!
+
+    log_debug "SSH process PID: $SSH_SERVER_PID"
+
+    # Give server time to start
+    sleep 2
+
+    log_success "Remote server started on $REMOTE_IP:$PORT (via SSH to $REMOTE_HOST)"
+}
+
+start_local_server() {
+    log_debug "Starting iperf3 server locally on port $PORT"
+
+    # Kill any existing server on this port
+    kill_existing_server "localhost"
+
+    # Start server with -1 flag (exit after one test)
+    local server_cmd="iperf3 -s -p $PORT -1"
+
+    if [[ $DEBUG -eq 1 ]]; then
+        server_cmd="$server_cmd -d"
+    fi
+
+    log_debug "Local command: $server_cmd"
+
+    # Start server in background
+    if [[ $DEBUG -eq 1 ]]; then
+        $server_cmd &
+    else
+        $server_cmd &>/dev/null &
+    fi
+    SERVER_PID=$!
+
+    log_debug "Local server PID: $SERVER_PID"
+
+    # Give server time to start
+    sleep 2
+
+    log_success "Local server started on port $PORT"
+}
+
+build_client_args() {
+    local args=""
+
+    args="$args -t $DURATION"
+    args="$args -p $PORT"
+
+    if [[ $PARALLEL -gt 1 ]]; then
+        args="$args -P $PARALLEL"
+    fi
+
+    if [[ $REVERSE -eq 1 ]]; then
+        args="$args -R"
+    fi
+
+    if [[ $BIDIR -eq 1 ]]; then
+        args="$args --bidir"
+    fi
+
+    if [[ $UDP -eq 1 ]]; then
+        args="$args -u"
+        if [[ -n "$UDP_BANDWIDTH" ]]; then
+            args="$args -b $UDP_BANDWIDTH"
+        fi
+    fi
+
+    if [[ $JSON -eq 1 ]]; then
+        args="$args -J"
+    fi
+
+    if [[ -n "$WINDOW" ]]; then
+        args="$args -w $WINDOW"
+    fi
+
+    echo "$args"
+}
+
+run_client_test() {
+    local client_args
+    client_args=$(build_client_args)
+
+    if [[ $LOCAL_SERVER -eq 1 ]]; then
+        # Server is local, run client on remote
+        log_debug "Running client test on remote host..."
+
+        # Get local IP for remote client to connect to
+        local local_ip
+        local_ip=$(hostname -I 2>/dev/null | awk '{print $1}' || hostname)
+
+        local client_cmd="$REMOTE_IPERF3_PATH -c $local_ip $client_args"
+        log_debug "Remote client command: ssh $REMOTE_HOST '$client_cmd'"
+
+        # Run with full path
+        # shellcheck disable=SC2029
+        if [[ $DEBUG -eq 1 ]]; then
+            ssh "$REMOTE_HOST" "$client_cmd"
+        else
+            ssh "$REMOTE_HOST" "$client_cmd" 2>/dev/null
+        fi
+    else
+        # Server is remote, run client locally
+        log_debug "Running client test locally..."
+
+        local client_cmd="iperf3 -c $REMOTE_IP $client_args"
+        log_debug "Local client command: $client_cmd"
+
+        if [[ $DEBUG -eq 1 ]]; then
+            $client_cmd
+        else
+            $client_cmd 2>/dev/null
+        fi
+    fi
+}
+
+cleanup_and_exit() {
+    if [[ $CLEANUP_DONE -eq 1 ]]; then
+        return
+    fi
+    CLEANUP_DONE=1
+
+    log_debug "Cleaning up..."
+
+    # Kill local server if running
+    if [[ -n "$SERVER_PID" ]]; then
+        log_debug "Killing local server (PID: $SERVER_PID)"
+        kill -9 "$SERVER_PID" 2>/dev/null || true
+    fi
+
+    # Kill remote server
+    if [[ -n "$REMOTE_HOST" && $LOCAL_SERVER -eq 0 ]]; then
+        log_debug "Killing remote server on $REMOTE_HOST:$PORT"
+        # shellcheck disable=SC2029
+        ssh "$REMOTE_HOST" "
+            if command -v lsof &>/dev/null; then
+                pids=\$(lsof -ti :$PORT 2>/dev/null || true)
+                if [[ -n \"\$pids\" ]]; then
+                    kill -9 \$pids 2>/dev/null || true
+                fi
+            else
+                pkill -9 -f 'iperf3.*-p $PORT' 2>/dev/null || true
+            fi
+        " 2>/dev/null || true
+    fi
+
+    # Kill SSH process if running
+    if [[ -n "$SSH_SERVER_PID" ]]; then
+        log_debug "Killing SSH server process (PID: $SSH_SERVER_PID)"
+        kill -9 "$SSH_SERVER_PID" 2>/dev/null || true
+    fi
+
+    log_debug "Cleanup complete"
+}
+
+parse_args() {
+    local positional_args=()
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            --local-server)
+                LOCAL_SERVER=1
+                shift
+                ;;
+            -t|--time)
+                DURATION="$2"
+                shift 2
+                ;;
+            -p|--port)
+                PORT="$2"
+                shift 2
+                ;;
+            -P|--parallel)
+                PARALLEL="$2"
+                shift 2
+                ;;
+            -R|--reverse)
+                REVERSE=1
+                shift
+                ;;
+            --bidir)
+                BIDIR=1
+                shift
+                ;;
+            -u|--udp)
+                UDP=1
+                # Check if next arg is a bandwidth value
+                if [[ $# -gt 1 && ! "$2" =~ ^- ]]; then
+                    UDP_BANDWIDTH="$2"
+                    shift 2
+                else
+                    shift
+                fi
+                ;;
+            -J|--json)
+                JSON=1
+                shift
+                ;;
+            -w|--window)
+                WINDOW="$2"
+                shift 2
+                ;;
+            -v|--verbose)
+                VERBOSE=1
+                shift
+                ;;
+            -d|--debug)
+                DEBUG=1
+                VERBOSE=1  # Debug implies verbose
+                shift
+                ;;
+            -*)
+                log_error "Unknown option: $1"
+                echo "Use -h or --help for usage information"
+                exit 1
+                ;;
+            *)
+                positional_args+=("$1")
+                shift
+                ;;
+        esac
+    done
+
+    # Check for required HOST argument
+    if [[ ${#positional_args[@]} -eq 0 ]]; then
+        log_error "Missing required argument: HOST"
+        echo "Use -h or --help for usage information"
+        exit 1
+    fi
+
+    if [[ ${#positional_args[@]} -gt 1 ]]; then
+        log_error "Too many arguments. Expected one HOST argument."
+        exit 1
+    fi
+
+    # Parse host and optional port
+    parse_host_port "${positional_args[0]}"
+}
+
+main() {
+    # Set up trap handlers
+    trap cleanup_and_exit INT TERM EXIT
+
+    # Parse arguments
+    parse_args "$@"
+
+    # Pre-flight checks
+    check_local_iperf3
+    check_remote_iperf3
+    check_network_connectivity
+
+    if [[ $LOCAL_SERVER -eq 1 ]]; then
+        check_port_availability "localhost"
+        start_local_server
+    else
+        check_port_availability "$REMOTE_HOST"
+        start_remote_server
+    fi
+
+    # Run the test
+    log_debug "Starting iperf3 test..."
+    echo ""
+    run_client_test
+    echo ""
+
+    # Manual cleanup before trap
+    if [[ $LOCAL_SERVER -eq 0 ]]; then
+        log_debug "Killing remote server"
+        kill_existing_server "$REMOTE_HOST"
+    fi
+
+    log_success "Test complete"
+}
+
+# Run main function
+main "$@"
