@@ -96,3 +96,25 @@ profiles:
         - laptop-work-ssh-key
         - github-ssh-key
         - home-ops-ssh-key
+
+hooks:
+  systemd-reload:
+    profile: linux
+    match:
+      - "/etc/systemd/**/*.service"
+      - "/etc/systemd/**/*.timer"
+    do:
+      - run: sudo systemctl daemon-reload
+  systemd-user-reload:
+    profile: linux
+    match:
+      - ".config/systemd/user/**"
+      - ".config/environment.d/*.conf"
+    do:
+      - run: systemctl --user daemon-reload
+      - run: pkill -u "$USER" zsh --signal=USR2 || true
+  tmux-reload:
+    match:
+      - ".config/tmux/**"
+    do:
+      - run: tmux-reset
