@@ -7,17 +7,23 @@ REPO="Subbeh/dotfiles.git"
 REPO_SSH="git@github.com:$REPO"
 STATEMATE_REPO="https://github.com/subbeh/statemate.git"
 AGE_KEY_DIR="$HOME/.config/statemate"
-SSH_KEY="$HOME/.ssh/keys/id_github-ssh-key"
+SSH_KEY="$HOME/.ssh/keys.d/id_github-ssh-key"
 
 export BITWARDENCLI_APPDATA_DIR="$HOME/.local/share/bitwardencli"
 
 case "$(uname -s)" in
-  Darwin) OS=darwin; DEFAULT_SOURCE_DIR="$HOME/workspace/dotfiles" ;;
-  Linux) OS=linux; DEFAULT_SOURCE_DIR="/data/workspace/dotfiles" ;;
-  *)
-    echo "Unsupported OS" >&2
-    exit 1
-    ;;
+Darwin)
+  OS=darwin
+  DEFAULT_SOURCE_DIR="$HOME/workspace/dotfiles"
+  ;;
+Linux)
+  OS=linux
+  DEFAULT_SOURCE_DIR="/data/workspace/dotfiles"
+  ;;
+*)
+  echo "Unsupported OS" >&2
+  exit 1
+  ;;
 esac
 SOURCE_DIR="${SOURCE_DIR:-$DEFAULT_SOURCE_DIR}"
 
@@ -102,15 +108,15 @@ install_linux() {
 install_statemate_binary() {
   echo "==> Installing statemate binary..."
   case "$OS" in
-    darwin)
-      brew install subbeh/tap/statemate
-      ;;
-    linux)
-      local os arch
-      os=$(uname -s | tr '[:upper:]' '[:lower:]')
-      arch=$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
-      curl -sL "https://github.com/subbeh/statemate/releases/download/latest/mate_${os}_${arch}.tar.gz" | sudo tar xz -C /usr/local/bin mate
-      ;;
+  darwin)
+    brew install subbeh/tap/statemate
+    ;;
+  linux)
+    local os arch
+    os=$(uname -s | tr '[:upper:]' '[:lower:]')
+    arch=$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
+    curl -sL "https://github.com/subbeh/statemate/releases/download/latest/mate_${os}_${arch}.tar.gz" | sudo tar xz -C /usr/local/bin mate
+    ;;
   esac
 }
 
@@ -167,8 +173,8 @@ prereqs_installed && prereq_default=N || prereq_default=Y
 if confirm "Install prerequisites?" "$prereq_default"; then
   echo "==> Installing prerequisites..."
   case "$OS" in
-    darwin) install_darwin ;;
-    linux) install_linux ;;
+  darwin) install_darwin ;;
+  linux) install_linux ;;
   esac
 fi
 
