@@ -9,6 +9,7 @@ packages:
     - google-chrome
     - karabiner-elements
     - logi-options+
+    - mackup
     - middleclick
     - mole
     - raycast
