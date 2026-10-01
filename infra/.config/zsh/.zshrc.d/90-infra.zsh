@@ -28,3 +28,22 @@ chkcmd kubectl && {
 
 # terraform
 chkcmd terraform && complete -o nospace -C $(which terraform) terraform
+
+# ansible
+play() {
+  local _popd
+  [[ "$(pwd)" != "${XDG_HOMEOPS_DIR:?not set}/ansible" ]] && _popd=1
+  ((_popd)) && pushd "${XDG_HOMEOPS_DIR:?not set}/ansible"
+  ansible-playbook "playbooks/$@"
+  ((_popd)) && popd
+}
+
+## completion function for ap command
+_play() {
+  local playbooks
+  playbooks=("${XDG_HOMEOPS_DIR}/ansible/playbooks/"*(N:t))
+  _describe 'playbooks' playbooks
+}
+
+## Register the completion function
+compdef _play play
