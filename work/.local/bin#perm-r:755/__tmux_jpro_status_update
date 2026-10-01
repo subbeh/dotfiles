@@ -26,8 +26,8 @@ fi
 
   # Map status to colored indicator (using tmux color syntax)
   if [[ -z "$status" || "$status" == "null" || "$status" == "Stopped" ]]; then
-    # No status or stopped - show nothing
-    result=""
+    # No status or stopped
+    result=" #[fg=#969696]#[fg=default]"
   elif [[ "$status" == "Running" ]]; then
     result=" #[fg=#fab387]#[fg=default]"
   elif [[ "$status" == "Succeeded" ]]; then
