@@ -25,7 +25,6 @@ packages:
     - nmap
     - onefetch
     - openssh
-    - shellcheck
     - socat
     - speedtest-cli
     - tldr
@@ -42,6 +41,8 @@ packages:
     - openbsd-netcat
     - pandoc-cli
     - sudo
+  aur:
+    - shellcheck-bin
   brew:
     - gnu-sed
     - node
