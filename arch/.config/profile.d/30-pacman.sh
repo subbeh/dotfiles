@@ -4,4 +4,5 @@ alias paczfl='pacman -Qq | fzf --preview "pacman -Qil {}" --layout=reverse --bin
 alias paczfr='pacman -Slq | fzf --preview "pacman -Si {}" --layout=reverse'
 alias paclist='tv pacman-packages'
 alias pacfind='paru -Ss'
+alias pacclean='sudo pacman -Rns $(pacman -Qdtq)'
 alias yay='paru'

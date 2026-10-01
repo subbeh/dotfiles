@@ -19,6 +19,7 @@ packages:
     - linux-lts
     - linux-lts-headers
     - os-prober
+    - pacman-contrib
     - sbctl
     - snap-pac
     - snapper
