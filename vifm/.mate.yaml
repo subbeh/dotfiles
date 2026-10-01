@@ -2,6 +2,7 @@ packages:
   common:
     - docx2txt
     - feh
+    - glow
     - inkscape
     - poppler
     - qutebrowser

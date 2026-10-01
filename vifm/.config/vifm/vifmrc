@@ -258,6 +258,14 @@ filextype   {*.pdf},<application/pdf>
 fileviewer  {*.pdf},<application/pdf>
             \ pdftotext -nopgbrk %c -
 
+" Markdown
+" glow drops styling when stdout isn't a TTY (as in the preview pane), so force
+" a style and wrap to the pane width
+filetype    {*.md},<text/markdown>
+            \ glow -p %c
+fileviewer  {*.md},<text/markdown>
+            \ glow -s dark -w %pw %c
+
 " Audio
 filetype    {*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,*.aac,*.mpga},
             \<audio/*>

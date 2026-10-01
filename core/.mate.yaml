@@ -12,6 +12,7 @@ packages:
     - ffmpeg
     - gawk
     - git
+    - glow
     - go
     - gron
     - htop
@@ -39,14 +40,12 @@ packages:
     - less
     - npm
     - openbsd-netcat
-    - pandoc-cli
     - sudo
   aur:
     - shellcheck-bin
   brew:
     - gnu-sed
     - node
-    - pandoc
     - rar
     - watch
     - xh
