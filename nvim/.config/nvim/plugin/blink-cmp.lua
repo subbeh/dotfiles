@@ -18,6 +18,8 @@ end
 
 local cmp = require("blink.cmp")
 
+-- macOS 27 dyld rejects dylibs stripped by CLT 27 strip (misaligned string table)
+vim.env.CARGO_PROFILE_RELEASE_STRIP = "false"
 cmp.build():pwait()
 cmp.setup({
   keymap = {
