@@ -47,7 +47,7 @@ return {
     FileUnstaged = "",
     FileUntracked = "?",
     Diff = " ",
-    Repo = " ",
+    Repo = " ",
     Octoface = " ",
     Branch = " ",
     PR = "󰓂 ",
