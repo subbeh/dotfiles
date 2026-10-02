@@ -142,21 +142,6 @@ local function with_icon(icon, text, hl)
   return "%#" .. hl .. "Icon#" .. icon .. "%#" .. hl .. "#" .. text
 end
 
--- mini.icons highlight groups define only `fg`, so using one directly would leave
--- the icon on the default background. Derive a cached group per icon color that
--- pairs it with the section background.
-local ft_icon_hls = {}
-local function ft_icon_hl(icon_hl)
-  local hl = ft_icon_hls[icon_hl]
-  if hl == nil then
-    hl = "MiniStatuslineFileinfo" .. icon_hl:gsub("MiniIcons", "")
-    local fg = vim.api.nvim_get_hl(0, { name = icon_hl, link = false }).fg
-    vim.api.nvim_set_hl(0, hl, { bg = colors.bg.default, fg = fg or colors.fg.default })
-    ft_icon_hls[icon_hl] = hl
-  end
-  return hl
-end
-
 require("mini.statusline").setup({
   content = {
     active = function()
@@ -201,7 +186,7 @@ require("mini.statusline").setup({
       local filetype = vim.bo.filetype
       if filetype ~= "" then
         local ft_icon, ft_hl = require("mini.icons").get("filetype", filetype)
-        filetype = "%#" .. ft_icon_hl(ft_hl) .. "#" .. ft_icon .. "%#MiniStatuslineFileinfo# " .. filetype
+        filetype = "%#" .. ft_hl .. "#" .. ft_icon .. "%#MiniStatuslineFileinfo# " .. filetype
       end
 
       return status.combine_groups({
@@ -277,44 +262,44 @@ require("mini.indentscope").setup({
 -- stylua: ignore start
 -- highlighting --
 local set = vim.api.nvim_set_hl
-set(0, "MiniDiffSignAdd",            { fg = colors.green.bright })
-set(0, "MiniDiffSignChange",         { fg = colors.yellow.bright })
-set(0, "MiniDiffSignDelete",         { fg = colors.red.bright })
+set(0, "MiniDiffSignAdd",                    { fg = colors.green.bright })
+set(0, "MiniDiffSignChange",                 { fg = colors.yellow.bright })
+set(0, "MiniDiffSignDelete",                 { fg = colors.red.bright })
 
-set(0, "MiniIndentscopeSymbol",      { fg = colors.bg.lightest })
+set(0, "MiniIndentscopeSymbol",              { fg = colors.bg.lightest })
 
-set(0, "MiniClueNextKey",            { fg = colors.fg.default })
-set(0, "MiniClueDescSingle",         { fg = colors.red.base })
-set(0, "MiniClueDescGroup",          { fg = colors.yellow.base })
+set(0, "MiniClueNextKey",                    { fg = colors.fg.default })
+set(0, "MiniClueDescSingle",                 { fg = colors.red.base })
+set(0, "MiniClueDescGroup",                  { fg = colors.yellow.base })
 
-set(0, "MiniStatuslineModeNormal",   { bg = colors.blue.bright,    fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeInsert",   { bg = colors.green.bright,   fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeVisual",   { bg = colors.yellow.bright,  fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeReplace",  { bg = colors.red.bright,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeCommand",  { bg = colors.magenta.bright, fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineModeOther",    { bg = colors.fg.default,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
-set(0, "MiniStatuslineDevinfo",      { bg = colors.bg.lighter,     fg = colors.fg.default })
-set(0, "MiniStatuslineDevinfoGit",           { bg = colors.bg.lighter, fg = colors.fg.default })
-set(0, "MiniStatuslineDevinfoGitIcon",       { bg = colors.bg.lighter, fg = colors.yellow.base })
-set(0, "MiniStatuslineDevinfoRepo",          { bg = colors.bg.lighter, fg = colors.fg.default })
-set(0, "MiniStatuslineDevinfoRepoIcon",      { bg = colors.bg.lighter, fg = colors.magenta.base })
-set(0, "MiniStatuslineDevinfoLsp",           { bg = colors.bg.lighter, fg = colors.fg.default })
-set(0, "MiniStatuslineDevinfoLspIcon",       { bg = colors.bg.lighter, fg = colors.blue.base })
-set(0, "MiniStatuslineDevinfoFormatter",     { bg = colors.bg.lighter, fg = colors.fg.default })
-set(0, "MiniStatuslineDevinfoFormatterIcon", { bg = colors.bg.lighter, fg = colors.green.base })
-set(0, "MiniStatuslineDevinfoLinter",        { bg = colors.bg.lighter, fg = colors.fg.default })
-set(0, "MiniStatuslineDevinfoLinterIcon",    { bg = colors.bg.lighter, fg = colors.cyan.base })
-set(0, "MiniStatuslineDirinfo",      { bg = colors.bg.default,     fg = colors.fg.darkest })
-set(0, "MiniStatuslineFileinfo",     { bg = colors.bg.default,     fg = colors.fg.default })
-set(0, "MiniStatuslineDirinfoIcon",  { bg = colors.bg.default,     fg = colors.blue.base })
-set(0, "MiniStatuslineFileinfoIcon", { bg = colors.bg.default,     fg = colors.blue.base })
+set(0, "MiniStatuslineModeNormal",           { bg = colors.blue.bright,    fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeInsert",           { bg = colors.green.bright,   fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeVisual",           { bg = colors.yellow.bright,  fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeReplace",          { bg = colors.red.bright,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeCommand",          { bg = colors.magenta.bright, fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineModeOther",            { bg = colors.fg.default,     fg = colors.bg.default, bold = true, cterm = { bold = true } })
+set(0, "MiniStatuslineDevinfo",              { bg = colors.bg.default,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoGit",           { bg = colors.bg.default,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoGitIcon",       { bg = colors.bg.default,     fg = colors.yellow.base })
+set(0, "MiniStatuslineDevinfoRepo",          { bg = colors.bg.default,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoRepoIcon",      { bg = colors.bg.default,     fg = colors.magenta.base })
+set(0, "MiniStatuslineDevinfoLsp",           { bg = colors.bg.default,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoLspIcon",       { bg = colors.bg.default,     fg = colors.blue.base })
+set(0, "MiniStatuslineDevinfoFormatter",     { bg = colors.bg.default,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoFormatterIcon", { bg = colors.bg.default,     fg = colors.green.base })
+set(0, "MiniStatuslineDevinfoLinter",        { bg = colors.bg.default,     fg = colors.fg.default })
+set(0, "MiniStatuslineDevinfoLinterIcon",    { bg = colors.bg.default,     fg = colors.cyan.base })
+set(0, "MiniStatuslineDirinfo",              { fg = colors.fg.darkest })
+set(0, "MiniStatuslineFileinfo",             { fg = colors.fg.default })
+set(0, "MiniStatuslineDirinfoIcon",          { fg = colors.blue.base })
+set(0, "MiniStatuslineFileinfoIcon",         { fg = colors.blue.base })
 
-set(0, "MiniIconsRed",               { fg = colors.red.bright })
-set(0, "MiniIconsBlue",              { fg = colors.blue.bright })
-set(0, "MiniIconsCyan",              { fg = colors.cyan.bright })
-set(0, "MiniIconsGrey",              { fg = colors.white.base })
-set(0, "MiniIconsAzure",             { fg = colors.blue.base })
-set(0, "MiniIconsGreen",             { fg = colors.green.bright })
-set(0, "MiniIconsOrange",            { fg = colors.yellow.base })
-set(0, "MiniIconsPurple",            { fg = colors.magenta.bright })
-set(0, "MiniIconsYellow",            { fg = colors.yellow.bright })
+set(0, "MiniIconsRed",                       { fg = colors.red.bright })
+set(0, "MiniIconsBlue",                      { fg = colors.blue.bright })
+set(0, "MiniIconsCyan",                      { fg = colors.cyan.bright })
+set(0, "MiniIconsGrey",                      { fg = colors.white.base })
+set(0, "MiniIconsAzure",                     { fg = colors.blue.base })
+set(0, "MiniIconsGreen",                     { fg = colors.green.bright })
+set(0, "MiniIconsOrange",                    { fg = colors.yellow.base })
+set(0, "MiniIconsPurple",                    { fg = colors.magenta.bright })
+set(0, "MiniIconsYellow",                    { fg = colors.yellow.bright })

@@ -16,15 +16,15 @@ set -g status-left                  "#[bold]#{?#(__tmux_is_remote #{client_pid})
 set -g status-right                 "#(__tmux_status_right '#{pane_current_path}')"
 set -g status-style                 "fg=terminal,bg=terminal"
 
-set -g window-style                 "fg=colour243,bg=#{{ .Vars.color.bg.dark }}"
-set -g window-active-style          "fg=terminal,bg=terminal"
+set -g window-style                 "fg=colour243,bg=terminal"
+set -g window-active-style          "fg=terminal,bg=#{{ .Vars.color.bg.dark }}"
 set -g window-status-activity-style "fg=terminal,bg=colour12,bold"
 set -g window-status-style          "fg=colour239,bg=colour12"
 set -g window-status-separator      "#[fg=colour243] ⏽ "
 set -g window-status-format         "#[bg=terminal,fg=colour243][#[fg=colour4,bold]#I#[fg=colour243,nobold]]#W#{@jpro_status}"
 set -g window-status-current-format "#[bold]#{?window_zoomed_flag,#[bg=colour11]#[fg=colour0] 󰖯 #W#{@jpro_status} ,#[fg=colour12]#[bg=terminal]󰖲 #[fg=terminal]#W#{@jpro_status}#[nobold]}"
 
-set-hook -g client-focus-in         "set window-active-style 'fg=terminal,bg=terminal'"
+set-hook -g client-focus-in         "set window-active-style 'fg=terminal,bg=#{{ .Vars.color.bg.dark }}'"
 set-hook -g client-focus-out        "set window-active-style 'fg=colour243,bg=terminal'"
 
 # Periodically update jpro status (macOS only)
