@@ -52,6 +52,17 @@ The skill will:
 - New sources → one commit including mate.yaml registration  
 - Generated/import files → separate `chore` commit
 - Per-source splitting → default grouping by source directory
+- `#encrypted` files → `git diff` only shows ciphertext. Diff the plaintext with `mate cat`,
+  then delete the scratch files:
+
+  ```bash
+  git show 'HEAD:<path>' > /tmp/old.age && mate cat /tmp/old.age > /tmp/old.txt
+  mate cat '<path>' > /tmp/new.txt
+  diff -u /tmp/old.txt /tmp/new.txt; rm -f /tmp/old.age /tmp/old.txt /tmp/new.txt
+  ```
+
+  Show only the diff, never the whole file. `#import` syncs (kubeconfig, claude settings)
+  can stay generic `chore(work): sync imported ...` and don't need a plaintext diff.
 
 ## Commit message format
 
