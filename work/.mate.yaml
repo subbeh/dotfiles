@@ -6,6 +6,7 @@ packages:
     - aws-sso-util
     - awscli
     - azure-cli
+    - golangci-lint
     - jamf/internal-tap/cloudtools
     - jamf/internal-tap/hermes
     - postman
