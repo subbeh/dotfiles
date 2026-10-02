@@ -1,0 +1,149 @@
+[mgr]
+cwd = { fg = "#{{ .Vars.color.magenta.base }}" }
+
+# Find
+find_keyword = { fg = "#{{ .Vars.color.yellow.bright }}", bold = true, italic = true, underline = true }
+find_position = { fg = "#{{ .Vars.color.magenta.bright }}", bg = "reset", bold = true, italic = true }
+
+# Marker
+marker_copied = { fg = "#{{ .Vars.color.green.bright }}", bg = "#{{ .Vars.color.green.bright }}" }
+marker_cut = { fg = "#{{ .Vars.color.red.base }}", bg = "#{{ .Vars.color.red.base }}" }
+marker_marked = { fg = "#{{ .Vars.color.blue.base }}", bg = "#{{ .Vars.color.blue.base }}" }
+marker_selected = { fg = "#{{ .Vars.color.magenta.base }}", bg = "#{{ .Vars.color.magenta.base }}" }
+
+# Count
+count_copied = { fg = "#{{ .Vars.color.bg.dark }}", bg = "#{{ .Vars.color.green.base }}" }
+count_cut = { fg = "#{{ .Vars.color.bg.dark }}", bg = "#{{ .Vars.color.red.base }}" }
+count_selected = { fg = "#{{ .Vars.color.bg.dark }}", bg = "#{{ .Vars.color.yellow.base }}" }
+
+# Border
+border_symbol = "│"
+border_style = { fg = "#{{ .Vars.color.fg.darker }}" }
+
+[tabs]
+active = { fg = "#{{ .Vars.color.bg.default }}", bg = "#{{ .Vars.color.blue.base }}", bold = true }
+inactive = { fg = "#{{ .Vars.color.blue.base }}", bg = "#{{ .Vars.color.bg.lighter }}" }
+
+[mode]
+normal_main = { fg = "#{{ .Vars.color.bg.default }}", bg = "#{{ .Vars.color.blue.base }}", bold = true }
+normal_alt = { fg = "#{{ .Vars.color.blue.base }}", bg = "#{{ .Vars.color.bg.lighter }}" }
+
+# Select mode
+select_main = { fg = "#{{ .Vars.color.bg.default }}", bg = "#{{ .Vars.color.green.base }}", bold = true }
+select_alt = { fg = "#{{ .Vars.color.green.base }}", bg = "#{{ .Vars.color.bg.lighter }}" }
+
+# Unset mode
+unset_main = { fg = "#{{ .Vars.color.bg.default }}", bg = "#{{ .Vars.color.magenta.base }}", bold = true }
+unset_alt = { fg = "#{{ .Vars.color.magenta.base }}", bg = "#{{ .Vars.color.bg.lighter }}" }
+
+[status]
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
+# Permissions
+perm_sep = { fg = "#{{ .Vars.color.fg.darkest }}" }
+perm_type = { fg = "#{{ .Vars.color.blue.base }}" }
+perm_read = { fg = "#{{ .Vars.color.yellow.bright }}" }
+perm_write = { fg = "#{{ .Vars.color.red.base }}" }
+perm_exec = { fg = "#{{ .Vars.color.green.base }}" }
+
+# Progress
+progress_label = { fg = "#{{ .Vars.color.fg.default }}", bold = true }
+progress_normal = { fg = "#{{ .Vars.color.green.bright }}", bg = "#{{ .Vars.color.bg.lighter }}" }
+progress_error = { fg = "#{{ .Vars.color.yellow.bright }}", bg = "#{{ .Vars.color.red.base }}" }
+
+[pick]
+border = { fg = "#{{ .Vars.color.blue.base }}" }
+active = { fg = "#{{ .Vars.color.magenta.bright }}", bold = true }
+inactive = {}
+
+[input]
+border = { fg = "#{{ .Vars.color.blue.base }}" }
+title = {}
+value = {}
+selected = { reversed = true }
+
+[cmp]
+border = { fg = "#{{ .Vars.color.blue.base }}" }
+
+[tasks]
+border = { fg = "#{{ .Vars.color.blue.base }}" }
+title = {}
+hovered = { fg = "#{{ .Vars.color.magenta.bright }}", bold = true }
+
+[which]
+border = { fg = "#{{ .Vars.color.blue.base }}" }
+cand = { fg = "#{{ .Vars.color.green.base }}" }
+rest = { fg = "#{{ .Vars.color.white.base }}" }
+desc = { fg = "#{{ .Vars.color.magenta.bright }}" }
+separator = "  "
+separator_style = { fg = "#{{ .Vars.color.black.bright }}" }
+
+[help]
+on = { fg = "#{{ .Vars.color.green.base }}" }
+run = { fg = "#{{ .Vars.color.magenta.bright }}" }
+hovered = { reversed = true, bold = true }
+footer = { fg = "#{{ .Vars.color.bg.lighter }}", bg = "#{{ .Vars.color.fg.default }}" }
+
+[spot]
+border = { fg = "#{{ .Vars.color.blue.base }}" }
+title = { fg = "#{{ .Vars.color.blue.base }}" }
+tbl_col = { fg = "#{{ .Vars.color.green.base }}" }
+tbl_cell = { fg = "#{{ .Vars.color.magenta.bright }}", bg = "#{{ .Vars.color.bg.lighter }}" }
+
+[notify]
+title_info = { fg = "#{{ .Vars.color.green.bright }}" }
+title_warn = { fg = "#{{ .Vars.color.yellow.bright }}" }
+title_error = { fg = "#{{ .Vars.color.red.base }}" }
+
+[filetype]
+rules = [
+  # Image
+  { mime = "**/image/*", fg = "#{{ .Vars.color.green.base }}" },
+  # Media
+  { mime = "**/{audio,video}/*", fg = "#{{ .Vars.color.yellow.bright }}" },
+  # Archive
+  { mime = "**/application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#{{ .Vars.color.magenta.bright }}" },
+  # Document
+  { mime = "**/application/{pdf,doc,rtf}", fg = "#{{ .Vars.color.green.bright }}" },
+  # Virtual file system
+  { mime = "vfs/{absent,stale}", fg = "#{{ .Vars.color.white.base }}" },
+  # Fallback
+  { url = "*", fg = "#{{ .Vars.color.fg.default }}" },
+  { url = "*/", fg = "#{{ .Vars.color.blue.base }}" },
+]
+
+[icon]
+dirs = [
+  { name = ".config", text = "", fg = "#{{ .Vars.color.magenta.bright }}" },
+  { name = ".git", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = ".github", text = "", fg = "#{{ .Vars.color.blue.base }}" },
+  { name = ".npm", text = "", fg = "#{{ .Vars.color.blue.base }}" },
+  { name = "Desktop", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Development", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Documents", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Downloads", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Library", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Movies", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Music", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Pictures", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Public", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { name = "Videos", text = "", fg = "#{{ .Vars.color.green.base }}" },
+]
+conds = [
+  # Special files
+  { if = "orphan", text = "", fg = "#{{ .Vars.color.fg.default }}" },
+  { if = "link", text = "", fg = "#{{ .Vars.color.fg.darkest }}" },
+  { if = "block", text = "", fg = "#{{ .Vars.color.magenta.base }}" },
+  { if = "char", text = "", fg = "#{{ .Vars.color.magenta.base }}" },
+  { if = "fifo", text = "", fg = "#{{ .Vars.color.magenta.base }}" },
+  { if = "sock", text = "", fg = "#{{ .Vars.color.magenta.base }}" },
+  { if = "sticky", text = "", fg = "#{{ .Vars.color.magenta.base }}" },
+  { if = "dummy", text = "", fg = "#{{ .Vars.color.red.base }}" },
+
+  # Fallback
+  { if = "dir & hovered", text = "", fg = "#{{ .Vars.color.blue.base }}" },
+  { if = "dir", text = "", fg = "#{{ .Vars.color.blue.base }}" },
+  { if = "exec", text = "", fg = "#{{ .Vars.color.green.base }}" },
+  { if = "!dir", text = "", fg = "#{{ .Vars.color.fg.default }}" },
+]

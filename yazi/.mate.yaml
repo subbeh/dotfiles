@@ -1,0 +1,17 @@
+packages:
+  common:
+    - yazi
+    - poppler
+    - fd
+    - ripgrep
+    - fzf
+    - zoxide
+    - resvg
+  brew:
+    - ffmpeg-full
+    - sevenzip
+    - imagemagick-full
+  pacman:
+    - 7zip
+    - ffmpeg
+    - imagemagick

@@ -51,6 +51,7 @@ sources:
   - task
   - tmux
   - vifm
+  - yazi
   - zsh
 
 # Profiles for machine-specific configuration
