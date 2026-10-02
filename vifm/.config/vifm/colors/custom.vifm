@@ -11,7 +11,7 @@ highlight Win         cterm=none          ctermfg=default   ctermbg=default
 highlight Directory   cterm=bold          ctermfg=blue      ctermbg=default
 highlight CurrLine    cterm=bold,inverse  ctermfg=default   ctermbg=default
 highlight OtherLine   cterm=bold          ctermfg=default   ctermbg=default
-highlight Selected    cterm=bold          ctermfg=black     ctermbg=Magenta
+highlight Selected    cterm=bold          ctermfg=black     ctermbg=magenta
 
 highlight JobLine     cterm=bold          ctermfg=default   ctermbg=default
 highlight StatusLine  cterm=none          ctermfg=default   ctermbg=default
@@ -54,7 +54,7 @@ highlight {*.zip,*.jar,*.war,*.ear,*.oxt,*.apk,*.vsix,*.tar,*.bz2,*.tbz2,
           \ cterm=bold ctermfg=red ctermbg=default
 " plain text
 highlight {*.djvu,*.htm,*.html,*.xhtml,*.md,*[^0-9].[1-9],*.css,*.scss,*.sass,
-          \*.org,*.pandoc,*.pdc,*.tex,*.txt,*.toml,*.yml,*.yaml,*.xml,*.json,
+          \*.org,*.pdc,*.tex,*.txt,*.toml,*.yml,*.yaml,*.xml,*.json,
           \*.conf,*.ini,config,*.cfg,*.pub,*.log,*.rss,*.gradle,[mM]akefile,
           \[mM]akefile.*,*.mak,*.mk,}
           \ cterm=none ctermfg=yellow ctermbg=default

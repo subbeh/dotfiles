@@ -456,6 +456,8 @@ nnoremap <space> <nop>
 " Config
 " Reload vifm config
 nnoremap <space>r :restart<cr>
+" Quit vifm
+nnoremap <space>q :q<cr>
 
 " Sorting and opening
 " Display sorting dialog
