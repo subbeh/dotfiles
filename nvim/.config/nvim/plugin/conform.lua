@@ -23,6 +23,7 @@ require("conform").setup({
     markdown = { "mdformat", "injected" },
     python = { "black" },
     sh = { "shfmt" },
+    toml = { "tombi" },
     yaml = { "prettier" },
     zsh = { "shfmt" },
   },
