@@ -1,0 +1,198 @@
+config-version = 2
+
+# Notify Sketchybar about workspace change
+exec-on-workspace-change = ['/bin/bash', '-c',
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=3'
+]
+
+# Start AeroSpace at login
+start-at-login = true
+
+# Automatically reload the config when the config file is saved
+# After setting this to true, reload once manually to start the auto-reloading
+auto-reload-config = true
+
+# Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# See: https://nikitabobko.github.io/AeroSpace/guide#layouts
+# The 'accordion-padding' specifies the size of accordion padding
+# You can set 0 to disable the padding feature
+accordion-padding = 300
+
+# Possible values: tiles|accordion
+default-root-container-layout = 'tiles'
+
+# Possible values: horizontal|vertical|auto
+# 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
+#               tall monitor (anything higher than wide) gets vertical orientation
+default-root-container-orientation = 'auto'
+
+# Mouse follows focus when focused monitor changes
+# Drop it from your config, if you don't like this behavior
+# See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
+# See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
+# Fallback value (if you omit the key): on-focused-monitor-changed = []
+# on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+on-focus-changed = ['move-mouse window-lazy-center']
+
+# You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
+# Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
+# Also see: https://nikitabobko.github.io/AeroSpace/goodness#disable-hide-app
+automatically-unhide-macos-hidden-apps = true
+
+persistent-workspaces = ["1", "2", "3", "4"]
+
+# Workspace-to-monitor pinning
+# Uses monitor names so assignments are stable regardless of lid open/closed
+[workspace-to-monitor-force-assignment]
+1 = ['LG ULTRAFINE', 'Built-in Display']
+2 = ['LG HDR 4K', 'Built-in Display']
+3 = ['Built-in Display']
+
+[gaps]
+inner.horizontal = 15
+inner.vertical =   15
+outer.left =       3
+outer.bottom =     3
+outer.top =        3
+outer.right =      3
+
+# Keybindings
+[mode.main.binding]
+cmd-h = [] # Disable "hide application"
+cmd-alt-h = [] # Disable "hide others"
+
+## System
+alt-shift-r = 'reload-config'
+
+## Apps
+alt-enter = 'exec-and-forget open -na kitty'
+alt-a = 'mode apps'
+[mode.apps.binding]
+esc = ['reload-config', 'mode main']
+alt-o = ['workspace 1', "exec-and-forget osascript -e 'if application \"Outlook\" is not frontmost then tell application \"Outlook\" to activate'"]
+alt-f = ['workspace 1', "exec-and-forget osascript -e 'if application \"Firefox\" is not frontmost then tell application \"Firefox\" to activate'"]
+alt-m = ['workspace 1', "exec-and-forget osascript -e 'if application \"Spotify\" is not frontmost then tell application \"Spotify\" to activate'"]
+alt-t = ['workspace 2', "exec-and-forget osascript -e 'if application \"Kitty\" is not frontmost then tell application \"Kitty\" to activate'"]
+alt-s = ['workspace 3', "exec-and-forget osascript -e 'if application \"Slack\" is not frontmost then tell application \"Slack\" to activate'"]
+
+## Layout
+alt-f6 = 'layout tiles horizontal vertical'
+alt-f7 = 'layout accordion horizontal vertical'
+alt-f9 = 'fullscreen'
+alt-f10 = 'macos-native-fullscreen'
+
+## Windows
+alt-q = 'close'
+
+alt-shift-comma = 'join-with left'
+alt-shift-period = 'join-with right'
+# alt-shift-j = 'join-with down'
+# alt-shift-k = 'join-with up'
+
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+alt-minus = 'resize smart -50'
+alt-equal = 'resize smart +50'
+alt-shift-equal = 'balance-sizes'
+
+## Workspaces
+alt-1 = 'workspace --auto-back-and-forth 1'
+alt-2 = 'workspace --auto-back-and-forth 2'
+alt-3 = 'workspace --auto-back-and-forth 3'
+alt-4 = 'workspace --auto-back-and-forth 4'
+
+alt-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
+alt-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
+alt-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
+alt-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
+
+alt-tab = 'workspace-back-and-forth'
+alt-shift-tab = 'focus --wrap-around dfs-next'
+
+# alt-f = 'layout floating tiling'
+# alt-h = 'focus left'
+# alt-j = 'focus down'
+# alt-k = 'focus up'
+# alt-l = 'focus right'
+# alt-shift-h = 'move left'
+# alt-shift-j = 'move down'
+# alt-shift-k = 'move up'
+# alt-shift-l = 'move right'
+# alt-ctrl-shift-h = 'move-node-to-workspace --focus-follows-window prev'
+# alt-ctrl-shift-l = 'move-node-to-workspace --focus-follows-window next'
+#
+# # Swap windows
+# alt-leftSquareBracket = 'swap --wrap-around dfs-next'
+# alt-rightSquareBracket = 'swap --wrap-around dfs-prev'
+#
+# # Layout: build master/stack by hand (see join-with / split)
+# alt-slash = 'layout tiles horizontal vertical'
+# alt-comma = 'layout accordion horizontal vertical'
+# alt-ctrl-shift-j = 'join-with left'
+# alt-ctrl-shift-k = 'join-with right'
+# alt-minus = 'resize smart -50'
+# alt-equal = 'resize smart +50'
+# alt-0 = 'balance-sizes'
+# alt-shift-0 = 'flatten-workspace-tree'
+#
+# # Workspaces
+# alt-tab = 'workspace-back-and-forth'
+# alt-ctrl-h = 'workspace prev'
+# alt-ctrl-l = 'workspace next'
+# alt-1 = 'workspace --auto-back-and-forth 1'
+# alt-2 = 'workspace --auto-back-and-forth 2'
+# alt-3 = 'workspace --auto-back-and-forth 3'
+# alt-ctrl-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+# alt-ctrl-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+# alt-ctrl-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+#
+# # Monitors
+# alt-ctrl-left = 'focus-monitor --wrap-around prev'
+# alt-ctrl-right = 'focus-monitor --wrap-around next'
+# alt-shift-left = ['move-node-to-monitor --wrap-around prev', 'focus-monitor --wrap-around prev']
+# alt-shift-right = ['move-node-to-monitor --wrap-around next', 'focus-monitor --wrap-around next']
+
+# Auto-assign apps to workspaces
+[[on-window-detected]]
+if.app-name-regex-substring = 'Termius'
+run = 'move-node-to-workspace G'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Kitty'
+run = 'move-node-to-workspace 2'
+
+# Auto-float apps
+[[on-window-detected]]
+if.app-name-regex-substring = 'System Preferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'System Settings'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Activity Monitor'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Finder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = '1Password'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Raycast'
+run = 'layout floating'

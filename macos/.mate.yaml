@@ -13,7 +13,7 @@ packages:
     - middleclick
     - mole
     - raycast
-    - rectangle
+    # - rectangle
     - spotify
     # fonts
     - font-fira-code-nerd-font
