@@ -45,6 +45,9 @@ vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
         vim.b.minicompletion_disable = true
       end
     end)
+    if vim.bo.buftype == "" then
+      require("mini.map").open()
+    end
   end,
 })
 
@@ -70,6 +73,28 @@ require("mini.diff").setup({
       change = icons.ui.BoldLineDashedMiddle,
       delete = icons.ui.BoldLineMiddle,
     },
+  },
+})
+
+-- map --
+local minimap = require("mini.map")
+require("mini.map").setup({
+  -- Clear out text encoding symbols so only the scrollbar remains
+  symbols = {
+    -- encode = minimap.gen_encode_symbols.color("file", "bg"),
+    scroll_line = icons.ui.BoldLineFull,
+    scroll_view = icons.ui.BoldLineMiddle,
+  },
+  -- Integrated signs (optional: diagnostics, git, etc.)
+  integrations = {
+    minimap.gen_integration.builtin_search(),
+    minimap.gen_integration.diagnostic(),
+  },
+  -- Adjust the window appearance
+  window = {
+    side = "right",
+    width = 1, -- Keeps the bar ultra-thin
+    winblend = 25, -- Sets transparency
   },
 })
 
@@ -293,6 +318,9 @@ set(0, "MiniStatuslineDirinfo",              { fg = colors.fg.darkest })
 set(0, "MiniStatuslineFileinfo",             { fg = colors.fg.default })
 set(0, "MiniStatuslineDirinfoIcon",          { fg = colors.blue.base })
 set(0, "MiniStatuslineFileinfoIcon",         { fg = colors.blue.base })
+
+set(0, "MiniMapSymbolLine",          { fg = colors.blue.base })
+set(0, "MiniMapSymbolView",          { fg = colors.bg.lightest })
 
 set(0, "MiniIconsRed",                       { fg = colors.red.bright })
 set(0, "MiniIconsBlue",                      { fg = colors.blue.bright })
