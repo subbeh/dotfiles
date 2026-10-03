@@ -114,7 +114,13 @@ hooks:
       - ".config/environment.d/*.conf"
     do:
       - run: systemctl --user daemon-reload
-      - run: pkill -u "$USER" zsh --signal=USR2 || true
+  shell-reload:
+    match:
+      - ".config/profile.d/*.sh"
+      - ".config/zsh/**"
+      - ".zshenv"
+    do:
+      - run: pkill -USR2 -u "$USER" zsh || true
   tmux-reload:
     match:
       - ".config/tmux/**"
