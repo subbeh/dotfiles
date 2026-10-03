@@ -1,6 +1,8 @@
 ---
 name: commit
 description: Create intelligent git commits following Conventional Commits. Use when the user says "/commit", asks to commit changes, or wants to create git commits. Supports single commit mode (staged changes only) and batch mode (analyzes all changes, groups related ones into multiple logical commits). Triggers on "/commit", "/commit --all", "commit my changes", "commit this".
+trigger: commit|create commit|/commit
+model: sonnet
 ---
 
 # Intelligent Commit
