@@ -1,5 +1,6 @@
 targets:
   etc: /etc
+  root: /root
 packages:
   pacman:
     # core
