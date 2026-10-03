@@ -11,7 +11,7 @@ bw_unlock() {
     chmod 600 "${BW_KEYCHAIN}"
   printf '%s' "$bw_key" > "${XDG_RUNTIME_DIR}/bw-session"
   chmod 600 "${XDG_RUNTIME_DIR}/bw-session"
-  pkill -u "$USER" zsh --signal=USR2 || true
+  pkill -USR2 -u "$USER" zsh || true
 }
 
 case "$1" in

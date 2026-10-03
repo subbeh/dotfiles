@@ -101,7 +101,7 @@ TRAPUSR2() { _reload; }
 # Reload this shell, or every zsh with `src all`.
 src() {
   if [[ "$1" == all ]]; then
-    pkill -u "$USER" zsh --signal=USR2 || true
+    pkill -USR2 -u "$USER" zsh || true
   else
     _reload
   fi

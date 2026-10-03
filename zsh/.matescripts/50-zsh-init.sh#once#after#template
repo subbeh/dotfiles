@@ -18,4 +18,4 @@ fi
 {{- end }}
 
 mkdir -pv "${XDG_CACHE_HOME:-$HOME/.cache}/zsh" "${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
-pkill -u "$USER" zsh --signal=USR1 || true
+pkill -USR1 -u "$USER" zsh || true
