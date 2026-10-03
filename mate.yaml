@@ -23,7 +23,8 @@ age:
     - age14lue9m7wkjynpke4290yjnk36ztm6fdvj65dhudprc4rj8yajgxqxawmnf
 
 ignore:
-  - INSTALL.md
+  - "*.md"
+  - "!**/.claude/**/*.md"
   - .gitkeep
 
 sources:
