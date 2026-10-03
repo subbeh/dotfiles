@@ -1,8 +1,4 @@
-{{- if eq .OS "darwin" }}
-pinentry-program /opt/homebrew/bin/pinentry-mac
-{{- else if eq .OS "linux" }}
-pinentry-program /usr/bin/pinentry
-{{- end }}
+pinentry-program {{ .HomeDir }}/.local/bin/pinentry-auto
 
 enable-ssh-support
 allow-preset-passphrase

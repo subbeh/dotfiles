@@ -1,0 +1,18 @@
+#!/bin/sh
+# Terminal pinentry when the caller asked for one (SSH sessions, see
+# profile.d/20-gnupg.sh), GUI otherwise. gpg forwards PINENTRY_USER_DATA
+# through gpg-agent into this process's environment.
+
+case "${PINENTRY_USER_DATA:-}" in
+*USE_CURSES*)
+{{- if eq .OS "darwin" }}
+  exec /opt/homebrew/bin/pinentry-curses "$@"
+  ;;
+esac
+exec /opt/homebrew/bin/pinentry-mac "$@"
+{{- else }}
+  exec /usr/bin/pinentry-curses "$@"
+  ;;
+esac
+exec /usr/bin/pinentry "$@"
+{{- end }}
