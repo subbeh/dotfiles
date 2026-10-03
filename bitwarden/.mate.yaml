@@ -1,3 +1,7 @@
+targets:
+  config: "{{ .Vars.configHome }}"
+
 packages:
   common:
     - bitwarden-cli
+    - rbw

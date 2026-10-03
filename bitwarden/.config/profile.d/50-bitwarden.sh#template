@@ -1,5 +1,7 @@
 #!/bin/sh
 
+export RBW_PROFILE="${RBW_PROFILE:-home}"
+
 export BITWARDENCLI_APPDATA_DIR="${BITWARDENCLI_APPDATA_DIR:-"$HOME/.local/share/bitwardencli"}"
 export BW_GPGKEY="{{ index .Vars.gpgKeys 0 }}"
 export BW_KEYCHAIN="${BITWARDENCLI_APPDATA_DIR}/.bitwarden-session.keychain"
