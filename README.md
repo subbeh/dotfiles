@@ -9,7 +9,7 @@ Bitwarden CLI), fetches the age key from Bitwarden, clones this repository, and
 applies the configuration:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/Subbeh/dotfiles/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/subbeh/dotfiles/main/install.sh | bash
 ```
 
 The script is interactive and prompts for each step, so you can skip any part

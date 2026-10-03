@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-REPO="Subbeh/dotfiles.git"
+REPO="subbeh/dotfiles.git"
 REPO_SSH="git@github.com:$REPO"
 STATEMATE_REPO="https://github.com/subbeh/statemate.git"
 AGE_KEY_DIR="$HOME/.config/statemate"
