@@ -2,8 +2,8 @@
 
 ThinkPad X1 Carbon Gen 11+ | systemd-boot | LUKS2 + FIDO2 | BTRFS | Dual-boot Windows
 
-https://wiki.archlinux.org/title/Lenovo_ThinkPad_X1_Carbon_(Gen_11)
-https://wiki.archlinux.org/title/User:ZachHilman/Installation_-_Btrfs_%2B_LUKS2_%2B_Secure_Boot
+https://wiki.archlinux.org/title/Lenovo_ThinkPad_X1_Carbon\_(Gen_11)
+https://wiki.archlinux.org/title/User:ZachHilman/Installation\_-_Btrfs_%2B_LUKS2\_%2B_Secure_Boot
 https://wiki.archlinux.org/title/User:Altercation/Bullet_Proof_Arch_Install
 
 ## Pre-install
@@ -53,13 +53,13 @@ sgdisk --print $DISK
 
 Expected layout:
 
-| #   | Label | Size   | Type        |
+| # | Label | Size | Type |
 | --- | ----- | ------ | ----------- |
-| 1   | EFI   | 512M   | ef00 (keep) |
-| 2   | (MSR) | —      | (keep)      |
-| 3   | (Win) | —      | (keep)      |
-| 4   | root  | 200G   | 8300        |
-| 5   | data  | (rest) | 8300        |
+| 1 | EFI | 512M | ef00 (keep) |
+| 2 | (MSR) | — | (keep) |
+| 3 | (Win) | — | (keep) |
+| 4 | root | 200G | 8300 |
+| 5 | data | (rest) | 8300 |
 
 ```bash
 partprobe -s $DISK
@@ -170,7 +170,7 @@ pacstrap -K /mnt base base-devel linux linux-headers linux-lts linux-lts-headers
   libfido2 systemd-ukify zram-generator
 
 # Generate fstab
-genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -U /mnt >>/mnt/etc/fstab
 ```
 
 Verify fstab looks correct:
@@ -196,7 +196,7 @@ reflector --country AU --age 24 --protocol https --sort rate --save /etc/pacman.
 ```bash
 sed -i 's/^#en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "LANG=en_US.UTF-8" >/etc/locale.conf
 
 ln -sf /usr/share/zoneinfo/Australia/Melbourne /etc/localtime
 hwclock --systohc
@@ -205,9 +205,9 @@ hwclock --systohc
 ### Hostname & Hosts
 
 ```bash
-echo "x1" > /etc/hostname
+echo "x1" >/etc/hostname
 
-cat << EOF > /etc/hosts
+cat <<EOF >/etc/hosts
 127.0.0.1 localhost
 ::1       localhost
 127.0.1.1 x1.int.sbbh.cloud x1
@@ -239,7 +239,7 @@ su sysadm -c "cd /tmp && git clone https://aur.archlinux.org/paru.git && cd paru
 ## zram (swap)
 
 ```bash
-cat << 'EOF' > /etc/systemd/zram-generator.conf
+cat <<'EOF' >/etc/systemd/zram-generator.conf
 [zram0]
 zram-size = ram / 2
 compression-algorithm = zstd
@@ -251,7 +251,7 @@ EOF
 ### mkinitcpio
 
 ```bash
-cat << 'EOF' > /etc/mkinitcpio.conf
+cat <<'EOF' >/etc/mkinitcpio.conf
 MODULES=(nvme nvme_core i915 btrfs)
 BINARIES=()
 FILES=()
@@ -273,7 +273,7 @@ systemctl enable systemd-boot-update.service
 ### Loader config
 
 ```bash
-cat << 'EOF' > /boot/loader/loader.conf
+cat <<'EOF' >/boot/loader/loader.conf
 default arch-linux.efi
 timeout 5
 console-mode auto
@@ -298,11 +298,11 @@ mkdir -p /etc/kernel
 
 ROOT_UUID=$(blkid -s UUID -o value /dev/disk/by-partlabel/root)
 
-cat << EOF > /etc/kernel/cmdline
+cat <<EOF >/etc/kernel/cmdline
 rd.luks.name=${ROOT_UUID}=root rd.luks.options=discard root=/dev/mapper/root rootflags=subvol=@ rw
 EOF
 
-cat << 'EOF' > /etc/mkinitcpio.d/linux.preset
+cat <<'EOF' >/etc/mkinitcpio.d/linux.preset
 ALL_config="/etc/mkinitcpio.conf"
 ALL_kver="/boot/vmlinuz-linux"
 ALL_microcode=(/boot/*-ucode.img)
@@ -319,7 +319,7 @@ EOF
 The `linux-lts` package ships a default preset that builds plain initramfs images. Override it to build a UKI so systemd-boot auto-discovers it as a fallback boot entry. Only the `default` preset is built (no `fallback`): the LTS kernel is itself the recovery kernel, and the 512M EFI partition cannot hold a second ~200M fallback UKI.
 
 ```bash
-cat << 'EOF' > /etc/mkinitcpio.d/linux-lts.preset
+cat <<'EOF' >/etc/mkinitcpio.d/linux-lts.preset
 ALL_config="/etc/mkinitcpio.conf"
 ALL_kver="/boot/vmlinuz-linux-lts"
 ALL_microcode=(/boot/*-ucode.img)
@@ -386,7 +386,7 @@ cryptsetup luksAddKey /dev/disk/by-partlabel/data /etc/crypto_keyfile.bin
 ```bash
 DATA_UUID=$(blkid -s UUID -o value /dev/disk/by-partlabel/data)
 
-cat << EOF >> /etc/crypttab
+cat <<EOF >>/etc/crypttab
 data    UUID=${DATA_UUID}    /etc/crypto_keyfile.bin    luks
 EOF
 ```
@@ -398,7 +398,7 @@ We already created the snapshot subvolumes earlier, so just write the config fil
 ### Root config
 
 ```bash
-cat << 'EOF' > /etc/snapper/configs/root
+cat <<'EOF' >/etc/snapper/configs/root
 SUBVOLUME="/"
 FSTYPE="btrfs"
 QGROUP=""
@@ -442,7 +442,7 @@ sed -i 's|SUBVOLUME="/"|SUBVOLUME="/data"|' /etc/snapper/configs/data
 ### Register configs
 
 ```bash
-echo 'SNAPPER_CONFIGS="root home data"' > /etc/conf.d/snapper
+echo 'SNAPPER_CONFIGS="root home data"' >/etc/conf.d/snapper
 ```
 
 ## Services
@@ -461,7 +461,7 @@ systemctl enable snapper-cleanup.timer
 ### Reflector config
 
 ```bash
-cat << 'EOF' > /etc/xdg/reflector/reflector.conf
+cat <<'EOF' >/etc/xdg/reflector/reflector.conf
 --country AU
 --protocol https
 --age 24
@@ -491,16 +491,16 @@ reboot
 ### Verification
 
 1. systemd-boot menu appears with Arch UKI + Windows entries
-2. YubiKey prompt appears — touch to unlock root
-3. Data partition mounted: `lsblk -f | grep data`
-4. Snapper working: `snapper -c root list`
-5. TRIM working: `sudo fstrim -v /`
-6. zram active: `swapon --show`
+1. YubiKey prompt appears — touch to unlock root
+1. Data partition mounted: `lsblk -f | grep data`
+1. Snapper working: `snapper -c root list`
+1. TRIM working: `sudo fstrim -v /`
+1. zram active: `swapon --show`
 
 If Windows doesn't appear in the boot menu, create a manual entry:
 
 ```bash
-sudo tee /boot/loader/entries/windows.conf << 'EOF'
+sudo tee /boot/loader/entries/windows.conf <<'EOF'
 title   Windows
 efi     /EFI/Microsoft/Boot/bootmgfw.efi
 EOF
@@ -510,7 +510,7 @@ EOF
 
 ```bash
 nmcli device wifi list
-nmcli device wifi connect <SSID> password <password> hidden yes
+nmcli device wifi connect yes <SSID >password <password >hidden
 ```
 
 ### Dotfiles
@@ -518,7 +518,7 @@ nmcli device wifi connect <SSID> password <password> hidden yes
 Install dotfiles and apply configuration. See [README.md](../README.md) for details.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Subbeh/dotfiles/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/subbeh/dotfiles/main/install.sh | bash
 ```
 
 ## Enable Secure Boot
@@ -528,9 +528,9 @@ After first boot, enroll your Secure Boot keys.
 ### 1. Enter UEFI Setup Mode
 
 1. Reboot and enter UEFI Setup (F1 on ThinkPad at boot)
-2. Navigate to **Security → Secure Boot**
-3. **Reset to Setup Mode** or **Clear All Secure Boot Keys** (this enables Setup Mode)
-4. Save and exit — boot back into Arch
+1. Navigate to **Security → Secure Boot**
+1. **Reset to Setup Mode** or **Clear All Secure Boot Keys** (this enables Setup Mode)
+1. Save and exit — boot back into Arch
 
 ### 2. Enroll keys
 
@@ -548,9 +548,9 @@ sbctl status
 ### 3. Enable Secure Boot
 
 1. Reboot into UEFI Setup (F1)
-2. Navigate to **Security → Secure Boot**
-3. **Enable Secure Boot**
-4. Save and exit
+1. Navigate to **Security → Secure Boot**
+1. **Enable Secure Boot**
+1. Save and exit
 
 ### 4. Verify
 
@@ -564,7 +564,7 @@ sbctl verify
 
 If boot fails after enabling Secure Boot, disable it in UEFI and check `sbctl verify` for unsigned files.
 
----
+______________________________________________________________________
 
 ## Appendix: Snapshot Rollback
 
@@ -585,7 +585,7 @@ mv /mnt/@ /mnt/@.broken
 # Create writable snapshot from a known-good snapshot
 # (list snapshots under /mnt/@snapshots/<number>/snapshot)
 ls /mnt/@snapshots/
-btrfs subvolume snapshot /mnt/@snapshots/<number>/snapshot /mnt/@
+btrfs subvolume snapshot /mnt/@snapshots/ /mnt/@ <number >/snapshot
 
 umount /mnt
 reboot
