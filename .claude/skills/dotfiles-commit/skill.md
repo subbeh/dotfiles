@@ -18,9 +18,9 @@ This skill replaces the manual commit workflow documented in CLAUDE.md. It analy
 ## What it does
 
 1. **Analyzes repository state** - checks git status and diffs
-2. **Groups files intelligently** - uses AI to understand logical relationships between changed files
-3. **Interactive review** - shows each group with reasoning and suggested commit message
-4. **Executes commits** - creates commits following Conventional Commits format with proper attribution
+1. **Groups files intelligently** - uses AI to understand logical relationships between changed files
+1. **Interactive review** - shows each group with reasoning and suggested commit message
+1. **Executes commits** - creates commits following Conventional Commits format with proper attribution
 
 ## Key behaviors
 
@@ -41,24 +41,30 @@ User: commit these changes
 ```
 
 The skill will:
+
 1. Analyze all modified files
-2. Group them logically with AI reasoning
-3. Show you each group for review
-4. Execute commits as approved
+1. Group them logically with AI reasoning
+1. Show you each group for review
+1. Execute commits as approved
 
 ## Special cases handled
 
 - Cross-cutting changes (theme updates) → single commit
-- New sources → one commit including mate.yaml registration  
+
+- New sources → one commit including mate.yaml registration
+
 - Generated/import files → separate `chore` commit
+
 - Per-source splitting → default grouping by source directory
+
 - `#encrypted` files → `git diff` only shows ciphertext. Diff the plaintext with `mate cat`,
   then delete the scratch files:
 
   ```bash
-  git show 'HEAD:<path>' > /tmp/old.age && mate cat /tmp/old.age > /tmp/old.txt
-  mate cat '<path>' > /tmp/new.txt
-  diff -u /tmp/old.txt /tmp/new.txt; rm -f /tmp/old.age /tmp/old.txt /tmp/new.txt
+  git show 'HEAD:<path>' >/tmp/old.age && mate cat /tmp/old.age >/tmp/old.txt
+  mate cat '<path>' >/tmp/new.txt
+  diff -u /tmp/old.txt /tmp/new.txt
+  rm -f /tmp/old.age /tmp/old.txt /tmp/new.txt
   ```
 
   Show only the diff, never the whole file. `#import` syncs (kubeconfig, claude settings)
@@ -74,6 +80,6 @@ Optional body with bullet points explaining WHY
 Co-Authored-By: Claude Sonnet 4.5 (1M context) <noreply@anthropic.com>
 ```
 
-**Types**: feat, fix, docs, style, refactor, perf, test, build, ci, chore, pkg  
-**Scope**: source directory name (or `mate`, `theme` for cross-cutting)  
+**Types**: feat, fix, docs, style, refactor, perf, test, build, ci, chore, pkg\
+**Scope**: source directory name (or `mate`, `theme` for cross-cutting)\
 **Subject**: imperative, lowercase, no period, concise
