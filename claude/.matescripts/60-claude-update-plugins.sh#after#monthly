@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# description: Update Claude Code plugins
+
+claude-update-plugins || true

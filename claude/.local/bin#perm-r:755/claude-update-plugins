@@ -1,0 +1,184 @@
+#!/bin/bash
+# Check for Claude Code plugin updates
+# Compares installed plugin versions with latest available in marketplaces
+
+set -euo pipefail
+
+CLAUDE_DIR="$HOME/.claude"
+PLUGINS_FILE="$CLAUDE_DIR/plugins/installed_plugins.json"
+MARKETPLACES_DIR="$CLAUDE_DIR/plugins/marketplaces"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+BOLD='\033[1m'
+
+# Check dependencies
+if ! command -v jq &>/dev/null; then
+  echo -e "${RED}Error: jq is required but not installed.${NC}"
+  echo "Install jq:"
+  echo "  macOS:         brew install jq"
+  echo "  Ubuntu/Debian: sudo apt-get install jq"
+  echo "  Fedora:        sudo dnf install jq"
+  echo "  Windows:       choco install jq"
+  exit 1
+fi
+
+if [[ ! -f "$PLUGINS_FILE" ]]; then
+  echo -e "${RED}Error: Plugin file not found at $PLUGINS_FILE${NC}"
+  exit 1
+fi
+
+echo -e "${BOLD}Checking Claude Code plugin updates...${NC}\n"
+
+# Check if marketplaces directory exists and has content
+if [[ ! -d "$MARKETPLACES_DIR" ]] || [[ -z "$(ls -A "$MARKETPLACES_DIR" 2>/dev/null)" ]]; then
+  echo -e "${YELLOW}Warning: No marketplaces found at $MARKETPLACES_DIR${NC}"
+  echo "Install plugins first with: claude plugin install <plugin>@<marketplace>"
+  exit 0
+fi
+
+# Fetch latest from all marketplaces; track failures to warn about stale data
+echo -e "${BLUE}Fetching latest from marketplaces...${NC}"
+fetch_failed=()
+for marketplace_dir in "$MARKETPLACES_DIR"/*/; do
+  if [[ -d "$marketplace_dir/.git" ]]; then
+    marketplace_name=$(basename "$marketplace_dir")
+    if ! git -C "$marketplace_dir" fetch origin --quiet 2>/dev/null; then
+      fetch_failed+=("$marketplace_name")
+    fi
+  fi
+done
+if [[ ${#fetch_failed[@]} -gt 0 ]]; then
+  echo -e "${YELLOW}Warning: Could not reach remote for: ${fetch_failed[*]}${NC}"
+  echo -e "${YELLOW}Results below may reflect cached data from last successful fetch.${NC}"
+fi
+echo ""
+
+updates_available=0
+up_to_date=0
+unknown_version=0
+cannot_compare=0
+update_queue=()
+
+print_update_header() {
+  echo -e "${YELLOW}⬆${NC}  ${BOLD}$1${NC}@$2"
+}
+
+# Parse installed plugins — quoted via <<< to prevent word-splitting and glob expansion
+plugins=$(jq -r '.plugins | keys[]' "$PLUGINS_FILE") || {
+  echo -e "${RED}Error: Could not parse plugin data from $PLUGINS_FILE${NC}"
+  exit 1
+}
+
+while IFS= read -r plugin_key; do
+  [[ -z "$plugin_key" ]] && continue
+
+  # Extract plugin name and marketplace (handles @scope/plugin@marketplace format)
+  marketplace="${plugin_key##*@}"
+  plugin_name="${plugin_key%@*}"
+
+  # Warn and skip keys with no '@marketplace' suffix
+  if [[ "$marketplace" == "$plugin_key" ]]; then
+    echo -e "${YELLOW}?${NC}  ${BOLD}$plugin_key${NC} — no @marketplace suffix, skipping"
+    continue
+  fi
+
+  # Get installed info — single jq call with --arg to avoid injection
+  IFS=$'\t' read -r installed_version installed_sha is_local < <(
+    jq -r --arg k "$plugin_key" \
+      '.plugins[$k][0] | [(.version // "unknown"), (.gitCommitSha // ""), (.isLocal // false | tostring)] | @tsv' \
+      "$PLUGINS_FILE"
+  )
+
+  marketplace_dir="$MARKETPLACES_DIR/$marketplace"
+
+  if [[ ! -d "$marketplace_dir/.git" ]]; then
+    continue
+  fi
+
+  # Get latest SHA from marketplace using git -C to avoid subshell cd
+  latest_sha=$(git -C "$marketplace_dir" rev-parse origin/main 2>/dev/null ||
+    git -C "$marketplace_dir" rev-parse origin/master 2>/dev/null ||
+    echo "")
+
+  if [[ -z "$latest_sha" || -z "$installed_sha" ]]; then
+    continue
+  fi
+
+  # Check if there are commits between installed and latest
+  if [[ "$installed_sha" != "$latest_sha" ]]; then
+    commits_ahead=$(git -C "$marketplace_dir" rev-list --count "$installed_sha..$latest_sha" 2>/dev/null || echo "?")
+
+    if [[ "$commits_ahead" == "?" ]]; then
+      echo -e "${BLUE}?${NC}  ${BOLD}$plugin_name${NC}@$marketplace"
+      echo -e "   Cannot compare (installed SHA not found in remote history)"
+      ((++cannot_compare))
+      continue
+    fi
+
+    if [[ "$commits_ahead" != "0" ]]; then
+      # Try to find version info from commit messages (-F for fixed string, not regex)
+      latest_version=$(git -C "$marketplace_dir" log --oneline "$installed_sha..$latest_sha" 2>/dev/null |
+        grep -iF "$plugin_name" | head -1 |
+        grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "")
+
+      print_update_header "$plugin_name" "$marketplace"
+      if [[ -n "$latest_version" ]]; then
+        echo -e "   ${RED}$installed_version${NC} → ${GREEN}$latest_version${NC} ($commits_ahead commits)"
+      elif [[ "$is_local" == "true" || "$installed_version" == "unknown" ]]; then
+        echo -e "   $commits_ahead commits behind (local plugin, no version tracking)"
+        ((++unknown_version))
+        update_queue+=("$plugin_key")
+        continue
+      else
+        echo -e "   ${RED}$installed_version${NC} → ${GREEN}newer available${NC} ($commits_ahead commits)"
+      fi
+      ((++updates_available))
+      update_queue+=("$plugin_key")
+    else
+      ((++up_to_date))
+    fi
+  else
+    ((++up_to_date))
+  fi
+done <<<"$plugins"
+
+echo ""
+echo -e "${BOLD}Summary:${NC}"
+if [[ $updates_available -gt 0 ]]; then
+  echo -e "  ${YELLOW}$updates_available plugin(s) with updates available${NC}"
+fi
+if [[ $unknown_version -gt 0 ]]; then
+  echo -e "  ${BLUE}$unknown_version local plugin(s) with possible updates${NC}"
+fi
+echo -e "  ${GREEN}$up_to_date plugin(s) up to date${NC}"
+if [[ $cannot_compare -gt 0 ]]; then
+  echo -e "  ${BLUE}$cannot_compare plugin(s) could not be compared${NC}"
+fi
+
+if [[ ${#update_queue[@]} -gt 0 && ! -t 0 ]]; then
+  echo ""
+  echo "Run claude-update-plugins in a terminal to update."
+elif [[ ${#update_queue[@]} -gt 0 ]]; then
+  echo ""
+  echo -e "${BOLD}Update plugins:${NC}"
+  for plugin_key in "${update_queue[@]}"; do
+    read -r -p "  Update ${plugin_key}? [y/N] " answer
+    case "$answer" in
+      [yY] | [yY][eE][sS])
+        if claude plugin update "$plugin_key"; then
+          echo -e "  ${GREEN}Updated ${plugin_key}${NC} (restart Claude Code to apply)"
+        else
+          echo -e "  ${RED}Failed to update ${plugin_key}${NC}"
+        fi
+        ;;
+      *)
+        echo "  Skipped ${plugin_key}"
+        ;;
+    esac
+  done
+fi
