@@ -13,4 +13,5 @@ else
   _bin=$(which mate)
 fi
 
-source <($_bin completion zsh)
+# Completion generation forks mate -- defer to zinit's turbo queue.
+zinit wait lucid as'null' id-as'defer-statemate' atload"source <($_bin completion zsh)" for %$ZDOTDIR

@@ -2,6 +2,6 @@
 
 if test -x /opt/homebrew/bin/brew; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
-  export FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
+  export FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions:${FPATH}"
+  export DYLD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib:$DYLD_LIBRARY_PATH"
 fi
