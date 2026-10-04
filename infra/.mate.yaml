@@ -2,9 +2,11 @@ packages:
   common:
     - direnv
     - docker
+    - gopls
     - kubectl
     - kubectx
     - mise
+    - pyright
     - terraform
     - uv
   brew:
