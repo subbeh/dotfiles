@@ -1,7 +1,7 @@
-"$schema" = 'https://starship.rs/config-schema.json'
+"$schema" = "https://starship.rs/config-schema.json"
 
 add_newline = false
-continuation_prompt = '[❯❯](dimmed white) '
+continuation_prompt = "[❯❯](dimmed white) "
 command_timeout = 1000
 
 format = """
@@ -26,102 +26,102 @@ $python\
 """
 
 [custom.user]
-command = 'echo $USER'
+command = "echo $USER"
 when = ''' test "$USER" != "sysadm" && test "$USER" != "steven.terwindt" '''
-format = '[$output ](bold yellow)'
+format = "[$output ](bold yellow)"
+
+[custom.direnv]
+command = "echo "
+when = ''' test -n "$DIRENV_DIR" '''
+format = "[$output ](bold bright-green)"
+
+[custom.mise]
+command = "echo "
+when = ''' test -n "$MISE_DIR" '''
+format = "[$output ](bold purple)"
+
+[custom.upterm]
+when = ''' test -n "$UPTERM_ADMIN_SOCKET" '''
+format = "[[](bold red) upterm](bold blue) "
+
+[custom.hermes]
+command = "echo $INST"
+symbol = "󱃾"
+when = ''' test -n "$INST" '''
+format = "[$symbol ](bold blue)[$output ](dimmed white)"
+
+[custom.k8shome]
+command = ''' kubectl config view --minify --output 'jsonpath={..namespace}' '''
+symbol = "󱃾"
+when = ''' [ "$KUBECONFIG" = "$HOMELAB_DIR/.secret/kubeconfig" ] '''
+format = "[$symbol ](bold blue)[$output ](dimmed white)"
+
+[custom.statemate]
+command = "mate status --short"
+symbol = "󱃾"
+when = ''' test -n "$(mate status --short)" '''
+format = "[$symbol ](bold yellow)[$output ](dimmed white)"
 
 [hostname]
 ssh_symbol = '\[\] '
-style = 'bright-blue'
-format = '[$ssh_symbol$hostname]($style)[ ❯](bold purple) '
+style = "bright-blue"
+format = "[$ssh_symbol$hostname]($style)[ ❯](bold purple) "
 
 [directory]
 truncate_to_repo = false
 truncation_length = 8
-truncation_symbol = '+/'
-style = 'bold bright-blue'
-format = '[$truncation_symbol](bold bright-purple)[$path](bold bright-blue)[$read_only]($read_only_style) '
-read_only = ' 󰌾'
+truncation_symbol = "+/"
+style = "bold bright-blue"
+format = "[$truncation_symbol](bold bright-purple)[$path](bold bright-blue)[$read_only]($read_only_style) "
+read_only = " 󰌾"
 substitutions = [
-  { from = "~/.config$",                       to = "[]",    regex = true },
-  { from = "~/.config/",                       to = "[] ",   regex = true },
-  { from = "^~$",                              to = "[]",    regex = true },
-  { from = "^~/",                              to = "[] ",   regex = true },
-  { from = "^(/data|/Users/Shared/data)",      to = "<data>", regex = true },
-  { from = "^<data>/workspace/dotfiles$",      to = "[󰇘]",    regex = true },
-  { from = "^<data>/workspace/dotfiles/",      to = "[󰇘] ",   regex = true },
-  { from = "^<data>/workspace/jamf/sessions/", to = "[] ",   regex = true },
-  { from = "^<data>/workspace$",               to = "[󱧽]",    regex = true },
-  { from = "^<data>/workspace/",               to = "[󱧽] ",   regex = true },
-  { from = "^<data>$",                         to = "[]",    regex = true },
-  { from = "^<data>/",                         to = "[] ",   regex = true },
-  { from = "/\\.worktrees/?.*",                to = " [󱏒]",   regex = true },
+  { from = "~/.config$", to = "[]", regex = true },
+  { from = "~/.config/", to = "[] ", regex = true },
+  { from = "^~$", to = "[]", regex = true },
+  { from = "^~/", to = "[] ", regex = true },
+  { from = "^(/data|/Users/Shared/data)", to = "<data>", regex = true },
+  { from = "^<data>/workspace/dotfiles$", to = "[󰇘]", regex = true },
+  { from = "^<data>/workspace/dotfiles/", to = "[󰇘] ", regex = true },
+  { from = "^<data>/workspace/jamf/sessions/", to = "[] ", regex = true },
+  { from = "^<data>/workspace$", to = "[󱧽]", regex = true },
+  { from = "^<data>/workspace/", to = "[󱧽] ", regex = true },
+  { from = "^<data>$", to = "[]", regex = true },
+  { from = "^<data>/", to = "[] ", regex = true },
+  { from = "/\\.worktrees/?.*", to = " [󱏒]", regex = true },
 ]
 
 [character]
-success_symbol = '[❯](bold purple)'
-error_symbol = '[❯](bold red)'
+success_symbol = "[❯](bold purple)"
+error_symbol = "[❯](bold red)"
 
 [cmd_duration]
-format = '[[󰔟](bold yellow) $duration ](dimmed white)'
+format = "[[󰔟](bold yellow) $duration ](dimmed white)"
 
 [git_branch]
-format = '[[$symbol](bold cyan) $branch(:$remote_branch)](dimmed white) '
+format = "[[$symbol](bold cyan) $branch(:$remote_branch)](dimmed white) "
 symbol = ""
 
 [git_status]
-style = 'dimmed white'
-ahead = '⇡${count}'
-diverged = '⇕⇡${ahead_count}⇣${behind_count}'
-behind = '⇣${count}'
-deleted = 'x'
+style = "dimmed white"
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
+deleted = "x"
 
 [aws]
-format = '[[$symbol](bold bright-blue) $profile](dimmed white) '
-style = 'bold blue'
-symbol = ''
+format = "[[$symbol](bold bright-blue) $profile](dimmed white) "
+style = "bold blue"
+symbol = ""
 
 [golang]
-format = '[ ](sapphire)'
+format = "[ ](sapphire)"
 
 [python]
-format = '[[](bold yellow) $virtualenv](dimmed white) '
+format = "[[](bold yellow) $virtualenv](dimmed white) "
 
 [kubernetes]
-symbol = ''
+symbol = ""
 disabled = false
-detect_env_vars = ['KUBECONFIG']
-detect_files = ['dummy']
-format = '[[$symbol](bold bright-blue)$namespace](dimmed white) '
-
-[custom.direnv]
-command = 'echo '
-when = ''' test -n "$DIRENV_DIR" '''
-format = '[$output ](bold bright-green)'
-
-[custom.mise]
-command = 'echo '
-when = ''' test -n "$MISE_DIR" '''
-format = '[$output ](bold purple)'
-
-[custom.upterm]
-when = ''' test -n "$UPTERM_ADMIN_SOCKET" '''
-format = '[[](bold red) upterm](bold blue) '
-
-[custom.hermes]
-command = 'echo $INST'
-symbol = '󱃾'
-when = ''' test -n "$INST" '''
-format = '[$symbol ](bold blue)[$output ](dimmed white)'
-
-[custom.k8shome]
-command = ''' kubectl config view --minify --output 'jsonpath={..namespace}' '''
-symbol = '󱃾'
-when = ''' [ "$KUBECONFIG" = "$HOMELAB_DIR/.secret/kubeconfig" ] '''
-format = '[$symbol ](bold blue)[$output ](dimmed white)'
-
-[custom.statemate]
-command = 'mate status --short'
-symbol = '󱃾'
-when = ''' test -n "$(mate status --short)" '''
-format = '[$symbol ](bold yellow)[$output ](dimmed white)'
+detect_env_vars = ["KUBECONFIG"]
+detect_files = ["dummy"]
+format = "[[$symbol](bold bright-blue)$namespace](dimmed white) "
