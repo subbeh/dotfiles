@@ -9,7 +9,8 @@ packages:
     - golangci-lint
     - jamf/internal-tap/cloudtools
     - jamf/internal-tap/hermes
+    - podman
     - postman
     - slack
-    - swiftbar
+    # - swiftbar
     - zoom
