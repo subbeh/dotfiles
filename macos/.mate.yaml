@@ -15,7 +15,9 @@ packages:
     - raycast
     # - rectangle
     - spotify
+    - vlc
     # fonts
     - font-fira-code-nerd-font
     - font-fira-mono-nerd-font
     - font-hack-nerd-font
+    - sf-symbols

@@ -8,6 +8,7 @@ packages:
     - mise
     - pyright
     - terraform
+    - upterm
     - uv
   brew:
     - hashicorp/tap/terraform

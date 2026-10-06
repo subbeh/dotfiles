@@ -1,3 +1,6 @@
+packages:
+  common:
+    - sshpass
 generate:
   {{- range $key := (var "sshKeys") }}
   - target: ".ssh/keys.d/id_{{ $key }}"
