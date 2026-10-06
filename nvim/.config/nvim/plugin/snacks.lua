@@ -20,7 +20,7 @@ require("snacks").setup({
         { icon = icons.ui.FindText, key = "g", desc = "Find Text",       action = ":lua Snacks.dashboard.pick('live_grep')" },
         { icon = icons.ui.Files,    key = "r", desc = "Recent Files",    action = ":lua Snacks.dashboard.pick('oldfiles')" },
         { icon = icons.ui.Config,   key = "c", desc = "Config",          action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.stdpath('config' )})" },
-        { icon = icons.ui.Refresh,  key = "s", desc = "Restore Session", action = ":lua require('persistence').load({ last = true })" },
+        { icon = icons.ui.Refresh,  key = "s", desc = "Restore Session", action = ":lua require('persistence').load()" },
         { icon = icons.ui.Exit,     key = "q", desc = "Quit",            action = ":qa" },
       },
     },
