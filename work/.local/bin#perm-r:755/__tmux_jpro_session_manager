@@ -86,7 +86,7 @@ if [[ "$instance" ]]; then
 
     # set context and run clops tools
     tmux send-keys -t '{top-left}' "__jpro_set_ctx $instance ; k9s -n $instance-jamfcloud-com -c po" C-m
-    tmux send-keys -t '{top-right}' "cd $DIR/cloud-ops-tools/src/scripts && ./jtop.py -i $instance" C-m
+    tmux send-keys -t '{top-right}' "jtop -i $instance" C-m
 
     # bind key for sketchybar context
     # tmux bind-key -T prefix C "run-shell 'KUBECONFIG=${JAMF_DIR:?not set}/kubeconfig hermes jpro set-ctx #{window_name} && open swiftbar://refreshplugin?name=hermes'"

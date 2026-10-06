@@ -11,7 +11,7 @@ windows:
         -
         -
   - clops-tools:
-      root: <%= ENV["JAMF_DIR"] %>/cloud-ops-tools
+      root: <%= ENV["JAMF_DIR"] %>/repos/cloud-ops-tools
       layout: b703,459x119,0,0{153x119,0,0[153x90,0,0,47,153x28,0,91,52],305x119,154,0[305x90,154,0,50,305x28,154,91,51]}
       panes:
         -
