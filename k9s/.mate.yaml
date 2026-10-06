@@ -1,0 +1,3 @@
+packages:
+  common:
+    - k9s
