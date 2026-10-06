@@ -7,6 +7,7 @@ packages:
     - dialog
     - direnv
     - coreutils
+    - croc
     - duf
     - dust
     - ffmpeg
@@ -24,7 +25,6 @@ packages:
     - mtr
     - ncdu
     - nmap
-    - onefetch
     - openssh
     - socat
     - speedtest-cli
@@ -47,5 +47,6 @@ packages:
     - gnu-sed
     - node
     - rar
+    - shellcheck
     - watch
     - xh

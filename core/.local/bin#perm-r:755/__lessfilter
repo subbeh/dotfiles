@@ -1,13 +1,14 @@
 #!/bin/sh
 
 if [ -d "$1" ]; then
-  onefetch --include-hidden --no-art --no-color-palette "$1" 2>/dev/null && exit 0
-  tree -CL 3 --gitignore --noreport "$1" 2>/dev/null && exit 0
+  tree -CL 3 -a --gitignore --noreport "$1" 2>/dev/null && exit 0
 fi
 
 case "${1##*.}" in
 md | MD | mkd | markdown)
-  glow "$1"
+  # glow drops styling when stdout isn't a TTY (as here, piped into less), so
+  # force a style; -w 0 disables wrapping so less does it, matching bat below
+  glow -s dark -w 0 "$1"
   ;;
 *)
   [ "$(tput colors)" -gt 8 ] || exit 1
