@@ -35,6 +35,7 @@ sources:
   - claude
   - eza
   - fd
+  - firefox
   - fzf
   - git
   - gnupg
@@ -78,10 +79,8 @@ profiles:
       - hyprland
       - mpv
       - restic
-      - firefox
     variables:
       workspaceDir: "/data/workspace"
-      firefoxDir: "/data/appdata/firefox"
       sshKeys:
         - laptop-personal-ssh-key
         - github-ssh-key
