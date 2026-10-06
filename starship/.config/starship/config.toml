@@ -82,7 +82,8 @@ substitutions = [
   { from = "^(/data|/Users/Shared/data)", to = "<data>", regex = true },
   { from = "^<data>/workspace/dotfiles$", to = "[󰇘]", regex = true },
   { from = "^<data>/workspace/dotfiles/", to = "[󰇘] ", regex = true },
-  { from = "^<data>/workspace/jamf/sessions/", to = "[] ", regex = true },
+  { from = "^<data>/workspace/jamf$", to = "[]", regex = true },
+  { from = "^<data>/workspace/jamf/", to = "[] ", regex = true },
   { from = "^<data>/workspace$", to = "[󱧽]", regex = true },
   { from = "^<data>/workspace/", to = "[󱧽] ", regex = true },
   { from = "^<data>$", to = "[]", regex = true },
@@ -101,13 +102,6 @@ format = "[[󰔟](bold yellow) $duration ](dimmed white)"
 format = "[[$symbol](bold cyan) $branch(:$remote_branch)](dimmed white) "
 symbol = ""
 
-[git_status]
-style = "dimmed white"
-ahead = "⇡${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-behind = "⇣${count}"
-deleted = "x"
-
 [aws]
 format = "[[$symbol](bold bright-blue) $profile](dimmed white) "
 style = "bold blue"
@@ -123,5 +117,4 @@ format = "[[](bold yellow) $virtualenv](dimmed white) "
 symbol = ""
 disabled = false
 detect_env_vars = ["KUBECONFIG"]
-detect_files = ["dummy"]
 format = "[[$symbol](bold bright-blue)$namespace](dimmed white) "
