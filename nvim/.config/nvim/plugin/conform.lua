@@ -7,6 +7,10 @@ vim.pack.add({
 
 require("mason").setup()
 
+local function has_frontmatter(bufnr)
+  return vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] == "---"
+end
+
 require("conform").setup({
   format_on_save = function()
     if vim.g.disable_autoformat then
@@ -20,7 +24,9 @@ require("conform").setup({
     json = { "prettier" },
     jsonc = { "prettier" },
     lua = { "stylua" },
-    markdown = { "mdformat", "injected" },
+    -- mdformat mangles YAML frontmatter and mason can't install mdformat-frontmatter,
+    -- so frontmatter files go to prettier instead (see the conditions below).
+    markdown = { "mdformat", "prettier", "injected" },
     python = { "black" },
     sh = { "shfmt" },
     toml = { "tombi" },
@@ -28,8 +34,19 @@ require("conform").setup({
     zsh = { "shfmt" },
   },
   formatters = {
+    mdformat = {
+      condition = function(_, ctx)
+        return not has_frontmatter(ctx.buf)
+      end,
+    },
     prettier = {
-      prepend_args = { "--prose-wrap", "always" },
+      condition = function(_, ctx)
+        return vim.bo[ctx.buf].filetype ~= "markdown" or has_frontmatter(ctx.buf)
+      end,
+      prepend_args = function(_, ctx)
+        local wrap = vim.bo[ctx.buf].filetype == "markdown" and "preserve" or "always"
+        return { "--prose-wrap", wrap }
+      end,
     },
   },
 })
