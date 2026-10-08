@@ -1,23 +1,24 @@
 #!/bin/sh
 
+{{- if ne .Profile "work" }}
 export GITHUB_TOKEN="{{ bitwarden "github.com" "field" "gh-cli-token" }}"
+{{- end }}
 
-alias gs='git status'
-alias ga='git add'
 alias gaa='git add --all'
+alias ga='git add'
 alias gau='git add -u'
-alias gp='git push'
-alias gpo='git push origin'
-alias gtd='git tag --delete'
-alias gtdr='git tag --delete origin'
-alias gr='git branch -r'
-alias gplo='git pull origin'
 alias gb='git branch '
+alias gbr='git branch -r'
 alias gc='git commit -m'
 alias gco='git checkout '
 alias gl='git log --oneline --graph'
-alias gr='git remote'
-alias grs='git remote show'
 alias glo='git log --pretty="oneline"'
 alias glol='git log --graph --oneline --decorate'
+alias gp='git pull'
+alias gP='git push'
+alias gpo='git pull origin'
+alias gPo='git push origin'
+alias gr='git remote'
+alias grs='git remote show'
+alias gs='git status'
 alias lg='lazygit'
