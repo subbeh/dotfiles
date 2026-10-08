@@ -345,7 +345,7 @@
     "interval": 10,
     "tooltip": true,
     "signal": 6,
-    "on-click": "mate apply",
+    "on-click": "mate apply --noconfirm",
     "on-click-right": "pkill -SIGRTMIN+6 waybar"
   },
   //

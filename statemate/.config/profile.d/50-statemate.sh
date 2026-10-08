@@ -4,10 +4,10 @@ test -r "$XDG_CONFIG_HOME/statemate/key.txt" && STATEMATE_KEY_FILE="$_" && expor
 
 alias cd.="cd $(cut -d: -f2 "$XDG_CONFIG_HOME/statemate/mate.yaml" | sed 's/~/$HOME/')"
 alias ds='mate status'
-alias da='mate apply'
-alias daa='mate apply && mate clean --all --force'
+alias da='mate apply --noconfirm'
+alias daa='mate apply --noconfirm && mate clean --all --noconfirm'
 alias dad='mate apply --dry-run -v'
 alias de='mate edit'
 alias ddiff='mate diff'
 alias ddoc='mate doctor'
-alias dc='mate clean --all --force'
+alias dc='mate clean --all --noconfirm'
