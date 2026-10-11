@@ -68,6 +68,42 @@ For each changed file:
 
 **Generated files**: Files with `#import` suffix that auto-sync should get their own `chore(<src>): sync <description>` commit, never mixed with real work.
 
+## Phase 2.5: Cleanliness & Correctness Check
+
+Before presenting a group, check it isn't half-finished. This catches mistakes before they're baked into a commit, not after.
+
+**Scan the diff's added (`+`) lines** for:
+- Debug/test leftovers: `console.log`, `print(`, `dbg!`, `debugger`, `binding.pry`, `pdb.set_trace`, stray `echo`/`set -x` added only for debugging
+- Unresolved markers: `TODO`, `FIXME`, `XXX`, `WIP`, `not implemented`, `TBD`
+- Merge conflict markers: `<<<<<<<`, `=======`, `>>>>>>>`
+- Commented-out code next to the active code it was meant to replace (not an intentional, documented toggle)
+- Placeholder/junk values: `lorem ipsum`, `foo`/`bar` test values, obviously-fake paths or secrets
+
+**Run the project's own verifiers** on touched files (per CLAUDE.md's "Verify before calling it done"):
+- `mate eval <path>` (and `mate eval -p personal <path>` if profile-scoped) for every touched `#template`
+- `shellcheck` for touched shell scripts
+- `stylua --check` and `luacheck` (and `selene` if installed) for touched Lua
+
+**If anything turns up**, stop before Phase 3 and ask:
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "Found <specific issue> in <file>. How do you want to proceed?",
+    header: "Cleanliness check",
+    multiSelect: false,
+    options: [
+      { label: "Show me", description: "Show the exact line(s) so I can decide" },
+      { label: "Commit anyway", description: "It's intentional, proceed with this group" },
+      { label: "Skip this group", description: "Leave it uncommitted so it can be fixed" },
+      { label: "Quit", description: "Stop the commit workflow" }
+    ]
+  }]
+})
+```
+
+Only move a group to Phase 3 once it's clean, or the user has explicitly said to proceed anyway. A clean group needs no mention of this check when presented — only flag groups with findings.
+
 ## Phase 3: Present Groups for Review
 
 For each group, show:
@@ -248,6 +284,7 @@ Before committing:
 2. **Never commit generated files with real work** - they get separate commits
 3. **Never use broad staging** - always explicit paths
 4. **Verify scope matches** - scope should be the actual source directory name
+5. **Run the Phase 2.5 cleanliness check** - no debug leftovers, unresolved markers, conflict artifacts, or failing verifiers
 
 ## Final Summary
 
@@ -274,6 +311,7 @@ Done.
 - If pre-commit hook blocks, respect it (user can override with --no-verify if needed)
 - If a file can't be staged, show error and skip that group
 - If grouping results in 0 groups, report "No changes to commit"
+- If the Phase 2.5 check finds an issue, never commit silently - always ask first
 
 ## Notes
 

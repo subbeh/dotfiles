@@ -19,6 +19,7 @@ This skill replaces the manual commit workflow documented in CLAUDE.md. It analy
 
 1. **Analyzes repository state** - checks git status and diffs
 1. **Groups files intelligently** - uses AI to understand logical relationships between changed files
+1. **Cleanliness check** - scans each group for debug leftovers, unresolved markers, and unfinished code before review
 1. **Interactive review** - shows each group with reasoning and suggested commit message
 1. **Executes commits** - creates commits following Conventional Commits format with proper attribution
 
@@ -26,6 +27,7 @@ This skill replaces the manual commit workflow documented in CLAUDE.md. It analy
 
 - **Analyzes actual diffs**: Reads full diffs to understand scope, not just filenames or TODO items
 - **AI-driven grouping**: Groups by logical relationships and actual changes, not just directory
+- **Cleanliness check**: Before review, scans each group's diff for debug prints, TODO/FIXME/WIP markers, merge conflict artifacts, stray commented-out code, and placeholder values; runs `shellcheck`/`mate eval`/`stylua`/`luacheck` on touched files. Anything found is surfaced via AskUserQuestion instead of being committed silently
 - **Shows reasoning**: Explains WHY files were grouped together based on what changed
 - **Interactive prompts**: Uses AskUserQuestion for Commit / Skip / Show diff / Chat / Quit actions
 - **Show diff option**: View the actual code changes for a group before deciding
