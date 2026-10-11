@@ -4,6 +4,8 @@
 __pycache__/
 .claude/settings.local.json
 .claude/specs
+.agents/
+AGENTS.md
 .specs
 .worktrees/
 
