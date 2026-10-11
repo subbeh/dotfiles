@@ -3,6 +3,7 @@ packages:
     - bun
     - direnv
     - docker
+    - golangci-lint
     - gopls
     - kubectl
     - kubectx

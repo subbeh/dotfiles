@@ -6,11 +6,10 @@ packages:
     - aws-sso-util
     - awscli
     - azure-cli
-    - golangci-lint
     - jamf/internal-tap/cloudtools
     - jamf/internal-tap/hermes
     - podman
     - postman
     - slack
-    # - swiftbar
+    # - swiftbar # TODO: enable when version 2.1.2 is out
     - zoom
