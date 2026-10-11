@@ -27,14 +27,14 @@ This skill replaces the manual commit workflow documented in CLAUDE.md. It analy
 
 - **Analyzes actual diffs**: Reads full diffs to understand scope, not just filenames or TODO items
 - **AI-driven grouping**: Groups by logical relationships and actual changes, not just directory
-- **Cleanliness check**: Before review, scans each group's diff for debug prints, TODO/FIXME/WIP markers, merge conflict artifacts, stray commented-out code, and placeholder values; runs `shellcheck`/`mate eval`/`stylua`/`luacheck` on touched files. Anything found is surfaced via AskUserQuestion instead of being committed silently
+- **Cleanliness check**: Before review, scans each group's diff for debug prints, TODO/FIXME/WIP markers, merge conflict artifacts, stray commented-out code, and placeholder values; runs `shellcheck`/`mate eval`/`stylua`/`luacheck` on touched files and `gitleaks protect --staged` for secrets. Anything found is surfaced via AskUserQuestion instead of being committed silently
 - **Shows reasoning**: Explains WHY files were grouped together based on what changed
 - **Interactive prompts**: Uses AskUserQuestion for Commit / Skip / Show diff / Chat / Quit actions
 - **Show diff option**: View the actual code changes for a group before deciding
 - **Chat option**: Discuss grouping, ask questions, or provide different instructions
 - **Follows project rules**: All CLAUDE.md conventions (types, scopes, special cases)
 - **Never uses**: `git add -A`, `git add .`, `git commit -a` - always explicit file paths
-- **Secret scanning**: Integrates with pre-commit hook for security
+- **Secret scanning**: Runs `gitleaks protect --staged` itself in the cleanliness check, rather than relying on `.git/hooks/pre-commit` (which no-ops for non-interactive commits since it checks for a TTY)
 
 ## Usage
 

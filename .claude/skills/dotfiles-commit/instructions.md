@@ -84,6 +84,18 @@ Before presenting a group, check it isn't half-finished. This catches mistakes b
 - `shellcheck` for touched shell scripts
 - `stylua --check` and `luacheck` (and `selene` if installed) for touched Lua
 
+**Scan for secrets directly** - after staging the group's files, run:
+```bash
+gitleaks protect --staged --no-banner --redact
+```
+Don't rely on `.git/hooks/pre-commit` for this: that hook checks `[[ ! -t 0 ]]` and exits 0
+whenever stdin isn't a TTY, which is always true when you run `git commit` through a tool
+call - it silently never scans. Run gitleaks yourself, every time, before every commit.
+Never pass `--no-verify` to skip the git hook as a workaround; it's irrelevant here since the
+hook never ran anyway. If gitleaks reports a leak, treat it as a hard stop, not a style nit:
+unstage the group and ask before doing anything else, even if the match looks like a
+false positive.
+
 **If anything turns up**, stop before Phase 3 and ask:
 
 ```javascript
@@ -95,6 +107,26 @@ AskUserQuestion({
     options: [
       { label: "Show me", description: "Show the exact line(s) so I can decide" },
       { label: "Commit anyway", description: "It's intentional, proceed with this group" },
+      { label: "Skip this group", description: "Leave it uncommitted so it can be fixed" },
+      { label: "Quit", description: "Stop the commit workflow" }
+    ]
+  }]
+})
+```
+
+A gitleaks finding uses the same tool, but drop "Commit anyway" as the easy default - put
+"Show me" first and make the user explicitly confirm it's a false positive, since the cost
+of a wrongly-dismissed real secret is much higher than a wrongly-dismissed TODO:
+
+```javascript
+AskUserQuestion({
+  questions: [{
+    question: "gitleaks flagged a possible secret in <file>: <redacted match>. How do you want to proceed?",
+    header: "Secret scan",
+    multiSelect: false,
+    options: [
+      { label: "Show me (Recommended)", description: "Show the exact match and surrounding context" },
+      { label: "False positive, commit anyway", description: "Confirmed this isn't a real secret" },
       { label: "Skip this group", description: "Leave it uncommitted so it can be fixed" },
       { label: "Quit", description: "Stop the commit workflow" }
     ]
@@ -280,7 +312,7 @@ pkg(git): add gitleaks for secret scanning
 ## Safety Checks
 
 Before committing:
-1. **Never commit secrets** - the pre-commit hook will catch this, but check yourself
+1. **Never commit secrets** - run `gitleaks protect --staged --no-banner --redact` yourself in Phase 2.5; the `.git/hooks/pre-commit` hook does not run for non-interactive commits (see Phase 2.5)
 2. **Never commit generated files with real work** - they get separate commits
 3. **Never use broad staging** - always explicit paths
 4. **Verify scope matches** - scope should be the actual source directory name
@@ -308,10 +340,10 @@ Done.
 ## Error Handling
 
 - If `git commit` fails, show the error and ask how to proceed
-- If pre-commit hook blocks, respect it (user can override with --no-verify if needed)
 - If a file can't be staged, show error and skip that group
 - If grouping results in 0 groups, report "No changes to commit"
 - If the Phase 2.5 check finds an issue, never commit silently - always ask first
+- Never pass `--no-verify` to work around a blocked commit; find out why it's blocked instead
 
 ## Notes
 
