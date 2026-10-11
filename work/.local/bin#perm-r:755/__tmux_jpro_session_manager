@@ -89,7 +89,6 @@ if [[ "$instance" ]]; then
     tmux send-keys -t '{top-right}' "jtop -i $instance" C-m
 
     # bind key for sketchybar context
-    # tmux bind-key -T prefix C "run-shell 'KUBECONFIG=${JAMF_DIR:?not set}/kubeconfig hermes jpro set-ctx #{window_name} && open swiftbar://refreshplugin?name=hermes'"
     tmux bind-key -T prefix C "run-shell -b '$HOME/.config/clopsbar/plugins/hermes.10s.sh set_context #{window_name}'"
   else
     # select window
