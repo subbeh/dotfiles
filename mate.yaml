@@ -66,6 +66,8 @@ profiles:
       os: darwin
     sources:
       - aerospace
+      - aven
+      - macos
       - sofka
     variables:
       workspaceDir: "/Users/Shared/data/workspace"
@@ -91,7 +93,6 @@ profiles:
     detection:
       user: steven.terwindt
     sources:
-      - macos
       - work
     variables:
       sshKeys:

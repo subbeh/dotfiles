@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# description: Install Aven daemon
+
+set -euo pipefail
+
+aven daemon install
