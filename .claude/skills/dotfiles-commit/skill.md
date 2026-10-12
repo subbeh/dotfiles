@@ -28,6 +28,7 @@ This skill replaces the manual commit workflow documented in CLAUDE.md. It analy
 - **Analyzes actual diffs**: Reads full diffs to understand scope, not just filenames or TODO items
 - **AI-driven grouping**: Groups by logical relationships and actual changes, not just directory
 - **Cleanliness check**: Before review, scans each group's diff for debug prints, TODO/FIXME/WIP markers, merge conflict artifacts, stray commented-out code, and placeholder values; runs `shellcheck`/`mate eval`/`stylua`/`luacheck` on touched files and `gitleaks protect --staged` for secrets. Anything found is surfaced via AskUserQuestion instead of being committed silently
+- **Never renders secrets into the transcript**: skips `mate eval` on any template calling `bitwarden(...)` and checks it via a redirected exit-code-only probe instead, since `mate eval` prints the real decrypted secret to stdout
 - **Shows reasoning**: Explains WHY files were grouped together based on what changed
 - **Interactive prompts**: Uses AskUserQuestion for Commit / Skip / Show diff / Chat / Quit actions
 - **Show diff option**: View the actual code changes for a group before deciding

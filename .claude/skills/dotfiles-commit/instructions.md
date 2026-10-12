@@ -80,7 +80,18 @@ Before presenting a group, check it isn't half-finished. This catches mistakes b
 - Placeholder/junk values: `lorem ipsum`, `foo`/`bar` test values, obviously-fake paths or secrets
 
 **Run the project's own verifiers** on touched files (per CLAUDE.md's "Verify before calling it done"):
-- `mate eval <path>` (and `mate eval -p personal <path>` if profile-scoped) for every touched `#template`
+- `mate eval <path>` (and `mate eval -p personal <path>` if profile-scoped) for every touched
+  `#template` - **except** one that calls `bitwarden(...)` (grep the raw source for
+  `bitwarden "` or `{{ bitwarden` first). `mate eval` fully renders the template, which means
+  it prints the real decrypted secret to stdout - directly into this transcript. For those,
+  redirect instead of reading the output directly:
+  ```bash
+  mate eval '<path>' >/tmp/mate-eval-check.txt 2>&1; echo "exit: $?"
+  grep -q '^Error' /tmp/mate-eval-check.txt && echo "template error - see details" || echo "renders OK"
+  rm -f /tmp/mate-eval-check.txt
+  ```
+  This confirms the template renders without a syntax error, without ever letting the
+  resolved secret reach the conversation. Never `cat`/`Read` that temp file.
 - `shellcheck` for touched shell scripts
 - `stylua --check` and `luacheck` (and `selene` if installed) for touched Lua
 
