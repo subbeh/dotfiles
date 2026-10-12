@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# description: Sync home-ops secrets from the vault to Bitwarden Secrets Manager
+
+set -euo pipefail
+
+command -v bws &>/dev/null || {
+  echo "bws is not installed" >&2
+  exit 1
+}
+
+export BWS_ACCESS_TOKEN={{ bitwarden "bitwarden.com" "field" "home-ops-bws-sync-token" | squote }}
+project_id={{ bitwarden "bitwarden.com" "field" "home-ops-bws-id" | squote }}
+# Marks the secrets this script owns; only those are ever deleted.
+note="managed by statemate: dotfiles .bws.yaml"
+
+{{- $values := dict }}
+{{- range $key, $ref := .Vars.bws.secrets }}
+{{- $_ := set $values $key (bitwarden (index $ref 0) (index $ref 1) (index $ref 2)) }}
+{{- end }}
+
+desired=$(
+  cat <<'EOF'
+{{ $values | toJson }}
+EOF
+)
+# An empty list would delete every managed secret, so treat it as a broken config.
+# Counted in its own assignment so a failing jq aborts here instead of reading as 0.
+count=$(jq length <<<"$desired")
+if [[ -z "$project_id" || "$count" -eq 0 ]]; then
+  echo "No project ID or secrets configured: is .bws.yaml loaded?" >&2
+  exit 1
+fi
+
+current=$(bws secret list "$project_id" --output json)
+
+dupes=$(jq -r 'group_by(.key) | map(select(length > 1) | .[0].key) | join(", ")' <<<"$current")
+if [[ -n "$dupes" ]]; then
+  echo "Duplicate keys in Secrets Manager, fix them by hand: $dupes" >&2
+  exit 1
+fi
+
+for key in $(jq -r 'keys[]' <<<"$desired"); do
+  if [[ ! "$key" =~ ^[A-Z][A-Z0-9_]*$ ]]; then
+    echo "Invalid key '$key' in .bws.yaml: use UPPER_SNAKE" >&2
+    exit 1
+  fi
+  value=$(jq -r --arg k "$key" '.[$k]' <<<"$desired")
+  existing=$(jq -c --arg k "$key" '.[] | select(.key == $k)' <<<"$current")
+  if [[ -z "$existing" ]]; then
+    # `--` and `--value=` keep a value starting with "-" (a PEM key) from parsing as an option.
+    bws secret create --note "$note" --output none -- "$key" "$value" "$project_id"
+    echo "created $key"
+  elif [[ "$(jq -r .value <<<"$existing")" != "$value" ]]; then
+    bws secret edit --value="$value" --note "$note" --output none -- "$(jq -r .id <<<"$existing")"
+    echo "updated $key"
+  fi
+done
+
+for stale in $(jq -r --argjson keys "$(jq -c keys <<<"$desired")" --arg note "$note" \
+  '.[] | select(.note == $note and (.key | IN($keys[]) | not)) | "\(.id):\(.key)"' <<<"$current"); do
+  bws secret delete "${stale%%:*}" --output none
+  echo "deleted ${stale#*:}"
+done

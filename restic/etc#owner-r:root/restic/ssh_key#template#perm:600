@@ -1,1 +1,1 @@
-{{ bitwarden "restic-ssh-key" "ssh" "private" }}
+{{ bitwarden "restic-ssh-key-laptop" "ssh" "private" }}

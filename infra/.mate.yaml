@@ -1,3 +1,7 @@
+targets:
+  home-ops: "{{ .Vars.workspaceDir }}/home-ops"
+include:
+  - home-ops/.bws.yaml
 packages:
   common:
     - bun
@@ -18,3 +22,14 @@ packages:
     - pipenv
   pacman:
     - python-pipenv
+
+# #onchange scripts only see deployed files, so this hash of the synced values is
+# what re-runs .matescripts/70-bws-sync.sh when one changes in the vault.
+{{- $values := dict }}
+{{- range $key, $ref := .Vars.bws.secrets }}
+{{- $_ := set $values $key (bitwarden (index $ref 0) (index $ref 1) (index $ref 2)) }}
+{{- end }}
+generate:
+  - target: .local/state/bws-sync/secrets.sha256
+    mode: "0600"
+    content: "{{ $values | toJson | sha256sum }}"
