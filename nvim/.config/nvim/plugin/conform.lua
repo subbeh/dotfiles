@@ -43,10 +43,6 @@ require("conform").setup({
       condition = function(_, ctx)
         return vim.bo[ctx.buf].filetype ~= "markdown" or has_frontmatter(ctx.buf)
       end,
-      prepend_args = function(_, ctx)
-        local wrap = vim.bo[ctx.buf].filetype == "markdown" and "preserve" or "always"
-        return { "--prose-wrap", wrap }
-      end,
     },
   },
 })
