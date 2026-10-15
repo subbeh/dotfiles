@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# description: Update packages
-
-set -euo pipefail
-
-paru && echo "Packages have been updated."
