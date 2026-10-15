@@ -7,7 +7,7 @@ echo "Setting environment..."
 source $(find "${0%/*}/../.config/profile.d" -name "*.sh")
 
 echo "Installing plugins..."
-nvim --headless -c ':lua vim.pack.update(nil, { force = true, target = "lockfile" })' -c qa
+nvim --headless -c ':lua vim.pack.update(nil, { force = true })' -c qa
 echo
 
 echo "Cleaning inactive plugins..."
