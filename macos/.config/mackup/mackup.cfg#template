@@ -1,4 +1,4 @@
 [storage]
 engine = file_system
-path = {{ .Vars.workspaceDir }}/archive
-directory = mackup
+path = {{ .Vars.workspaceDir }}/archive/mackup
+directory = backup

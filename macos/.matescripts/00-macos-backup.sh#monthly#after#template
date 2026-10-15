@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# description: Back up applications and system preferences
+
+macprefs backup
+mackup backup --force
+mv "{{ .Vars.workspaceDir }}/archive/mackup/backup" "{{ .Vars.workspaceDir }}/archive/mackup/$(date +%F)"
