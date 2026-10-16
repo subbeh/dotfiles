@@ -1,5 +1,5 @@
 # Vault values synced to Bitwarden Secrets Manager for home-ops, by
-# infra/.matescripts/70-bws-sync.sh. Each key is the Secrets Manager key
+# home-ops/.matescripts/70-bws-sync.sh. Each key is the Secrets Manager key
 # (UPPER_SNAKE, so it doubles as an env var name); each value is the arguments
 # to the `bitwarden` template function: [item, type, field].
 variables:

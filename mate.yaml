@@ -34,13 +34,14 @@ sources:
   - aven
   - bitwarden
   - claude
+  - dev
   - eza
   - fd
   - firefox
   - fzf
   - git
   - gnupg
-  - infra
+  - home-ops
   - k9s
   - kitty
   - nvim
