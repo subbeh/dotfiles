@@ -609,9 +609,9 @@ nnoremap <wait> <space><cr> :run<cr>
 
 " Preview toggle (E = open, e in quickview = close)
 " Toggle preview
-nnoremap E :view<cr>
+nnoremap <space><space> :view<cr>
 " Toggle preview (keep selection)
-vnoremap E :view<cr>gv
+vnoremap <space><space> :view<cr>gv
 " Close quickview
 qnoremap e q
 
