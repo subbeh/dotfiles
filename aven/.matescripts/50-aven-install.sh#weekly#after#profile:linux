@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# description: Install/update Aven (Linux)
+
+set -euo pipefail
+
+if [[ ${1:-} == --help || ${1:-} == -h ]]; then
+  sed -n '2,4s/^# //p' "$0"
+  exit 0
+fi
+if [[ $# != 0 ]]; then
+  echo "Usage: $0 (no arguments; set AVEN_INSTALL_DIR to override ~/.local/bin)" >&2
+  exit 1
+fi
+
+if [[ $(uname -s) != Linux ]]; then
+  echo 'This script installs Linux releases only.' >&2
+  exit 1
+fi
+case "$(uname -m)" in
+x86_64) arch=amd64 ;;
+aarch64) arch=arm64 ;;
+*)
+  echo "Unsupported architecture: $(uname -m)" >&2
+  exit 1
+  ;;
+esac
+
+for tool in curl tar sha256sum mktemp chmod mkdir mv rm; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "Missing $tool. On Arch Linux, install dependencies with: sudo pacman -S --needed curl tar coreutils" >&2
+    exit 1
+  fi
+done
+
+install_dir=${AVEN_INSTALL_DIR:-"$HOME/.local/bin"}
+archive="aven-linux-$arch.tar.gz"
+checksum="aven-linux-$arch.sha256"
+base_url=https://github.com/raine/aven/releases/latest/download
+tmp_dir=$(mktemp -d)
+staged_binary=''
+cleanup() {
+  rm -rf -- "$tmp_dir"
+  if [[ -n $staged_binary ]]; then
+    rm -f -- "$staged_binary"
+  fi
+}
+trap cleanup EXIT
+
+echo "Downloading the latest Aven release for Linux/$arch..."
+for asset in "$archive" "$checksum"; do
+  curl --fail --location --silent --show-error --retry 3 \
+    --connect-timeout 10 --max-time 120 \
+    "$base_url/$asset" --output "$tmp_dir/$asset"
+done
+
+# Check the expected archive, regardless of the filename in the checksum file.
+read -r expected_hash _ <"$tmp_dir/$checksum"
+[[ $expected_hash =~ ^[[:xdigit:]]{64}$ ]] || {
+  echo 'Invalid release checksum.' >&2
+  exit 1
+}
+if ! (cd "$tmp_dir" && printf '%s  %s\n' "$expected_hash" "$archive" | sha256sum --check --status); then
+  echo 'Release checksum verification failed; existing installation left untouched.' >&2
+  exit 1
+fi
+
+mkdir -p -- "$install_dir"
+staged_binary=$(mktemp "$install_dir/.aven.XXXXXXXX")
+tar -xOzf "$tmp_dir/$archive" aven >"$staged_binary"
+chmod 0755 "$staged_binary"
+"$staged_binary" --version
+# Rename on the same filesystem so an existing/running binary is replaced safely.
+mv -fT -- "$staged_binary" "$install_dir/aven"
+staged_binary=''
+echo "Installed $install_dir/aven. Run this script again to update."
+
+if [[ :$PATH: != *":$install_dir:"* ]]; then
+  # shellcheck disable=SC2016 # Print a literal $PATH for the shell profile.
+  printf '\nAdd this to ~/.zshrc (or your shell profile):\n  export PATH=%q:"$PATH"\n' "$install_dir"
+fi
