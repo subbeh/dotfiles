@@ -60,7 +60,7 @@ The skill will:
 
 - Per-source splitting → default grouping by source directory
 
-- `#encrypted` files → `git diff` only shows ciphertext. Diff the plaintext with `mate cat`,
+- `#enc` files → `git diff` only shows ciphertext. Diff the plaintext with `mate cat`,
   then delete the scratch files:
 
   ```bash

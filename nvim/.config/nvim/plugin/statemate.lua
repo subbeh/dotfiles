@@ -3,36 +3,36 @@
 -- Three things happen here:
 --
 --   1. Opening a deployed file prompts for source or target. `nvim ~/.ssh/config`
---      offers ssh/.ssh/config#encrypted in the dotfiles repo, so you do not edit
+--      offers ssh/.ssh/config#enc in the dotfiles repo, so you do not edit
 --      a file that `mate apply` will overwrite by accident. Picking the target,
 --      or dismissing the prompt, leaves the buffer as-is.
 --
 --   2. Filetype detection is fixed for source files. Statemate keeps metadata in
---      the filename (settings.json#profile:work#encrypted), so nvim reads the
---      extension as "json#profile:work#encrypted" and loses highlighting and
+--      the filename (settings.json#profile:work#enc), so nvim reads the
+--      extension as "json#profile:work#enc" and loses highlighting and
 --      LSP. The attrs are stripped and the filetype re-detected.
 --
---   3. Files marked #encrypted are age ciphertext on disk. They are decrypted on
+--   3. Files marked #enc are age ciphertext on disk. They are decrypted on
 --      read and re-encrypted on write so they can be edited in place.
 --
 -- Requires the `mate` and `age` binaries. If either is missing the autocmds fall
 -- back to normal editing rather than erroring.
 --
--- Note for #template files: you edit the raw template source, so Go template
+-- Note for #tmpl files: you edit the raw template source, so Go template
 -- syntax ({{ ... }}) is intact and unrendered. That is correct -- the template is
 -- what is version-controlled -- but it will not show interpolated values.
 
 local augroup = vim.api.nvim_create_augroup("statemate", { clear = true })
 
--- Matched as a substring, not a suffix: #encrypted is not always the last
+-- Matched as a substring, not a suffix: #enc is not always the last
 -- attribute, hence the trailing '*' in the autocmd patterns below.
-local AGE_ATTR = "#encrypted"
+local AGE_ATTR = "#enc"
 -- $STATEMATE_KEY_FILE is exported by the statemate profile.d snippet. The
 -- hardcoded path is the fallback for sessions that never sourced it.
 local IDENTITY = vim.env.STATEMATE_KEY_FILE or vim.fn.expand("~/.config/statemate/key.txt")
 
 ---Strip statemate #attrs from a path, returning the logical filename.
----"a/settings.json#profile:work#encrypted" -> "a/settings.json"
+---"a/settings.json#profile:work#enc" -> "a/settings.json"
 ---@param path string
 ---@return string
 local function strip_attrs(path)
@@ -180,7 +180,7 @@ local function source_for_target(path)
     return nil, false
   end
 
-  return root .. "/" .. rel, rel:find("#template", 1, true) ~= nil
+  return root .. "/" .. rel, rel:find("#tmpl", 1, true) ~= nil
 end
 
 ---Read age recipients from the repo's mate.yaml.

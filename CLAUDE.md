@@ -41,12 +41,12 @@ apply overwrites it.
 
 | Attribute | Effect |
 |-----------|--------|
-| `#template` / `#tmpl` | render as a Go template (sprig available) |
-| `#encrypted` | age-encrypted in the repo, decrypted on apply |
+| `#tmpl` | render as a Go template (sprig available) |
+| `#enc` | age-encrypted in the repo, decrypted on apply |
 | `#import` | target is authoritative; changes flow back into the source |
 | `#profile:<name>` | only deploys under that profile |
 | `#perm:600` `#owner:u` `#group:g` | mode/owner/group; `-r` variants recurse |
-| `#symlink` | recreate a symlink (source must be one) |
+| `#link` | recreate a symlink (source must be one) |
 
 Changing attributes means renaming the file. Use `mate encrypt` / `mate decrypt` /
 `mate rename` — they keep the state DB and target consistent, so the next apply
@@ -56,7 +56,7 @@ doesn't see a spurious add + delete. Then let git record the rename.
 
 Variables: `.Profile` `.Hostname` `.OS` `.Arch` `.HomeDir` `.Username`
 `.SourceDir` `.Vars` `.Env`. Own functions: `bitwarden <item> <type> <field>`.
-`.mate.yaml` files and `#template` scripts are rendered too.
+`.mate.yaml` files and `#tmpl` scripts are rendered too.
 
 `.mate/theme.yaml` feeds `.Vars.color.*` into ~15 templates (kitty, tmux, nvim
 `colors.lua`, waybar, rofi, hyprlock, swaync, vivid, k9s). Adding a colour is
@@ -75,7 +75,7 @@ otherwise identically-numbered files (`11-aliases-linux.sh#profile:linux`).
 
 ## Lifecycle scripts
 
-`<order>-<name>.sh#<frequency>#<timing>[#template][#profile:<name>]` — frequency
+`<order>-<name>.sh#<frequency>#<timing>[#tmpl][#profile:<name>]` — frequency
 is `once`, `onchange`, `always`, `daily`, `weekly`, `monthly`, or omitted (manual
 only); timing is `before` (default) or `after`. Order bands mirror `profile.d`:
 `00` daemons/system, `50` installs, `60`–`70` plugin updates, `90` anything
@@ -98,7 +98,7 @@ foo update
   `~/.config/statemate/key.txt`.
 - Never hardcode a secret — use the `bitwarden` template function, or a
   `generate:` block (see `ssh/.mate.yaml`).
-- Never drop an `#encrypted` suffix; check the staged diff for it before committing.
+- Never drop an `#enc` suffix; check the staged diff for it before committing.
 - Edit an encrypted file without decrypting into the worktree. `mate edit` execs
   `$VISUAL` directly, so it must be an **executable file path**, not a shell string:
 
@@ -108,7 +108,7 @@ cat >/tmp/mate-editor.sh <<'EOF'
 exec python3 /tmp/patch.py "$1"      # or sed -i, etc.
 EOF
 chmod +x /tmp/mate-editor.sh
-VISUAL=/tmp/mate-editor.sh mate edit 'work/.config/profile.d/05-work.sh#template#encrypted'
+VISUAL=/tmp/mate-editor.sh mate edit 'work/.config/profile.d/05-work.sh#tmpl#enc'
 ```
 
 Confirm the result with `mate cat`, then delete the scratch files.
@@ -130,7 +130,7 @@ across managers; otherwise split per manager — cf. `git/.mate.yaml`, where
 ## Verify before calling it done
 
 - `mate status` / `mate diff` shows only the intended paths.
-- `mate eval` on every touched `#template`.
+- `mate eval` on every touched `#tmpl`.
 - `stylua --check` and `luacheck` on touched Lua (`nvim/`, `hyprland/`); `selene`
   if installed.
 - `shellcheck` on touched shell scripts.
