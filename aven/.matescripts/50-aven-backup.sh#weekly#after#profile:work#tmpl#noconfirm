@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# description: Create Aven backup
+
+set -euo pipefail
+
+aven backup --output "{{ .Vars.workspaceDir }}/archive/aven/aven-backup.$(date +%F).tar.zst"
