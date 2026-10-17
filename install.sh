@@ -226,7 +226,7 @@ if confirm "Clone the dotfiles repository?" "$clone_default"; then
 fi
 
 # --- init ---
-if [[ -f "$AGE_KEY_DIR/mate.yaml" ]]; then
+if [[ -f "$AGE_KEY_DIR/config.yaml" ]]; then
   init_default=N
 else
   init_default=Y
