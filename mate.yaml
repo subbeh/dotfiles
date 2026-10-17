@@ -52,7 +52,6 @@ sources:
   - starship
   - statemate
   - syncthing
-  - task
   - tmux
   - vifm
   - yazi
