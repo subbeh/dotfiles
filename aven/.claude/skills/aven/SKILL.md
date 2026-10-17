@@ -70,6 +70,8 @@ EOF
 aven edit APP-7KQ9 --status done
 ```
 
+- Before picking up a new task, confirm with the user (via `AskUserQuestion` if
+  available) that it's the right one to start now.
 - Mark work `active` when starting it and `done` only when the work is complete.
 - `move` preserves task IDs and associated data. Its destination project must
   already exist, and linked tasks must move together so relationships do not
