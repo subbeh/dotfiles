@@ -1,4 +1,7 @@
----
+ignore:
+  - .stylua.toml
+  - selene.toml
+
 packages:
   common:
     - neovim
@@ -6,6 +9,3 @@ packages:
     - selene
     - stylua
     - tree-sitter-cli
-ignore:
-  - .stylua.toml
-  - selene.toml

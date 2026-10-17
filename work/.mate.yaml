@@ -1,5 +1,6 @@
 targets:
   workspace: "{{ .Vars.workspaceDir }}"
+
 packages:
   brew:
     - 1password

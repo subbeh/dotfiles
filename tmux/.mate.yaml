@@ -1,3 +1,10 @@
+hooks:
+  tmux-reload:
+    match:
+      - ".config/tmux/**"
+    do:
+      - run: tmux-reset
+
 packages:
   common:
     - tmux

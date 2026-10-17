@@ -102,20 +102,6 @@ profiles:
         - home-ops-ssh-key
 
 hooks:
-  systemd-reload:
-    profile: linux
-    match:
-      - "/etc/systemd/**/*.service"
-      - "/etc/systemd/**/*.timer"
-    do:
-      - run: sudo systemctl daemon-reload
-  systemd-user-reload:
-    profile: linux
-    match:
-      - ".config/systemd/user/**"
-      - ".config/environment.d/*.conf"
-    do:
-      - run: systemctl --user daemon-reload
   shell-reload:
     match:
       - ".config/profile.d/*.sh"
@@ -123,8 +109,3 @@ hooks:
       - ".zshenv"
     do:
       - run: pkill -USR2 -u "$USER" zsh || true
-  tmux-reload:
-    match:
-      - ".config/tmux/**"
-    do:
-      - run: tmux-reset
