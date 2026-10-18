@@ -8,6 +8,25 @@ command -v bws &>/dev/null || {
   exit 1
 }
 
+# Secrets Manager answers bursts with 429 "Try again in 1m"; wait it out rather
+# than fail, since the hook won't fire again for values it already hashed.
+bws() {
+  local err attempt
+  err=$(mktemp)
+  for attempt in 1 2 3; do
+    if command bws "$@" 2>"$err"; then
+      rm -f "$err"
+      return 0
+    fi
+    grep -q '429 Too Many Requests' "$err" || break
+    echo "bws rate-limited, retrying in 60s ($attempt/3)" >&2
+    sleep 60
+  done
+  cat "$err" >&2
+  rm -f "$err"
+  return 1
+}
+
 export BWS_ACCESS_TOKEN={{ bitwarden "bitwarden.com" "field" "home-ops-bws-sync-token" | squote }}
 project_id={{ bitwarden "bitwarden.com" "field" "home-ops-bws-id" | squote }}
 # Marks the secrets this script owns; only those are ever deleted.

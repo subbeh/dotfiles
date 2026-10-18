@@ -18,8 +18,8 @@ generate:
 hooks:
   bws-sync:
     match:
-      - workspace/home-ops/.bws.yaml
-      - workspace/.cache/bws-sync/secrets.sha256
+      - {{ .Vars.workspaceDir }}/home-ops/.bws.yaml
+      - {{ .Vars.workspaceDir }}/.cache/bws-sync/secrets.sha256
     description: Sync home-ops secrets to Bitwarden Secrets Manager
     do:
       - script: bws-sync.sh
