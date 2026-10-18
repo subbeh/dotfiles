@@ -1,3 +1,3 @@
 #!/bin/sh
 
-export ATUIN_SYNC_ADDRESS=https://atuin.sbbh.cloud
+export ATUIN_SYNC_ADDRESS=https://atuin.vps.sbbh.cloud
