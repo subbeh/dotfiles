@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# description: Log into Atuin sync server
+# description: Log in and set up Atuin
 
 atuin login \
   -u "{{ bitwarden "atuin.vps.sbbh.cloud" "login" "username" }}" \
   -p "{{ bitwarden "atuin.vps.sbbh.cloud" "login" "password" }}" \
   -k "{{ bitwarden "atuin.vps.sbbh.cloud" "field" "key" }}"
+
+atuin daemon start
