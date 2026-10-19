@@ -5,6 +5,7 @@
 variables:
   bws:
     secrets:
+      ATUIN_OPENAI_API_KEY: [openai.com, field, atuin-api-key]
       CLOUDFLARE_API_TOKEN: [cloudflare.com, field, sbbh-cloud-dns-api-token]
       GATUS_EXTERNAL_TOKEN: [gatus.int.sbbh.cloud, field, external-token]
       GATUS_PUSHOVER_APP_TOKEN: [pushover.net, field, api-token-gatus]
