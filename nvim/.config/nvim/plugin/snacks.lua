@@ -4,6 +4,34 @@ local icons = require("icons")
 local snacks = require("snacks")
 local colors = require("colors")
 
+-- Neovim's lastused timestamps can tie during rapid buffer switches.
+local buffer_visits, visit_count = {}, 0
+local function record_buffer_visit(buf)
+  if not vim.bo[buf].buflisted or vim.bo[buf].buftype ~= "" then
+    return
+  end
+  -- Showing a buffer in a picker preview is not a visit.
+  if snacks.picker.get({ source = "buffers" })[1] then
+    return
+  end
+  visit_count = visit_count + 1
+  buffer_visits[buf] = visit_count
+end
+local buffer_visit_group = vim.api.nvim_create_augroup("buffer_visits", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = buffer_visit_group,
+  callback = function(event)
+    record_buffer_visit(event.buf)
+  end,
+})
+vim.api.nvim_create_autocmd("BufWipeout", {
+  group = buffer_visit_group,
+  callback = function(event)
+    buffer_visits[event.buf] = nil
+  end,
+})
+record_buffer_visit(vim.api.nvim_get_current_buf())
+
 require("snacks").setup({
   -- misc
   bigfile = { enabled = true },
@@ -115,7 +143,22 @@ require("snacks").setup({
       },
       buffers = {
         current = false,
-        sort_lastused = true,
+        sort_lastused = false,
+        finder = function(opts, ctx)
+          local items = require("snacks.picker.source.buffers").buffers(opts, ctx)
+          table.sort(items, function(a, b)
+            local a_visit, b_visit = buffer_visits[a.buf] or 0, buffer_visits[b.buf] or 0
+            if a_visit ~= b_visit then
+              return a_visit > b_visit
+            end
+            -- Fall back to Neovim's history for buffers not visited since startup.
+            if a.info.lastused ~= b.info.lastused then
+              return a.info.lastused > b.info.lastused
+            end
+            return a.buf < b.buf
+          end)
+          return items
+        end,
         preset = "ivy",
         layout = {
           position = "bottom",
