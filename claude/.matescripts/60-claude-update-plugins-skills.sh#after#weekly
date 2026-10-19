@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# description: Update Claude Code plugins and skills
+
+# Update plugins
+claude-update-plugins || true
+
+# Update/install skills
+npx skills add https://github.com/vercel-labs/skills --skill find-skills --agent claude-code --yes -g
+npx skills add https://github.com/mattpocock/skills --all --agent claude-code --yes -g
+npx skills add https://github.com/juliusbrussee/caveman --skill caveman-commit --agent claude-code --yes -g
+
+npx skills update -g
