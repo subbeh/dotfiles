@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# description: Install/update Aven skill
+
+aven skill install --agent claude
