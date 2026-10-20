@@ -1,5 +1,4 @@
 sync_address = "https://atuin.vps.sbbh.cloud"
-sync_frequency = "0"
 filter_mode = "workspace"
 workspaces = true
 enter_accept = false
@@ -9,7 +8,7 @@ search_mode = "daemon-fuzzy"
 [tmux]
 enabled = true
 width = "80%"
-height = "60%"
+height = "80%"
 
 [stats]
 common_subcommands = [
@@ -38,3 +37,9 @@ autostart = true
 [ai]
 enabled = true
 endpoint = "https://atuin-ai.vps.sbbh.cloud"
+
+[ai.opening]
+send_last_command = true
+
+[pty_proxy]
+enabled = false
