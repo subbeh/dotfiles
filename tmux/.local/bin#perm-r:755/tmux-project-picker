@@ -41,7 +41,7 @@ build_project_list() {
       projects+=("$ICON_FOLDER $basename"$'\t'"$project_dir")
 
       # Check for worktrees
-      local worktrees_dir="$project_dir/.worktrees"
+      local worktrees_dir="${project_dir}-worktrees"
       if [ -d "$worktrees_dir" ]; then
         # Find worktrees and sort by modification time (most recent first)
         local worktree_list=()
@@ -76,7 +76,7 @@ build_project_list() {
     projects+=("$ICON_FOLDER $basename"$'\t'"$project_dir")
 
     # Check for worktrees
-    local worktrees_dir="$project_dir/.worktrees"
+    local worktrees_dir="${project_dir}-worktrees"
     if [ -d "$worktrees_dir" ]; then
       # Find worktrees and sort by modification time (most recent first)
       local worktree_list=()
@@ -99,7 +99,7 @@ build_project_list() {
         done < <(printf '%s\n' "${worktree_list[@]}" | sort -rn)
       fi
     fi
-  done < <(find "$XDG_PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d ! -name ".*" -print0)
+  done < <(find "$XDG_PROJECTS_DIR" -mindepth 1 -maxdepth 1 -type d ! -name ".*" ! -name "*-worktrees" -print0)
 
   printf '%s\n' "${projects[@]}"
 }
@@ -142,10 +142,11 @@ fi
 
 selected_name=$(basename "$selected_path")
 
-# Determine if this is a worktree (path contains /.worktrees/)
-if [[ "$selected_path" == *"/.worktrees/"* ]]; then
+# Determine if this is a worktree (path is <repo>-worktrees/<name>)
+if [[ "$(dirname "$selected_path")" == *-worktrees ]]; then
   # Worktree - use folder icon as prefix and branch icon as separator
-  parent_dir=$(basename "$(dirname "$(dirname "$selected_path")")")
+  parent_dir=$(basename "$(dirname "$selected_path")")
+  parent_dir=${parent_dir%-worktrees}
   window_name="$ICON_FOLDER ${parent_dir} $ICON_BRANCH ${selected_name}"
 else
   # Regular project - use folder icon (U+F07B from nerd fonts)

@@ -19,7 +19,9 @@ node_modules/
 
 // git worktrees are machine-local: their gitdir pointers are absolute, and the
 // workspace root differs per OS (/data on linux, /Users/Shared/data on darwin),
-// so a synced gitdir would need two different values at once.
+// so a synced gitdir would need two different values at once. <repo>-worktrees/
+// is the shared layout (agent-manager, worktrunk); .worktrees/ is Claude Code's.
+*-worktrees/
 .worktrees/
 **/.git/worktrees/
 

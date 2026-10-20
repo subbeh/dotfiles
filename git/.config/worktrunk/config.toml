@@ -31,7 +31,11 @@
 #
 # Inside the repository (`~/code/myproject/.worktrees/feature-auth`):
 #
-worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
+# worktree-path = "{{ repo_path }}/.worktrees/{{ branch | sanitize }}"
+#
+# Sibling `-worktrees` directory, the layout agent-manager hardcodes (`~/code/myproject-worktrees/feature-auth`):
+#
+worktree-path = "{{ repo_path }}/../{{ repo }}-worktrees/{{ branch | sanitize }}"
 #
 # Friendly branch-derived names (`~/code/myproject.malleable-opah`):
 #
