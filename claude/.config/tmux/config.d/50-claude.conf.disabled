@@ -1,0 +1,16 @@
+# vi: ft=tmux
+###########################################################################
+
+# tmux-tpad
+
+set -g @tpad-claude-bind        "C-c"
+set -g @tpad-claude-style       "fg=colour2"
+set -g @tpad-claude-height      "90%"
+set -g @tpad-claude-width       "30%"
+set -g @tpad-claude-pos_x       "350%"
+set -g @tpad-claude-pos_y       "80%"
+set -g @tpad-claude-per-dir     "true"
+set -g @tpad-claude-cmd         "claude-runner"
+set -g @tpad-claude-opts        "status on"
+set -g @tpad-claude-eject-split "right"
+set -g @tpad-claude-eject-size  "40"

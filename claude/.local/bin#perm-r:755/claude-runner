@@ -4,7 +4,7 @@
 _claude_project_dir() {
   local encoded
   encoded=$(printf '%s' "$PWD" | sed 's|[/.]|-|g')
-  echo "$HOME/.claude/projects/$encoded"
+  echo "${CLAUDE_CONFIG_DIR-$HOME/.claude}/projects/$encoded"
 }
 
 # Format seconds into human-readable relative time
@@ -123,13 +123,13 @@ main() {
   action=$(printf 'new\ncontinue\npick session\nnew (plan)\nnew (auto-mode)\nnew (accept-edits)\nquit' | fzf --prompt="claude> ")
 
   case "$action" in
-    continue) claude --continue ;;
-    new) claude --permission-mode default ;;
-    "new (plan)") claude --permission-mode plan ;;
-    "new (auto-mode)") CLAUDE_CODE_ENABLE_AUTO_MODE=1 claude --permission-mode auto ;;
-    "new (accept-edits)") claude --permission-mode acceptEdits ;;
-    "pick session") pick_session ;;
-    quit | "") ;;
+  continue) claude --continue ;;
+  new) claude --permission-mode default ;;
+  "new (plan)") claude --permission-mode plan ;;
+  "new (auto-mode)") CLAUDE_CODE_ENABLE_AUTO_MODE=1 claude --permission-mode auto ;;
+  "new (accept-edits)") claude --permission-mode acceptEdits ;;
+  "pick session") pick_session ;;
+  quit | "") ;;
   esac
 }
 

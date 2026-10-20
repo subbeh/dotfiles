@@ -43,11 +43,11 @@ _no_metrics="${CLOUDTOOLS_NO_METRICS:-}"
 _no_metrics="${_no_metrics#"${_no_metrics%%[![:space:]]*}"}"
 _no_metrics="${_no_metrics%"${_no_metrics##*[![:space:]]}"}"
 case "$_no_metrics" in
-    1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Oo][Nn])
-        exit 0
-        ;;
-    *)
-        ;;
+1 | [Tt][Rr][Uu][Ee] | [Yy][Ee][Ss] | [Oo][Nn])
+  exit 0
+  ;;
+*)
+  ;;
 esac
 
 # ── Locate the Python implementation ──────────────────────────────────────────
@@ -59,64 +59,64 @@ REPO_SCRIPT="$(dirname "$0")/../../src/scripts/${SCRIPT_NAME}.py"
 EXECUTION_SOURCE=""
 
 if command -v "$SCRIPT_NAME" &>/dev/null; then
-    LOGGER="$SCRIPT_NAME"
-    EXECUTION_SOURCE="brew"
+  LOGGER="$SCRIPT_NAME"
+  EXECUTION_SOURCE="brew"
 elif [[ -f "$REPO_SCRIPT" ]]; then
-    LOGGER="python3 $REPO_SCRIPT"
-    EXECUTION_SOURCE="repo"
+  LOGGER="python3 $REPO_SCRIPT"
+  EXECUTION_SOURCE="repo"
 else
-    exit 0
+  exit 0
 fi
 
 # ── Parse the hook payload and locate the per-session state file ─────────────
 payload=$(cat)
-session_id=$(jq -r '.session_id // ""' <<< "$payload")
+session_id=$(jq -r '.session_id // ""' <<<"$payload")
 
 # session_id comes from the untrusted stdin payload and is used to build a
 # filesystem path below — restrict it to safe characters to prevent path
 # traversal (e.g. "../../.bashrc") before it ever reaches STATE_FILE.
 if [[ -z "$session_id" || ! "$session_id" =~ ^[a-zA-Z0-9_-]+$ ]]; then
-    exit 0
+  exit 0
 fi
 
-STATE_FILE="$HOME/.claude/statusline_sessions/${session_id}.json"
+STATE_FILE="${CLAUDE_CONFIG_DIR-$HOME/.claude}/statusline_sessions/${session_id}.json"
 
 if [[ ! -f "$STATE_FILE" ]]; then
-    exit 0
+  exit 0
 fi
 
 VERBOSE_FLAG=""
 if [[ -n "${CLOUDTOOLS_DEBUG:-}" ]]; then
-    VERBOSE_FLAG="--verbose"
+  VERBOSE_FLAG="--verbose"
 fi
 
 # ── Emit one record per (model, effort) bucket ────────────────────────────────
 state=$(cat "$STATE_FILE")
-if ! bucket_keys=$(jq -r '.buckets | keys[]' <<< "$state" 2>&1); then
-    [[ -n "${CLOUDTOOLS_DEBUG:-}" ]] && echo "log-spend: jq failed parsing buckets: $bucket_keys" >&2
-    exit 0
+if ! bucket_keys=$(jq -r '.buckets | keys[]' <<<"$state" 2>&1); then
+  [[ -n "${CLOUDTOOLS_DEBUG:-}" ]] && echo "log-spend: jq failed parsing buckets: $bucket_keys" >&2
+  exit 0
 fi
 
 while IFS= read -r bucket_key; do
-    [[ -z "$bucket_key" ]] && continue
+  [[ -z "$bucket_key" ]] && continue
 
-    model="${bucket_key%%|*}"
-    effort="${bucket_key#*|}"
+  model="${bucket_key%%|*}"
+  effort="${bucket_key#*|}"
 
-    bucket=$(jq --arg k "$bucket_key" '.buckets[$k]' <<< "$state") || continue
-    cost_usd=$(jq -r '.cost_usd // ""' <<< "$bucket") || true
-    input_tokens=$(jq -r '.input_tokens // ""' <<< "$bucket") || true
-    output_tokens=$(jq -r '.output_tokens // ""' <<< "$bucket") || true
+  bucket=$(jq --arg k "$bucket_key" '.buckets[$k]' <<<"$state") || continue
+  cost_usd=$(jq -r '.cost_usd // ""' <<<"$bucket") || true
+  input_tokens=$(jq -r '.input_tokens // ""' <<<"$bucket") || true
+  output_tokens=$(jq -r '.output_tokens // ""' <<<"$bucket") || true
 
-    $LOGGER $VERBOSE_FLAG \
-        --model "$model" \
-        --effort "$effort" \
-        --input-tokens "$input_tokens" \
-        --output-tokens "$output_tokens" \
-        --cost-usd "$cost_usd" \
-        --session-id "$session_id" \
-        --execution-source "$EXECUTION_SOURCE" || true
-done <<< "$bucket_keys"
+  $LOGGER $VERBOSE_FLAG \
+    --model "$model" \
+    --effort "$effort" \
+    --input-tokens "$input_tokens" \
+    --output-tokens "$output_tokens" \
+    --cost-usd "$cost_usd" \
+    --session-id "$session_id" \
+    --execution-source "$EXECUTION_SOURCE" || true
+done <<<"$bucket_keys"
 
 # Best-effort delete-after-flush — the statusline's age-based sweep is the
 # backstop if this doesn't run (crash, hook disabled mid-session, etc).

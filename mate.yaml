@@ -24,7 +24,7 @@ age:
 
 ignore:
   - "*.md"
-  - "!**/.claude/**/*.md"
+  - "!**/.claude*/**/*.md"
   - .gitkeep
 
 sources:

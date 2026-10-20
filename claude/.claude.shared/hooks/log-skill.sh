@@ -36,11 +36,11 @@ _no_metrics="${CLOUDTOOLS_NO_METRICS:-}"
 _no_metrics="${_no_metrics#"${_no_metrics%%[![:space:]]*}"}"
 _no_metrics="${_no_metrics%"${_no_metrics##*[![:space:]]}"}"
 case "$_no_metrics" in
-    1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Oo][Nn])
-        exit 0
-        ;;
-    *)
-        ;;
+1 | [Tt][Rr][Uu][Ee] | [Yy][Ee][Ss] | [Oo][Nn])
+  exit 0
+  ;;
+*)
+  ;;
 esac
 
 # ── Locate the Python implementation ──────────────────────────────────────────
@@ -52,24 +52,24 @@ REPO_SCRIPT="$(dirname "$0")/../../src/scripts/${SCRIPT_NAME}.py"
 EXECUTION_SOURCE=""
 
 if command -v "$SCRIPT_NAME" &>/dev/null; then
-    LOGGER="$SCRIPT_NAME"
-    EXECUTION_SOURCE="brew"
+  LOGGER="$SCRIPT_NAME"
+  EXECUTION_SOURCE="brew"
 elif [[ -f "$REPO_SCRIPT" ]]; then
-    LOGGER="python3 $REPO_SCRIPT"
-    EXECUTION_SOURCE="repo"
+  LOGGER="python3 $REPO_SCRIPT"
+  EXECUTION_SOURCE="repo"
 else
-    # Fallback: write to a local log file so we at least capture the event.
-    # Never write tool_input.args verbatim — it's the same operator-authored
-    # free text log_skill_metric.py deliberately excludes from METRICS_ARGS
-    # (see CA-3569). Record only the skill name and a presence indicator.
-    payload=$(cat)
-    skill=$(jq -r '.tool_input.skill // "unknown"' <<< "$payload")
-    has_args="false"
-    if [[ -n "$(jq -r '.tool_input.args // ""' <<< "$payload")" ]]; then
-        has_args="true"
-    fi
-    echo "$(date -u +%s)  ${USER:-unknown}  $skill  has_args=$has_args" >> ~/.claude/skill-usage.log
-    exit 0
+  # Fallback: write to a local log file so we at least capture the event.
+  # Never write tool_input.args verbatim — it's the same operator-authored
+  # free text log_skill_metric.py deliberately excludes from METRICS_ARGS
+  # (see CA-3569). Record only the skill name and a presence indicator.
+  payload=$(cat)
+  skill=$(jq -r '.tool_input.skill // "unknown"' <<<"$payload")
+  has_args="false"
+  if [[ -n "$(jq -r '.tool_input.args // ""' <<<"$payload")" ]]; then
+    has_args="true"
+  fi
+  echo "$(date -u +%s)  ${USER:-unknown}  $skill  has_args=$has_args" >>"${CLAUDE_CONFIG_DIR-$HOME/.claude}/skill-usage.log"
+  exit 0
 fi
 
 # ── Parse the hook payload and forward as explicit CLI flags ──────────────────
@@ -77,14 +77,14 @@ fi
 # Pass --execution-source to record whether brew or repo version was used.
 VERBOSE_FLAG=""
 if [[ -n "${CLOUDTOOLS_DEBUG:-}" ]]; then
-    VERBOSE_FLAG="--verbose"
+  VERBOSE_FLAG="--verbose"
 fi
 
 # Parse the fields from the Claude Code hook payload JSON.
 payload=$(cat)
-skill=$(jq -r '.tool_input.skill // "unknown"' <<< "$payload")
-skill_args=$(jq -r '.tool_input.args // ""' <<< "$payload")
-session_id=$(jq -r '.session_id // ""' <<< "$payload")
+skill=$(jq -r '.tool_input.skill // "unknown"' <<<"$payload")
+skill_args=$(jq -r '.tool_input.args // ""' <<<"$payload")
+session_id=$(jq -r '.session_id // ""' <<<"$payload")
 
 # The metrics write is telemetry only — its output is never consumed and it
 # already exits 0 on any failure. Because this is a PreToolUse hook, Claude Code
@@ -92,20 +92,20 @@ session_id=$(jq -r '.session_id // ""' <<< "$payload")
 # Python + boto3 import + AWS creds + DynamoDB PutItem) adds seconds to every
 # skill launch. Detach it so the hook returns immediately.
 if [[ -n "${CLOUDTOOLS_DEBUG:-}" ]]; then
-    # Debug: run inline so --verbose output is visible.
-    $LOGGER $VERBOSE_FLAG \
-        --skill-name "$skill" \
-        --skill-args "$skill_args" \
-        --session-id "$session_id" \
-        --execution-source "$EXECUTION_SOURCE" || true
+  # Debug: run inline so --verbose output is visible.
+  $LOGGER $VERBOSE_FLAG \
+    --skill-name "$skill" \
+    --skill-args "$skill_args" \
+    --session-id "$session_id" \
+    --execution-source "$EXECUTION_SOURCE" || true
 else
-    # Fire-and-forget: the ( ... & ) subshell disowns the child from this hook's
-    # process group so Claude Code doesn't wait on it. Output is discarded.
-    ( $LOGGER $VERBOSE_FLAG \
-        --skill-name "$skill" \
-        --skill-args "$skill_args" \
-        --session-id "$session_id" \
-        --execution-source "$EXECUTION_SOURCE" </dev/null >>"${HOME}/.claude/log-skill-errors.log" 2>&1 & ) &
+  # Fire-and-forget: the ( ... & ) subshell disowns the child from this hook's
+  # process group so Claude Code doesn't wait on it. Output is discarded.
+  ($LOGGER $VERBOSE_FLAG \
+    --skill-name "$skill" \
+    --skill-args "$skill_args" \
+    --session-id "$session_id" \
+    --execution-source "$EXECUTION_SOURCE" </dev/null >>"${CLAUDE_CONFIG_DIR-$HOME/.claude}/log-skill-errors.log" 2>&1 &) &
 fi
 
 # Always exit 0 — hook failures must never block skill execution.

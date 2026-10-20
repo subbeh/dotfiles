@@ -1,3 +1,10 @@
+targets:
+  .claude.shared:
+    - .claude.personal
+{{- if eq .Profile "work" }}
+    - .claude.work
+{{- end }}
+
 packages:
   brew:
     - claude

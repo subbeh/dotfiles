@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-CLAUDE_DIR="$HOME/.claude"
+CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 PLUGINS_FILE="$CLAUDE_DIR/plugins/installed_plugins.json"
 MARKETPLACES_DIR="$CLAUDE_DIR/plugins/marketplaces"
 
@@ -169,16 +169,16 @@ elif [[ ${#update_queue[@]} -gt 0 ]]; then
   for plugin_key in "${update_queue[@]}"; do
     read -r -p "  Update ${plugin_key}? [y/N] " answer
     case "$answer" in
-      [yY] | [yY][eE][sS])
-        if claude plugin update "$plugin_key"; then
-          echo -e "  ${GREEN}Updated ${plugin_key}${NC} (restart Claude Code to apply)"
-        else
-          echo -e "  ${RED}Failed to update ${plugin_key}${NC}"
-        fi
-        ;;
-      *)
-        echo "  Skipped ${plugin_key}"
-        ;;
+    [yY] | [yY][eE][sS])
+      if claude plugin update "$plugin_key"; then
+        echo -e "  ${GREEN}Updated ${plugin_key}${NC} (restart Claude Code to apply)"
+      else
+        echo -e "  ${RED}Failed to update ${plugin_key}${NC}"
+      fi
+      ;;
+    *)
+      echo "  Skipped ${plugin_key}"
+      ;;
     esac
   done
 fi
