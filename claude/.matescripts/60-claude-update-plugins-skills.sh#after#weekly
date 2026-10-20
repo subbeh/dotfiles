@@ -1,12 +1,20 @@
 #!/usr/bin/env bash
 # description: Update Claude Code plugins and skills
 
-# Update plugins
-claude-update-plugins || true
+# Both honour CLAUDE_CONFIG_DIR, so run them once per profile config dir
+# (the -d check skips ~/.claude.json and an unmatched glob)
+for dir in "$HOME"/.claude.*; do
+  [[ -d "$dir" ]] || continue
+  export CLAUDE_CONFIG_DIR="$dir"
+  echo "==> $dir"
 
-# Update/install skills
-npx skills add https://github.com/vercel-labs/skills --skill find-skills --agent claude-code --yes -g
-npx skills add https://github.com/mattpocock/skills --all --agent claude-code --yes -g
-npx skills add https://github.com/juliusbrussee/caveman --skill caveman-commit --agent claude-code --yes -g
+  # Update plugins
+  claude-update-plugins || true
 
-npx skills update -g
+  # Update/install skills
+  npx skills add https://github.com/vercel-labs/skills --skill find-skills --agent claude-code --yes -g
+  npx skills add https://github.com/mattpocock/skills --all --agent claude-code --yes -g
+  npx skills add https://github.com/juliusbrussee/caveman --skill caveman-commit --agent claude-code --yes -g
+
+  npx skills update -g
+done
