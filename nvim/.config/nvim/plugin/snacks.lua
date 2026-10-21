@@ -205,6 +205,7 @@ map("n", "<leader>fl",       function() snacks.picker.lines() end,              
 map("n", "<leader>fm",       function() snacks.picker.marks() end,                           { desc = "Marks" })
 map("n", "<leader>fn",       function() snacks.picker.notifications() end,                   { desc = "Notifications" })
 map("n", "<leader>fp",       function() snacks.picker.projects() end,                        { desc = "Projects" })
+map("n", "<leader>ft",       function() snacks.picker.grep({ search = "\\b(TODO|FIXME|HACK)\\b", live = false }) end, { desc = "TODOs" })
 map("n", "<leader>fx",       function() snacks.picker.cliphist() end,                        { desc = "Clipboard" })
 map("n", "<leader>gd",       function() snacks.picker.git_diff() end,                        { desc = "Git Diff" })
 map("n", "<leader>gg",       function() snacks.picker.git_grep() end,                        { desc = "Git Grep" })
