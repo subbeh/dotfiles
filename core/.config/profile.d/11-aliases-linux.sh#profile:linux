@@ -18,3 +18,6 @@ alias userctl='systemctl --user'
 alias cc="fc -ln -1 | wl-copy -n"
 alias xc="wl-copy -n"
 alias xp="pwd | wl-copy -n"
+
+# misc
+alias open=xdg-open
