@@ -30,7 +30,7 @@ require("conform").setup({
     python = { "black" },
     sh = { "shfmt" },
     toml = { "tombi" },
-    yaml = { "prettier" },
+    yaml = { "yamlfmt" },
     zsh = { "shfmt" },
   },
   formatters = {
