@@ -26,7 +26,7 @@ zinit wait lucid as'null' id-as'defer-infra' nocd atload'
   }
 
   # Redraw the prompt, which was drawn before the env above was loaded.
-  zle && { print; zle .reset-prompt; }
+  zle && zle .reset-prompt
 ' for %$ZDOTDIR
 
 # aws
