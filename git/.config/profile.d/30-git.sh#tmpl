@@ -1,9 +1,5 @@
 #!/bin/sh
 
-{{- if ne .Profile "work" }}
-export GITHUB_TOKEN="{{ bitwarden "github.com" "field" "gh-cli-token" }}"
-{{- end }}
-
 alias gaa='git add --all'
 alias ga='git add'
 alias gau='git add -u'
