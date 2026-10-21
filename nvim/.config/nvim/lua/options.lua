@@ -39,7 +39,7 @@ opt.linebreak = true                                                            
 opt.listchars = { tab = "" }                                                                 --  Render tabs as a vertical dotted line
 opt.list = true                                                                                --  Show invisible characters
 opt.modeline = true                                                                            --  Honour modelines in files
-opt.mouse = "v"                                                                                --  Enable mouse in visual mode
+opt.mouse = "nv"                                                                               --  Enable mouse in normal and visual mode
 opt.number = true                                                                              --  Show line numbers
 opt.numberwidth = 2                                                                            --  Width of line number column
 opt.pumblend = 10                                                                              --  Popup menu transparency
