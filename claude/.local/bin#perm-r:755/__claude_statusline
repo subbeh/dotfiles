@@ -73,8 +73,8 @@ if [[ -n $cwd ]]; then
   branch=$(git --no-optional-locks -C "$cwd" branch --show-current 2>/dev/null)
 fi
 
-# Profile from the config dir this script is deployed into (~/.claude.<profile>).
-profile=$(basename "$(dirname "$0")")
+# Profile from the active config dir (~/.claude.<profile>).
+profile=$(basename "${CLAUDE_CONFIG_DIR:-}")
 profile=${profile#.claude}
 profile=${profile#.}
 case $profile in
