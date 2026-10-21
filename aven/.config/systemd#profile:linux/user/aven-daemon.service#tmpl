@@ -3,7 +3,7 @@ Description=Aven sync daemon
 StartLimitIntervalSec=0
 
 [Service]
-ExecStart="%h/.local/bin/aven" --db "%h/.local/state/aven/db.sqlite" daemon
+ExecStart={{ .HomeDir }}/.local/bin/aven --db {{ .HomeDir }}/.local/state/aven/db.sqlite daemon
 Restart=always
 RestartSec=30
 
