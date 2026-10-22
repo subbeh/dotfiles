@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Sleep the Mac once it sits idle on battery with the display off. Idle sleep
+# alone can't be trusted: an app holding an audio stream open (a browser tab,
+# Spotify) makes coreaudiod block it indefinitely. Run by macos.battery-sleep.
+
+idle_limit=600
+
+case $(pmset -g batt) in *"'Battery Power'"*) ;; *) exit 0 ;; esac
+# dark wakes (Power Nap) lack the Graphics capability; let them finish
+case $(pmset -g systemstate) in *Graphics*) ;; *) exit 0 ;; esac
+# powerd holds this assertion only while a display is on
+case $(pmset -g assertions) in *"Prevent sleep while display is on"*) exit 0 ;; esac
+
+idle=$(ioreg -c IOHIDSystem -d 4 | awk '/HIDIdleTime/ { print int($NF / 1e9); exit }')
+[ "${idle:-0}" -ge "$idle_limit" ] || exit 0
+
+pmset sleepnow

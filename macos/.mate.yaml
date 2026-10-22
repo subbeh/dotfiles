@@ -1,6 +1,13 @@
 targets:
   etc: /etc
 
+hooks:
+  battery-sleep:
+    match: Library/LaunchAgents/macos.battery-sleep.plist
+    description: Reload the battery sleep LaunchAgent
+    do:
+      - run: launchctl bootout "gui/$(id -u)/macos.battery-sleep" 2>/dev/null; launchctl bootstrap "gui/$(id -u)" ~/Library/LaunchAgents/macos.battery-sleep.plist
+
 packages:
   brew:
     # apps
