@@ -1,3 +1,4 @@
+---
 # Statemate configuration
 # See: https://github.com/subbeh/statemate
 
@@ -114,4 +115,4 @@ hooks:
     match:
       - ".config/tmux/**"
     do:
-      - run: tmux-reset
+      - run: tmux-reload
