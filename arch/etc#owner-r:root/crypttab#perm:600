@@ -1,0 +1,2 @@
+root    UUID=67fcc723-c7af-49c9-9bcd-650651604b78    -                          discard,fido2-device=auto,token-timeout=1s,x-initrd.attach
+data    UUID=5c60fba3-5176-456d-8fc4-02f78e193c70    /etc/crypto_keyfile.bin    luks

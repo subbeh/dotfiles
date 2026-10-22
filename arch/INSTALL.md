@@ -366,6 +366,25 @@ Touch YubiKey when prompted. Verify enrollment:
 cryptsetup luksDump /dev/disk/by-partlabel/root | grep -A5 "Tokens:"
 ```
 
+Without `fido2-device=auto`, boot asks for the YubiKey PIN even when no key is
+inserted. With it, boot waits up to `token-timeout` for the key, then falls back to
+the passphrase. The `sd-encrypt` hook copies `/etc/crypttab` lines marked
+`x-initrd.attach` into the initramfs, and their options override `rd.luks.options`
+on the kernel cmdline:
+
+```bash
+cat <<EOF >>/etc/crypttab
+root    UUID=${ROOT_UUID}    -    discard,fido2-device=auto,token-timeout=1s,x-initrd.attach
+EOF
+mkinitcpio -P
+```
+
+dotfiles manages `/etc/crypttab` afterwards (`arch/etc#owner-r:root/crypttab#perm:600`),
+including the data entry below, with this machine's LUKS UUIDs hardcoded. The root
+UUID must match `rd.luks.name=` in `/etc/kernel/cmdline`, so update both in the repo
+after a reinstall. A mismatched root entry is ignored and boot unlocks without the
+FIDO2 options.
+
 ## Data Partition Auto-unlock
 
 ### Generate keyfile

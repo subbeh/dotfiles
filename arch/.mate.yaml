@@ -17,6 +17,10 @@ hooks:
       - ".config/environment.d/*.conf"
     do:
       - run: systemctl --user daemon-reload
+  initramfs:
+    match: /etc/crypttab
+    do:
+      - run: sudo mkinitcpio -P
 
 packages:
   pacman:
