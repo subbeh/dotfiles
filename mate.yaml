@@ -4,6 +4,7 @@
 
 # Default target for deployed files (default: $HOME)
 target_base: "~"
+log_file: "~/.cache/statemate/mate.log"
 
 aur_helper: paru
 diff_tool: mate-diff
