@@ -10,8 +10,8 @@ hl.bind("SUPER + SPACE",                  hl.dsp.exec_cmd("pkill rofi || __rofi_
 -- WINDOWS
 hl.bind("SUPER + Q",                      hl.dsp.window.close("activewindow"))
 hl.bind("SUPER + SHIFT + Q",              hl.dsp.window.close("activewindow"))
-hl.bind("F9",                             hl.dsp.window.fullscreen({ mode = "maximized",                     action = "toggle", window = "activewindow" }))
-hl.bind("F10",                            hl.dsp.window.fullscreen({ mode = "fullscreen",                    action = "toggle", window = "activewindow" }))
+hl.bind("F10",                            hl.dsp.window.fullscreen({ mode = "maximized",                     action = "toggle", window = "activewindow" }))
+hl.bind("F11",                            hl.dsp.window.fullscreen({ mode = "fullscreen",                    action = "toggle", window = "activewindow" }))
 hl.bind("ALT + SHIFT + TAB",              hl.dsp.window.cycle_next("next"))
 hl.bind("CTRL + TAB",                     hl.dsp.exec_cmd("__rofi_launcher window windows"))
 hl.bind("SUPER + F",                      hl.dsp.window.float({ action = "toggle" }))
