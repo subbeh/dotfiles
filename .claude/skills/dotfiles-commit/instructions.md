@@ -202,8 +202,6 @@ AskUserQuestion({
    type(scope): subject
    
    [optional body]
-   
-   Co-Authored-By: Claude Sonnet 4.5 (1M context) <noreply@anthropic.com>
    ```
 3. Execute: `git commit -m "$(cat <<'EOF' ... EOF)"`
 4. Confirm success
@@ -256,8 +254,6 @@ When user selects "Chat":
 type(scope): subject
 
 Optional body explaining WHY (not WHAT)
-
-Co-Authored-By: Claude Sonnet 4.5 (1M context) <noreply@anthropic.com>
 ```
 
 ### Types

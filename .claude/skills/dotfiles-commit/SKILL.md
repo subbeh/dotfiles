@@ -21,7 +21,7 @@ This skill replaces the manual commit workflow documented in CLAUDE.md. It analy
 1. **Groups files intelligently** - uses AI to understand logical relationships between changed files
 1. **Cleanliness check** - scans each group for debug leftovers, unresolved markers, and unfinished code before review
 1. **Interactive review** - shows each group with reasoning and suggested commit message
-1. **Executes commits** - creates commits following Conventional Commits format with proper attribution
+1. **Executes commits** - creates commits following Conventional Commits format
 
 ## Key behaviors
 
@@ -79,8 +79,6 @@ The skill will:
 type(scope): subject
 
 Optional body with bullet points explaining WHY
-
-Co-Authored-By: Claude Sonnet 4.5 (1M context) <noreply@anthropic.com>
 ```
 
 **Types**: feat, fix, docs, style, refactor, perf, test, build, ci, chore, pkg\

@@ -277,9 +277,7 @@ Documentation updated. Would you like me to:
 If user wants a commit:
 ```bash
 git add notes/dotfiles/*.md
-git commit -m "docs(dotfiles): update <description>
-
-Co-Authored-By: Claude Sonnet 4.5 (1M context) <noreply@anthropic.com>"
+git commit -m "docs(dotfiles): update <description>"
 ```
 
 Note: The commit is in the notes directory (separate repo), not the dotfiles repo.
