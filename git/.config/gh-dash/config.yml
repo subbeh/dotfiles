@@ -1,3 +1,4 @@
+---
 # yaml-language-server: $schema=https://gh-dash.dev/schema.json
 prSections:
   - title: My Pull Requests
@@ -84,9 +85,9 @@ defaults:
   refetchIntervalMinutes: 30
 keybindings:
   universal:
-    - key: U
+    - key: K
       builtin: pageUp
-    - key: D
+    - key: J
       builtin: pageDown
 repoPaths: {}
 theme:
