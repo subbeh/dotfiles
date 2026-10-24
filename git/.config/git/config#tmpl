@@ -1,56 +1,56 @@
 # vi: ft=gitconfig
 
 [user]
-  email = gpg@sbbh.cloud
-  name = Steven Terwindt
-  username = subbeh
-  signingkey = {{ index .Vars.gpgKeys 0 }}
+	email = gpg@sbbh.cloud
+	name = Steven Terwindt
+	username = subbeh
+	signingkey = {{ index .Vars.gpgKeys 0 }}
 
 [sendemail]
-  from = Steven Terwindt <steven@sbbh.cloud>
+	from = Steven Terwindt <steven@sbbh.cloud>
 
 {{- if eq .Profile "work" }}
 [includeIf "gitdir:{{ .Vars.workspaceDir }}/jamf/"]
-  path = config_work.inc
+	path = config_work.inc
 {{- end }}
 
 [commit]
-  gpgsign = true
+	gpgsign = true
 
 [credential]
-  helper = cache
+	helper = cache
 
 [url "git@github.com:"]
-  insteadOf = https://github.com/
+	insteadOf = https://github.com/
 
 [core]
-  excludesFile = ~/.config/git/gitignore
+	excludesFile = ~/.config/git/gitignore
 
 [init]
-  defaultBranch = main
+	defaultBranch = main
 
 [push]
-  autoSetupRemote = true
-  followTags = true
+	autoSetupRemote = true
+	followTags = true
 
 [pull]
-  rebase = true
+	rebase = true
 
 [merge]
-  tool = nvimdiff
-  ff = only
+	tool = nvimdiff
+	ff = only
 
 [diff]
-  tool = nvimdiff
-  colorMoved = default
-  colorMovedWS = allow-indentation-change
+	tool = nvimdiff
+	colorMoved = default
+	colorMovedWS = allow-indentation-change
 
 [difftool]
-  prompt = true
+	prompt = true
 
 [difftool "nvimdiff"]
-  cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
 
 [diff "age"]
-  textconv = age --decrypt --identity ~/.config/statemate/key.txt
+	textconv = age --decrypt --identity ~/.config/statemate/key.txt
 
