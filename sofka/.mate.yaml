@@ -1,3 +1,2 @@
 packages:
-  brew:
-    - nklmilojevic/sofka/sofka
+  - nklmilojevic/sofka/sofka

@@ -1,11 +1,8 @@
 packages:
-  common:
-    - gnupg
-  brew:
-    - ykman
-    - ykpers
-    - pinentry-mac
-  pacman:
-    - pcsclite
-    - ccid
-    - pcsc-tools
+  - gnupg
+  - ykman: brew
+  - ykpers: brew
+  - pinentry-mac: brew
+  - pcsclite: pacman
+  - ccid: pacman
+  - pcsc-tools: pacman

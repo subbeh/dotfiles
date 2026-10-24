@@ -1,6 +1,5 @@
 packages:
-  common:
-    - sshpass
+  - sshpass
 
 generate:
   {{- range $key := (var "sshKeys") }}

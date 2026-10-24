@@ -1,10 +1,6 @@
 packages:
-  common:
-    - lazygit
-    - worktrunk
-    - gitleaks
-    - diffnav
-  brew:
-    - gh
-  pacman:
-    - github-cli
+  - lazygit
+  - worktrunk
+  - gitleaks
+  - diffnav
+  - gh: [brew, pacman: github-cli]

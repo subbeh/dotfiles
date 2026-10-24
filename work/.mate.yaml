@@ -3,15 +3,14 @@ targets:
   workspace: "{{ .Vars.workspaceDir }}"
 
 packages:
-  brew:
-    - 1password
-    - aws-sso-util
-    - awscli
-    - azure-cli
-    - jamf/internal-tap/cloudtools@9
-    - jamf/internal-tap/hermes
-    - podman
-    - postman
-    - slack
-    # - swiftbar # TODO: enable when version 2.1.2 is out
-    - zoom
+  - 1password
+  - aws-sso-util
+  - awscli
+  - azure-cli
+  - jamf/internal-tap/cloudtools@9
+  - jamf/internal-tap/hermes
+  - podman
+  - postman
+  - slack
+  # - swiftbar # TODO: enable when version 2.1.2 is out
+  - zoom

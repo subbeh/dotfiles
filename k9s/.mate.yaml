@@ -1,3 +1,2 @@
 packages:
-  common:
-    - k9s
+  - k9s

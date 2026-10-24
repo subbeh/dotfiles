@@ -1,5 +1,3 @@
 packages:
-  common:
-    - zoxide
-  pacman:
-    - zsh
+  - zoxide
+  - zsh: pacman

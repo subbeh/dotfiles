@@ -2,7 +2,4 @@ targets:
   config: "{{ .Vars.configHome }}"
 
 packages:
-  brew:
-    - agent-manager
-  aur:
-    - agent-manager-bin
+  - agent-manager: [brew, aur: agent-manager-bin]

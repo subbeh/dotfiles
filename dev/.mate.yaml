@@ -1,19 +1,15 @@
 packages:
-  common:
-    - bun
-    - direnv
-    - docker
-    - golangci-lint
-    - gopls
-    - kubectl
-    - kubectx
-    - mise
-    - pyright
-    - rust
-    - upterm
-    - uv
-  brew:
-    - kubecolor
-    - pipenv
-  pacman:
-    - python-pipenv
+  - bun
+  - direnv
+  - docker
+  - golangci-lint
+  - gopls
+  - kubectl
+  - kubectx
+  - mise
+  - pyright
+  - rust
+  - upterm
+  - uv
+  - kubecolor: brew
+  - pipenv: [brew, pacman: python-pipenv]

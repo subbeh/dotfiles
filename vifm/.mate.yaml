@@ -1,15 +1,13 @@
 packages:
-  common:
-    - docx2txt
-    - feh
-    - glow
-    - inkscape
-    - poppler
-    - qutebrowser
-    - vifm
-  pacman:
-    - zathura
-    - zathura-pdf-poppler
-    - dumptorrent
-    - fuse-zip
-    - fuseiso
+  - docx2txt
+  - feh
+  - glow
+  - inkscape
+  - poppler
+  - qutebrowser
+  - vifm
+  - zathura: pacman
+  - zathura-pdf-poppler: pacman
+  - dumptorrent: pacman
+  - fuse-zip: pacman
+  - fuseiso: pacman

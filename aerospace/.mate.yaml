@@ -1,4 +1,3 @@
 packages:
-  brew:
-    - nikitabobko/tap/aerospace
-    - felixkratz/formulae/borders
+  - nikitabobko/tap/aerospace
+  - felixkratz/formulae/borders

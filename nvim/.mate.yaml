@@ -3,9 +3,8 @@ ignore:
   - selene.toml
 
 packages:
-  common:
-    - neovim
-    - luacheck
-    - selene
-    - stylua
-    - tree-sitter-cli
+  - neovim
+  - luacheck
+  - selene
+  - stylua
+  - tree-sitter-cli

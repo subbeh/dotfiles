@@ -1,52 +1,46 @@
 packages:
-  common:
-    - age
-    - arp-scan
-    - bat
-    - btop
-    - dialog
-    - direnv
-    - coreutils
-    - croc
-    - duf
-    - dust
-    - ffmpeg
-    - gawk
-    - git
-    - glow
-    - go
-    - gron
-    - htop
-    - inetutils
-    - iperf3
-    - jq
-    - lsof
-    - man-db
-    - mtr
-    - ncdu
-    - nmap
-    - openssh
-    - socat
-    - speedtest-cli
-    - tldr
-    - tree
-    - unzip
-    - vim
-    - vivid
-    - wget
-    - whois
-    - yq
-  pacman:
-    - less
-    - npm
-    - openbsd-netcat
-    - sudo
-  aur:
-    - shellcheck-bin
-  brew:
-    - gnu-sed
-    - node
-    - rar
-    - shellcheck
-    - watch
-    - xh
+  - age
+  - arp-scan
+  - bat
+  - btop
+  - dialog
+  - direnv
+  - coreutils
+  - croc
+  - duf
+  - dust
+  - ffmpeg
+  - gawk
+  - git
+  - glow
+  - go
+  - gron
+  - htop
+  - inetutils
+  - iperf3
+  - jq
+  - lsof
+  - man-db
+  - mtr
+  - ncdu
+  - nmap
+  - openssh
+  - socat
+  - speedtest-cli
+  - tldr
+  - tree
+  - unzip
+  - vim
+  - vivid
+  - wget
+  - whois
+  - yq
+  - less: pacman
+  - node: [brew, pacman: npm]
+  - openbsd-netcat: pacman
+  - sudo: pacman
+  - shellcheck: [brew, aur: shellcheck-bin]
+  - gnu-sed: brew
+  - rar: brew
+  - watch: brew
+  - xh: brew

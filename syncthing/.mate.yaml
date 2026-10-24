@@ -1,5 +1,4 @@
 target_base: "{{ .Vars.workspaceDir }}"
 
 packages:
-  common:
-    - syncthing
+  - syncthing

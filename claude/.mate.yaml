@@ -6,5 +6,4 @@ targets:
 {{- end }}
 
 packages:
-  brew:
-    - claude
+  - claude: brew

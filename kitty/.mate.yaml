@@ -1,7 +1,5 @@
 packages:
-  common:
-    - kitty
-  pacman:
-    - otf-firamono-nerd
-    - ttf-firacode-nerd
-    - ttf-hack-nerd
+  - kitty
+  - otf-firamono-nerd: [brew: font-fira-mono-nerd-font, pacman]
+  - ttf-firacode-nerd: [brew: font-fira-code-nerd-font, pacman]
+  - ttf-hack-nerd: [brew: font-hack-nerd-font, pacman]

@@ -11,28 +11,26 @@ hooks:
       - run: systemctl --user restart waybar.service
 
 packages:
-  pacman:
-    # hyprland
-    - cliphist
-    - hypridle
-    - hyprland
-    - hyprlock
-    - hyprpaper
-    - hyprpicker
-    - hyprpolkitagent
-    - hyprshot
-    - hyprshutdown
-    - xdg-desktop-portal-hyprland
-    # fonts
-    - ttf-proggyclean-nerd
-    - noto-fonts
-    # misc
-    - libnewt
-    - qt5-wayland
-    - qt6-wayland
-    - rofi
-    - swaync
-    - thunar
-    - waybar
-  aur:
-    - siji-ng # font
+  # hyprland
+  - cliphist
+  - hypridle
+  - hyprland
+  - hyprlock
+  - hyprpaper
+  - hyprpicker
+  - hyprpolkitagent
+  - hyprshot
+  - hyprshutdown
+  - xdg-desktop-portal-hyprland
+  # fonts
+  - ttf-proggyclean-nerd
+  - noto-fonts
+  # misc
+  - libnewt
+  - qt5-wayland
+  - qt6-wayland
+  - rofi
+  - swaync
+  - thunar
+  - waybar
+  - siji-ng: aur # font

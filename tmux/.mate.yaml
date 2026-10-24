@@ -1,11 +1,5 @@
 packages:
-  common:
-    - tmux
-  brew:
-    - tmuxinator
-    - tpack
-    - gitmux
-  aur:
-    - tmuxinator
-    - tpack-bin
-    - gitmux
+  - tmux
+  - tmuxinator: [brew, aur]
+  - tpack: [brew, aur: tpack-bin]
+  - gitmux: [brew, aur]
