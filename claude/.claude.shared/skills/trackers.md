@@ -1,6 +1,6 @@
 # Trackers
 
-How `/tasks-handover`, `/tasks-takeover` and `/tasks-pickup` find a repo's task tracker and run
+How `/tasks-handover`, `/tasks-takeover`, `/tasks-pickup` and `/tasks-triage` find a repo's task tracker and run
 each operation on it.
 
 ## Finding the tracker
@@ -23,6 +23,12 @@ When none matches, ask the user where the task lives.
 - **Note**: `aven note <ref> --stdin`
 - **Start**: `aven edit <ref> --status active`
 - **Create**: `aven add`
+- **Inbox**: `aven list --status inbox --json`
+- **All open**: `aven list --open --json`; epics carry `is_epic`
+- **Edit**: `aven edit <ref> --title <t> --priority <p> --status <s>`, and
+  `--description-stdin` for the description
+- **Link**: `aven related add <task> <other>`, `aven dep add <blocked> <blocker>`,
+  `aven epic add <child> <epic>`
 
 ## Jira
 
