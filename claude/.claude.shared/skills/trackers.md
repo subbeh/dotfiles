@@ -1,6 +1,6 @@
 # Trackers
 
-How `/handover`, `/takeover` and `/pickup` find a repo's task tracker and run
+How `/tasks-handover`, `/tasks-takeover` and `/tasks-pickup` find a repo's task tracker and run
 each operation on it.
 
 ## Finding the tracker

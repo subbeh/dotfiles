@@ -1,5 +1,5 @@
 ---
-name: handover
+name: tasks-handover
 description: Hand the current work to a fresh session - update its task and docs, then print how to resume.
 disable-model-invocation: true
 ---
@@ -13,8 +13,8 @@ in [`../trackers.md`](../trackers.md), by tracker.
 
 ## 1. Find the task
 
-Take the ref this session worked on (the `/aven <ref>`, `/pickup <ref>` or
-`/takeover <ref>` it started from, a Jira key, or whichever tracker the work
+Take the ref this session worked on (the `/aven <ref>`, `/tasks-pickup <ref>` or
+`/tasks-takeover <ref>` it started from, a Jira key, or whichever tracker the work
 came from). If no task tracks it, ask with `AskUserQuestion` whether to create
 one, recommended first, and **create** it in the repo's tracker (**Finding the
 tracker** in `../trackers.md`).
@@ -57,7 +57,7 @@ Next: <next step>
 Uncommitted: <files, or none>
 
 Resume in a new session from <directory>:
-  /takeover <ref>
+  /tasks-takeover <ref>
 ```
 
 ## 5. Offer to resume in the background
@@ -66,9 +66,9 @@ Ask with `AskUserQuestion` whether to start the next session now, "Resume
 later" first as "(Recommended)". On yes, run from `<directory>`:
 
 ```bash
-claude --bg --name "<ref> - <title>" -- "/takeover <ref>"
+claude --bg --name "<ref> - <title>" -- "/tasks-takeover <ref>"
 ```
 
 It resumes from the note, not this conversation, so step 3 must be complete.
-`takeover` asks about **Open** items and drift; the background session waits
+`tasks-takeover` asks about **Open** items and drift; the background session waits
 for those answers in `claude agents`.

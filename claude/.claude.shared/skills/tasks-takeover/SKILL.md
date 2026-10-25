@@ -1,12 +1,12 @@
 ---
-name: takeover
+name: tasks-takeover
 description: Take over a task an earlier session left off - pick it from the repo's tracker, rebuild its context, and continue.
 disable-model-invocation: true
 ---
 
 # Takeover
 
-The other half of `/handover`. This session starts cold: everything you know
+The other half of `/tasks-handover`. This session starts cold: everything you know
 about the task comes from the tracker, the repo, and the user. The commands
 behind each **operation** below are in [`../trackers.md`](../trackers.md), by
 tracker.

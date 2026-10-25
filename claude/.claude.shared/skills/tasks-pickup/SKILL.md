@@ -1,12 +1,12 @@
 ---
-name: pickup
+name: tasks-pickup
 description: Pick an open task from the repo's tracker, confirm it with the user, and start on it.
 disable-model-invocation: true
 ---
 
 # Pickup
 
-Starts a task nobody has begun; `/takeover` resumes one already in progress.
+Starts a task nobody has begun; `/tasks-takeover` resumes one already in progress.
 The commands behind each **operation** below are in
 [`../trackers.md`](../trackers.md), by tracker.
 
@@ -38,7 +38,7 @@ open question.
 ## 4. Brief and start
 
 **Start** the task. When the work gets its own branch, put the ref in the
-branch name: that is how `/takeover` finds the task later.
+branch name: that is how `/tasks-takeover` finds the task later.
 
 Print the brief:
 
