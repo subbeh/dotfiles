@@ -173,11 +173,15 @@ require("mini.statusline").setup({
       local status = require("mini.statusline")
       local _, mode_hl = status.section_mode({ trunc_width = 9999 })
       local mode = mode_names[vim.fn.mode()] or "MISC"
+      local summary = vim.b.minigit_summary
+      local head = summary and summary.head_name
+      -- Off the default branch (or detached): show the branch in red.
+      local on_default = head == nil or head == "main" or head == "master"
+      local git_hl = on_default and "MiniStatuslineDevinfoGit" or "MiniStatuslineDevinfoGitAlert"
       local git = status.section_git({
         trunc_width = 40,
-        icon = with_icon(vim.trim(icons.git.Branch), "", "MiniStatuslineDevinfoGit"),
+        icon = with_icon(vim.trim(icons.git.Branch), "", git_hl),
       })
-      local summary = vim.b.minigit_summary
       if git ~= "" and summary ~= nil and summary.root ~= nil then
         git = with_icon(icons.git.Repo, vim.fn.fnamemodify(summary.root, ":t"), "MiniStatuslineDevinfoRepo") .. " " .. git
       end
@@ -306,6 +310,8 @@ set(0, "MiniStatuslineModeOther",            { bg = colors.fg.default,     fg = 
 set(0, "MiniStatuslineDevinfo",              { bg = colors.bg.default,     fg = colors.fg.default })
 set(0, "MiniStatuslineDevinfoGit",           { bg = colors.bg.default,     fg = colors.fg.default })
 set(0, "MiniStatuslineDevinfoGitIcon",       { bg = colors.bg.default,     fg = colors.yellow.base })
+set(0, "MiniStatuslineDevinfoGitAlert",      { bg = colors.bg.default,     fg = colors.red.base })
+set(0, "MiniStatuslineDevinfoGitAlertIcon",  { bg = colors.bg.default,     fg = colors.yellow.base })
 set(0, "MiniStatuslineDevinfoRepo",          { bg = colors.bg.default,     fg = colors.fg.default })
 set(0, "MiniStatuslineDevinfoRepoIcon",      { bg = colors.bg.default,     fg = colors.magenta.base })
 set(0, "MiniStatuslineDevinfoLsp",           { bg = colors.bg.default,     fg = colors.fg.default })
