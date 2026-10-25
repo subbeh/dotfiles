@@ -30,3 +30,15 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
   desc = "Press q to close window",
 })
+
+-- Publish this instance's server on its tmux pane, so `cda` can :cd it.
+if vim.env.TMUX_PANE then
+  vim.system({ "tmux", "set", "-p", "-t", vim.env.TMUX_PANE, "@nvim_server", vim.v.servername })
+  vim.api.nvim_create_autocmd("VimLeavePre", {
+    group = augroup,
+    callback = function()
+      vim.system({ "tmux", "set", "-p", "-u", "-t", vim.env.TMUX_PANE, "@nvim_server" }):wait()
+    end,
+    desc = "Unpublish nvim server from tmux pane",
+  })
+end
