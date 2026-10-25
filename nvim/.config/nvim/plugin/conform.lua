@@ -34,6 +34,9 @@ require("conform").setup({
     zsh = { "shfmt" },
   },
   formatters = {
+    -- yamlfmt would re-format frontmatter (prettier already does, and yamlfmt adds a
+    -- second `---`); shfmt mangles `<placeholder>` in doc snippets as redirections.
+    injected = { options = { lang_to_formatters = { yaml = {}, sh = {} } } },
     mdformat = {
       condition = function(_, ctx)
         return not has_frontmatter(ctx.buf)
