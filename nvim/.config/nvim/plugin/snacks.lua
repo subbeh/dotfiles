@@ -112,6 +112,21 @@ require("snacks").setup({
       },
     },
     exclude = { ".git" },
+    -- <c-j>/<c-k> scroll the preview; <c-n>/<c-p> still move through the list.
+    win = {
+      input = {
+        keys = {
+          ["<c-j>"] = { "preview_scroll_down", mode = { "i", "n" } },
+          ["<c-k>"] = { "preview_scroll_up", mode = { "i", "n" } },
+        },
+      },
+      list = {
+        keys = {
+          ["<c-j>"] = "preview_scroll_down",
+          ["<c-k>"] = "preview_scroll_up",
+        },
+      },
+    },
     sources = {
       -- Must explicitly set hidden=true per source to override source defaults
       files = {
