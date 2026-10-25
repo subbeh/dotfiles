@@ -22,6 +22,7 @@ local lint = require("lint")
 lint.linters_by_ft = {
   lua = { "selene" },
   systemd = { "systemd-analyze" },
+  ["yaml.ansible"] = { "ansible_lint" },
   zsh = { "zsh" },
 }
 
