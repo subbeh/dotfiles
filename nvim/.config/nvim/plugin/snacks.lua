@@ -216,6 +216,7 @@ map("n", "<leader>gho",      function() snacks.gitbrowse.open() end,            
 map("n", "<leader>ghp",      function() snacks.picker.gh_pr() end,                           { desc = "GitHub PR" })
 map("n", "<leader>gl",       function() snacks.picker.git_log_file() end,                    { desc = "Git Log (file)" })
 map("n", "<leader>gL",       function() snacks.picker.git_log_line() end,                    { desc = "Git Log (line)" })
+map("n", "<leader>gs",       function() snacks.picker.git_status() end,                      { desc = "Git Status" })
 map("n", "<leader>gS",       function() snacks.picker.git_stash() end,                       { desc = "Git Stash" })
 map("n", "<leader>lc",       function() snacks.picker.lsp_config() end,                      { desc = "List Servers" })
 map("n", "<leader>ld",       function() snacks.picker.lsp_declarations() end,                { desc = "List Declarations" })
