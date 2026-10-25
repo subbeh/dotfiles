@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# am-remote - run a second Agent Manager (e.g. over SSH from a phone).
+# Every manager resizes all agent windows to fit its own preview, so on exit
+# zoom the desktop manager's pane in and out to make it resize them back.
+
+restore() {
+  local pane
+  pane=$(tmux -L default list-panes -s -t '=tpad_agentmgr' -F '#{pane_id} #{pane_current_command}' 2>/dev/null |
+    awk '$2 == "agent-manager" { print $1; exit }')
+  [ -n "$pane" ] || return 0
+  tmux -L default resize-pane -Z -t "$pane"
+  sleep 1
+  tmux -L default resize-pane -Z -t "$pane"
+}
+
+trap restore EXIT
+
+# agent-manager ignores HUP and would linger headless after a dropped SSH
+# connection, so run it in the background (stdin from the tty, which bash
+# would otherwise point at /dev/null) and kill it ourselves.
+agent-manager "$@" </dev/tty &
+child=$!
+trap 'kill "$child" 2>/dev/null; exit' HUP INT TERM
+wait "$child"
