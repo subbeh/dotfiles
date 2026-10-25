@@ -274,12 +274,12 @@
   },
   "custom/power_off": {
     "format": " ⏻ ",
-    "on-click": "hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'",
+    "on-click": "systemd-run --user --scope hyprshutdown -t 'Shutting down...' --post-cmd 'shutdown -P 0'",
     "tooltip": false
   },
   "custom/power_reboot": {
     "format": " ",
-    "on-click": "hyprshutdown -t 'Shutting down...' --post-cmd 'reboot'",
+    "on-click": "systemd-run --user --scope hyprshutdown -t 'Rebooting...' --post-cmd 'reboot'",
     "tooltip": false
   },
   "custom/power_suspend": {
