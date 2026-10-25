@@ -6,7 +6,9 @@ _self_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _real_bw=$(PATH="${PATH//$_self_dir:/}" command -v bw)
 
 bw_unlock() {
-  local bw_key=$("$_real_bw" unlock --raw)
+  local bw_key
+  # A failed unlock must not overwrite the cached session with an empty one.
+  bw_key=$("$_real_bw" unlock --raw "$@") && [ -n "$bw_key" ] || return 1
   echo "$bw_key" | gpg --yes --encrypt --recipient "${BW_GPGKEY}" -o "${BW_KEYCHAIN}" &&
     chmod 600 "${BW_KEYCHAIN}"
   printf '%s' "$bw_key" > "${XDG_RUNTIME_DIR}/bw-session"
@@ -15,7 +17,7 @@ bw_unlock() {
 }
 
 case "$1" in
-  unlock) bw_unlock ;;
+  unlock) shift && bw_unlock "$@" ;;
   *)
     "$_real_bw" "$@"
     ;;
