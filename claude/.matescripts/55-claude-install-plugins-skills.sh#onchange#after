@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# description: Install missing Claude Code plugins and skills
+# Onchange: self
+
+set -euo pipefail
+
+command -v claude &>/dev/null || exit 0
+command -v npx &>/dev/null || exit 0
+
+# Only installs what is missing, so a run with nothing new stays offline;
+# 60-claude-update-plugins-skills updates what is already installed
+plugins=(plugin-dev mcp-server-dev claude-md-management)
+
+install_skills() {
+  local repo=$1 skill missing=()
+  shift
+  for skill in "$@"; do
+    [[ -e "$CLAUDE_CONFIG_DIR/skills/$skill" ]] || missing+=("$skill")
+  done
+  ((${#missing[@]})) || return 0
+  npx skills add "$repo" --skill "${missing[@]}" --agent claude-code --yes -g
+}
+
+# Both honour CLAUDE_CONFIG_DIR, so run them once per profile config dir
+# (the -d check skips ~/.claude.json and an unmatched glob)
+for dir in "$HOME"/.claude.*; do
+  [[ -d "$dir" ]] || continue
+  export CLAUDE_CONFIG_DIR="$dir"
+
+  installed=$(jq -r '.plugins | keys[]' "$dir/plugins/installed_plugins.json" 2>/dev/null || true)
+  for plugin in "${plugins[@]}"; do
+    grep -qxF "$plugin@claude-plugins-official" <<<"$installed" ||
+      claude plugin install "$plugin@claude-plugins-official"
+  done
+
+  install_skills vercel-labs/skills find-skills
+  install_skills juliusbrussee/caveman caveman-commit
+  install_skills anthropics/skills mcp-builder
+  install_skills mattpocock/skills \
+    code-review codebase-design diagnosing-bugs domain-modeling \
+    git-guardrails-claude-code grill-me grill-with-docs grilling \
+    implement implement-spec improve-codebase-architecture loop-me pr \
+    prototype research retro setup-matt-pocock-skills setup-pre-commit tdd \
+    to-questionnaire to-spec to-tickets triage wait-what wayfinder wizard \
+    writing-for-agents
+done

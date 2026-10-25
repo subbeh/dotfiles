@@ -160,14 +160,13 @@ if [[ $cannot_compare -gt 0 ]]; then
   echo -e "  ${BLUE}$cannot_compare plugin(s) could not be compared${NC}"
 fi
 
-if [[ ${#update_queue[@]} -gt 0 && ! -t 0 ]]; then
-  echo ""
-  echo "Run claude-update-plugins in a terminal to update."
-elif [[ ${#update_queue[@]} -gt 0 ]]; then
+if [[ ${#update_queue[@]} -gt 0 ]]; then
   echo ""
   echo -e "${BOLD}Update plugins:${NC}"
   for plugin_key in "${update_queue[@]}"; do
-    read -r -p "  Update ${plugin_key}? [y/N] " answer
+    # Ask only in a terminal; unattended runs (mate) update everything
+    answer=y
+    [[ -t 0 ]] && read -r -p "  Update ${plugin_key}? [y/N] " answer
     case "$answer" in
     [yY] | [yY][eE][sS])
       if claude plugin update "$plugin_key"; then
