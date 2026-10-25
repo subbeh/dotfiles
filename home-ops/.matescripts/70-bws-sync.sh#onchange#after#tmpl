@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # description: Sync home-ops secrets from the vault to Bitwarden Secrets Manager
+# Onchange: self .bws.yaml secrets.sha256
 
 set -euo pipefail
 
@@ -9,7 +10,7 @@ command -v bws &>/dev/null || {
 }
 
 # Secrets Manager answers bursts with 429 "Try again in 1m"; wait it out rather
-# than fail, since the hook won't fire again for values it already hashed.
+# than fail and leave the sync for the next apply.
 bws() {
   local err attempt
   err=$(mktemp)

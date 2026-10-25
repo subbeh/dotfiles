@@ -4,8 +4,8 @@ targets:
 include:
   - workspace/home-ops/.bws.yaml
 
-# Hooks only see deployed files, so this hash of the synced values is what
-# triggers the bws-sync hook below when one changes in the vault.
+# #onchange only sees deployed files, so this hash of the synced values is what
+# makes 70-bws-sync.sh due when one changes in the vault.
 {{- $values := dict }}
 {{- range $key, $ref := .Vars.bws.secrets }}
 {{- $_ := set $values $key (bitwarden (index $ref 0) (index $ref 1) (index $ref 2)) }}
@@ -14,12 +14,3 @@ generate:
   - target: {{ .Vars.workspaceDir }}/.cache/bws-sync/secrets.sha256
     mode: "0600"
     content: "{{ $values | toJson | sha256sum }}"
-
-hooks:
-  bws-sync:
-    match:
-      - {{ .Vars.workspaceDir }}/home-ops/.bws.yaml
-      - {{ .Vars.workspaceDir }}/.cache/bws-sync/secrets.sha256
-    description: Sync home-ops secrets to Bitwarden Secrets Manager
-    do:
-      - script: bws-sync.sh
