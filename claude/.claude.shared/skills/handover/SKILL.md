@@ -59,3 +59,16 @@ Uncommitted: <files, or none>
 Resume in a new session from <directory>:
   /takeover <ref>
 ```
+
+## 5. Offer to resume in the background
+
+Ask with `AskUserQuestion` whether to start the next session now, "Resume
+later" first as "(Recommended)". On yes, run from `<directory>`:
+
+```bash
+claude --bg --name "<ref> - <title>" -- "/takeover <ref>"
+```
+
+It resumes from the note, not this conversation, so step 3 must be complete.
+`takeover` asks about **Open** items and drift; the background session waits
+for those answers in `claude agents`.
