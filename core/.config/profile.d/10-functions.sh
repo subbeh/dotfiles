@@ -50,3 +50,23 @@ rand() {
   fi
   printf "%q" "$file"
 }
+
+# extract archives
+extract() {
+  local f
+  [ $# -gt 0 ] || { echo "Usage: extract <archive>..." >&2; return 1; }
+  for f in "$@"; do
+    [ -f "$f" ] || { echo "extract: '$f' is not a file" >&2; return 1; }
+    case "$f" in
+      *.tar | *.tar.* | *.tgz | *.tbz | *.tbz2 | *.txz | *.tzst) tar -xf "$f" ;;
+      *.zip) unzip "$f" ;;
+      *.rar) unrar x "$f" ;;
+      *.7z) "$(command -v 7zz || command -v 7z)" x "$f" ;;
+      *.gz) gunzip -k "$f" ;;
+      *.bz2) bunzip2 -k "$f" ;;
+      *.xz) unxz -k "$f" ;;
+      *.zst) unzstd "$f" ;;
+      *) echo "extract: unsupported archive '$f'" >&2; return 1 ;;
+    esac || return
+  done
+}

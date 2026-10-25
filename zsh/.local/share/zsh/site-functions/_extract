@@ -1,0 +1,4 @@
+#compdef extract
+
+# keep in sync with the case patterns in extract (core profile.d/10-functions.sh)
+_files -g '*.(tar|tar.*|tgz|tbz|tbz2|txz|tzst|zip|rar|7z|gz|bz2|xz|zst)(-.)'
