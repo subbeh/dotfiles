@@ -13,8 +13,9 @@
     "user",
     "group/hardware",
     "custom/sep",
-    "custom/syncthing",
+    "custom/bitwarden",
     "custom/restic",
+    "custom/syncthing",
     "custom/statemate",
     "custom/updates"
   ],

@@ -349,6 +349,17 @@
     "on-click-right": "pkill -SIGRTMIN+6 waybar"
   },
   //
+  // BITWARDEN
+  //
+  "custom/bitwarden": {
+    "exec": "__waybar_bitwarden",
+    "return-type": "json",
+    "interval": 30,
+    "tooltip": true,
+    "signal": 10,
+    "on-click": "__waybar_bitwarden unlock"
+  },
+  //
   // KUBERNETES
   //
   "custom/k8s": {

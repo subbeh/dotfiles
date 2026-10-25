@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Waybar module: Bitwarden CLI (bw) vault lock state, the session statemate uses.
+set -uo pipefail
+
+ICON_LOCKED='󰌾'
+ICON_UNLOCKED='󰌿'
+
+# waybar's environment lacks the bw variables; reuse the shell setup, which also loads BW_SESSION.
+# shellcheck source=/dev/null
+. "${XDG_CONFIG_HOME:-$HOME/.config}/profile.d/50-bitwarden.sh"
+
+# `__waybar_bitwarden unlock`: ask for the master password with pinentry, unlock, refresh the module.
+if [[ ${1:-} == unlock ]]; then
+  pin=$(printf '%s\n' 'SETTITLE Bitwarden' 'SETDESC Unlock the Bitwarden vault' 'SETPROMPT Master password' GETPIN BYE |
+    pinentry-auto 2>/dev/null | sed -n 's/^D //p')
+  pin=${pin//%25/%} # Assuan percent-encodes % in data lines
+  if [[ -n $pin ]] && ! BW_PASSWORD=$pin bw unlock --passwordenv BW_PASSWORD >/dev/null 2>&1; then
+    notify-send -a bitwarden -u critical "Bitwarden" "Unlock failed"
+  fi
+  pkill -SIGRTMIN+10 waybar
+  exit 0
+fi
+
+status=$(bw status 2>/dev/null | jq -r '.status // empty')
+case $status in
+  unlocked) icon=$ICON_UNLOCKED class=unlocked ;;
+  locked) icon=$ICON_LOCKED class=locked ;;
+  *) icon=$ICON_LOCKED class=unknown status=${status:-unavailable} ;;
+esac
+
+jq -nc --arg text "$icon" --arg class "$class" --arg tooltip "<b>bitwarden</b>  $status" \
+  '{text: $text, class: $class, tooltip: $tooltip}'
