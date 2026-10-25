@@ -68,4 +68,4 @@ require("snacks").toggle
       vim.g.disable_autoformat = not state
     end,
   })
-  :map("<leader>uf")
+  :map("<leader>cF")
