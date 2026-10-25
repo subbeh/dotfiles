@@ -1,0 +1,3 @@
+#!/bin/sh
+# Loads the cwd's .envrc (e.g. CLAUDE_CONFIG_DIR) for callers that skip the shell hook, like agent-manager.
+exec direnv exec . "$HOME/.local/bin/claude" "$@"

@@ -66,7 +66,7 @@ done
 # typeset would declare a *local* (and initially empty) path, blanking $PATH for
 # the rest of the reload.
 typeset -gU path PATH
-path=("${XDG_BIN_HOME:-$HOME/.local/bin}" $path)
+path=("$HOME/.local/wrappers" "${XDG_BIN_HOME:-$HOME/.local/bin}" $path)
 
 zstyle :completion:* use-cache true
 zstyle :completion:* cache-path "$XDG_CACHE_HOME/zsh/zcompcache"

@@ -38,6 +38,8 @@ if test -d "${XDG_CONFIG_HOME:-$HOME/.config}"/profile.d/; then
 fi
 
 prepend_path "$HOME/.local/bin"
+# Ahead of ~/.local/bin so wrappers shadow binaries an updater owns there (claude)
+prepend_path "$HOME/.local/wrappers"
 
 # Force PATH to be environment
 export PATH
