@@ -70,7 +70,6 @@ profiles:
     sources:
       - aerospace
       - macos
-      - sofka
     variables:
       workspaceDir: "/Users/Shared/data/workspace"
       configHome: "~/Library/Application Support"
