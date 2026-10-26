@@ -59,6 +59,7 @@ Check the current branch from `git branch --show-current` output gathered in Ste
 **If on `main` or `master`:**
 
 First, analyze the changes to derive a suggested branch name from the primary change: `type/short-kebab-description`
+
 - Examples: `feat/add-tmux-session-picker`, `fix/ssh-jump-host-matching`, `chore/cleanup-zsh-aliases`
 - Keep it under 50 characters
 
@@ -201,11 +202,13 @@ Group files by logical affinity:
 5. Remaining files form catch-all group
 
 **Balancing rules:**
+
 - Target 2-5 commits, never exceed 7
 - If a group exceeds 10 files, split by subdirectory or change type
 - If only 1 group results, fall back to single commit mode
 
 **Commit ordering** — present and execute commits in this order:
+
 1. Infrastructure/config (CI, build, tooling)
 2. Database/schema changes
 3. Features (`feat`)
@@ -228,7 +231,7 @@ Proposed commits:
    - nvim/.config/nvim/lua/plugins/lsp.lua
 
 3. chore(zsh): clean up unused aliases
-   - zsh/.config/zsh/.zshrc.d/aliases.zsh
+   - zsh/.config/zsh/zshrc.d/aliases.zsh
 ```
 
 Ask: **"Proceed with these commits?"** and wait for user confirmation.
@@ -300,9 +303,11 @@ If count > 0, the branch is behind main. Ask the user:
 2. "No, push as-is" → Proceed without rebase
 
 If rebase has conflicts:
+
 ```bash
 git rebase --abort
 ```
+
 Report: "Rebase onto main has conflicts. Resolve manually with `git rebase origin/main` and re-run `/commit`." Stop here — do not push.
 
 **Step 2: Check if behind own upstream (existing branches only)**
@@ -314,14 +319,17 @@ git rev-list --count HEAD..origin/<branch-name>
 ```
 
 If count > 0 (behind remote), attempt rebase:
+
 ```bash
 git rebase origin/<branch-name>
 ```
 
 If rebase has conflicts:
+
 ```bash
 git rebase --abort
 ```
+
 Report: "Branch is behind remote and rebase has conflicts. Resolve manually with `git pull --rebase` and re-run `/commit`." Stop here — do not push.
 
 If both checks pass (or user chose to skip), proceed with push.

@@ -7,6 +7,7 @@ You are executing the dotfiles documentation maintenance skill. Maintain technic
 Target: `$XDG_WORKSPACE_DIR/notes/dotfiles/` or `$XDG_NOTES_DIR/dotfiles/`
 
 Typical locations:
+
 - macOS: `/Users/Shared/data/workspace/notes/dotfiles/`
 - Linux: `/data/workspace/notes/dotfiles/`
 
@@ -19,22 +20,24 @@ Typical locations:
 **When**: User says "sync docs", "update documentation", or after they've made changes
 
 **Process**:
+
 1. Determine what changed:
    - Read recent git commits: `git log -10 --name-only --oneline`
    - Or ask user: "What did you change?"
-2. Map changes to documentation:
+1. Map changes to documentation:
    - tmux keybindings → `tmux-keybindings.md`
    - .mate.yaml packages → `packages.md`
    - New skill → `skills.md`
    - Lifecycle scripts → `lifecycle-scripts.md`
    - profile.d vars → `environment.md`
-3. Read the current docs
-4. Propose updates (show diff)
-5. Get user confirmation
-6. Write updated docs
-7. Optionally offer to commit: "Would you like me to commit these doc updates?"
+1. Read the current docs
+1. Propose updates (show diff)
+1. Get user confirmation
+1. Write updated docs
+1. Optionally offer to commit: "Would you like me to commit these doc updates?"
 
 **Example**:
+
 ```
 User: sync the docs
 
@@ -59,20 +62,22 @@ You:
 **When**: User says "generate docs for X", "document the Y"
 
 **Process**:
+
 1. Identify what needs documenting
-2. Read the relevant source files
-3. Extract information:
+1. Read the relevant source files
+1. Extract information:
    - Packages: Read all `.mate.yaml` files
    - Scripts: List and describe lifecycle scripts
    - Keybindings: Parse tmux/nvim keymap files
    - Environment: Extract exports from profile.d
-4. Generate markdown documentation
-5. Show preview
-6. Get user confirmation
-7. Write to notes directory
-8. Confirm to user
+1. Generate markdown documentation
+1. Show preview
+1. Get user confirmation
+1. Write to notes directory
+1. Confirm to user
 
 **Example**:
+
 ```
 User: generate the package list documentation
 
@@ -101,15 +106,17 @@ You:
 **When**: User says "update the X docs", "fix the Y documentation"
 
 **Process**:
+
 1. Read the current documentation file
-2. Understand what needs updating (ask user if unclear)
-3. Make the updates
-4. Show diff
-5. Get confirmation
-6. Write updated file
-7. Confirm to user
+1. Understand what needs updating (ask user if unclear)
+1. Make the updates
+1. Show diff
+1. Get confirmation
+1. Write updated file
+1. Confirm to user
 
 **Example**:
+
 ```
 User: update the troubleshooting docs with the jpro status fix
 
@@ -214,18 +221,19 @@ Details...
 ### Creating New Docs
 
 If a documentation file doesn't exist:
+
 1. Check if `notes/dotfiles/` directory exists
-2. If not, create it: `mkdir -p "$NOTES_DIR/dotfiles"`
-3. Create the new file
-4. Use proper structure (title, overview, sections)
+1. If not, create it: `mkdir -p "$NOTES_DIR/dotfiles"`
+1. Create the new file
+1. Use proper structure (title, overview, sections)
 
 ### Updating Existing Docs
 
 1. Read the current file
-2. Find the right section to update
-3. Make surgical changes (don't rewrite whole file unless necessary)
-4. Preserve existing formatting and structure
-5. Show only the changed sections in your diff
+1. Find the right section to update
+1. Make surgical changes (don't rewrite whole file unless necessary)
+1. Preserve existing formatting and structure
+1. Show only the changed sections in your diff
 
 ### File Naming
 
@@ -236,14 +244,16 @@ If a documentation file doesn't exist:
 ## Validation
 
 Before writing:
+
 1. Verify target directory exists
-2. Verify markdown is valid
-3. Check for broken links (if any)
-4. Ensure code blocks are properly fenced
+1. Verify markdown is valid
+1. Check for broken links (if any)
+1. Ensure code blocks are properly fenced
 
 After writing:
+
 1. Confirm file was written
-2. Show summary of what changed
+1. Show summary of what changed
 
 ## Proposals and Confirmation
 
@@ -275,6 +285,7 @@ Documentation updated. Would you like me to:
 ```
 
 If user wants a commit:
+
 ```bash
 git add notes/dotfiles/*.md
 git commit -m "docs(dotfiles): update <description>"
@@ -308,7 +319,7 @@ User: sync the docs for my changes
 
 You:
 1. Check recent commits: git log -5 --name-only
-2. See: nvim/plugin/nvim-tree.lua, fzf/.config/zsh/.zshrc.d/50-fzf.zsh
+2. See: nvim/plugin/nvim-tree.lua, fzf/.config/zsh/zshrc.d/50-fzf.zsh
 3. Map:
    - nvim change → architecture.md (startup behavior)
    - fzf change → troubleshooting.md (multi-select fix)
