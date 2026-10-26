@@ -1,4 +1,6 @@
-target_base: "{{ .Vars.workspaceDir }}"
+---
+targets:
+  workspace: "{{ .Vars.workspaceDir }}"
 
 packages:
   - syncthing
