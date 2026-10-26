@@ -24,7 +24,8 @@ With a ref as the argument, use it. Otherwise run the tracker's **in progress**
 list, most recently updated first.
 
 A ref in the current branch name (`git branch --show-current`) marks the last
-active task; otherwise it is the most recently updated one. Ask with
+active task; on aven + Jira that ref may be a Jira key, which **Find mirrored**
+turns into its task. Otherwise it is the most recently updated one. Ask with
 `AskUserQuestion`: the last active task first as "(Recommended)", then up to
 three others. With no candidates, ask for a ref.
 
@@ -41,14 +42,17 @@ Then check the repo against **State** and collect each mismatch as **drift**:
 
 - working directory and branch match the note's worktree and branch;
 - the commits under **Done** exist, and any commits since are accounted for;
-- `git status` shows the uncommitted files the note lists, and no others.
+- `git status` shows the uncommitted files the note lists, and no others;
+- on aven + Jira: a local task with a pushed branch gets **Backfill**, and a
+  mirrored task's **Drift** against Jira joins this list.
 
 Done when you can name the next concrete step, the files it touches, and every
 piece of drift.
 
 ## 4. Brief and continue
 
-If the task is not in progress yet, **start** it.
+If the task is not in progress yet, **start** it. Either way, add a **note**
+with this session's **claim line** (as `/tasks-pickup` writes it).
 
 Print the brief:
 

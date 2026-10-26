@@ -20,8 +20,11 @@ Done when you know the tracker and how to query it.
 ## 2. Pick the task
 
 With a ref as the argument, use it. Otherwise run the tracker's **open** list
-and print it as a table (ref, priority, status, title): highest priority first,
-then most recently updated. Ask with `AskUserQuestion`: the top task first as
+and print it as a table (ref, priority, status, title; on aven + Jira also the
+`jira` key and the epic): highest priority first, then most recently updated.
+Mark a task whose latest **claim line** names another session that is still
+running (agent-manager `list_sessions`) as claimed, and leave it out of the
+recommendation. Ask with `AskUserQuestion`: the top task first as
 "(Recommended)", then the next three; "Other" takes any ref from the table.
 With no candidates, say so and stop.
 
@@ -29,16 +32,21 @@ Done when you hold exactly one ref the user named or confirmed.
 
 ## 3. Read the task
 
-**Read** the task, then the code it touches. Where it leaves scope or
-acceptance criteria unclear, collect a question for the user.
+**Read** the task, then the code it touches. For a mirrored task, settle
+**Drift** first. Where it leaves scope or acceptance criteria unclear, collect
+a question for the user.
 
 Done when you can name the first concrete step, the files it touches, and every
 open question.
 
 ## 4. Brief and start
 
-**Start** the task. When the work gets its own branch, put the ref in the
-branch name: that is how `/tasks-takeover` finds the task later.
+**Start** the task, then add a **note** holding the **claim line**:
+`Claimed by <session> in <directory>`, where `<session>` is this session's
+agent-manager name (the `self` row of `list_sessions`) or `interactive`. When
+the work gets its own branch, name it per the tracker's **Branch name**, or put
+the ref in it when the tracker has none: that is how `/tasks-takeover` finds the
+task later.
 
 Print the brief:
 

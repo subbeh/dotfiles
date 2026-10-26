@@ -17,15 +17,19 @@ Take the ref this session worked on (the `/aven <ref>`, `/tasks-pickup <ref>` or
 `/tasks-takeover <ref>` it started from, a Jira key, or whichever tracker the work
 came from). If no task tracks it, ask with `AskUserQuestion` whether to create
 one, recommended first, and **create** it in the repo's tracker (**Finding the
-tracker** in `../trackers.md`).
+tracker** in `../trackers.md`). On aven + Jira, a Jira key resolves through
+**Find mirrored**, a new task gets `jira=<KEY>` when the branch carries one, and
+a local task with a pushed branch gets **Backfill**.
 
 Done when you hold exactly one ref.
 
 ## 2. Bring supporting documents up to date
 
 Every document this session created or worked from (a spec in `.specs/`, a
-plan, `TODO.md`, a README it changed): record decisions, tick finished items,
-mark what is still open. Leave changes uncommitted unless the user asked for a
+plan, `TODO.md`, a README it changed, private docs such as
+`~/.claude.work/docs/<repo>/`): record decisions, tick finished items, mark what
+is still open. A document marked frozen keeps its text; what changed since goes
+into the handoff note. Leave changes uncommitted unless the user asked for a
 commit.
 
 Done when no document describes a state older than the code.
@@ -39,7 +43,8 @@ Append it to the task as a **note**:
 - **Next**: the next concrete step first, then the rest of the remaining work.
 - **Decisions**: choices made and why, approaches ruled out.
 - **Open**: questions and blockers for the user.
-- **Docs**: repo-relative paths from step 2.
+- **Docs**: paths from step 2, repo-relative inside the repo and absolute
+  (`~/...`) outside it.
 
 Keep the task open; `done` stays with the task workflow. If the remaining work
 splits into separate tasks, propose them with `AskUserQuestion` before filing.
