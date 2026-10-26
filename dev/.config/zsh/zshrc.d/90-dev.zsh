@@ -15,9 +15,7 @@ zinit wait lucid as'null' id-as'defer-infra' nocd atload'
     alias kns="kubectl config set-context --current --namespace"
     alias kctx="kubectl config use-context"
 
-    source <(kubectl completion zsh)
     chkcmd kubectl-netshoot && {
-      source <(kubectl netshoot completion zsh)
       alias kdbgrun="kubectl netshoot run debugger"
       alias kdbg="kubectl netshoot debug"
     }

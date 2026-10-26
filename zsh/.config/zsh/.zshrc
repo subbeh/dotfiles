@@ -49,13 +49,13 @@ function compdef { __compdef_replay+=("${(j: :)${(q)@}}"); }
 
 autoload -U +X bashcompinit && bashcompinit
 
-for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
+for script in "$XDG_CONFIG_HOME"/zsh/zshrc.d/*.zsh; do
   if [ -r "$script" ]; then
     source "$script"
   fi
 done
 
-# Re-assert our own bin dir now that the .zshrc.d scripts have had their say.
+# Re-assert our own bin dir now that the zshrc.d scripts have had their say.
 # brew shellenv prepends /opt/homebrew/bin unconditionally, which would otherwise
 # leave ~/.local/bin behind it and shadow the binaries we deploy there.
 #

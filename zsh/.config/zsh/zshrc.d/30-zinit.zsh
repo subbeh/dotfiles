@@ -2,7 +2,7 @@
 
 # zinit plugin manager -- https://github.com/zdharma-continuum/zinit
 #
-# This file is sourced by the .zshrc.d loop, which runs *before* compinit in
+# This file is sourced by the zshrc.d loop, which runs *before* compinit in
 # .zshrc -- so completion plugins loaded here land on $fpath in time for it.
 
 # Bootstrap: clone zinit on first run.

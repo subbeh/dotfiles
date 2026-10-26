@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# description: Generate zsh completions from completions.d into site-functions
+
+set -euo pipefail
+
+src="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/completions.d"
+dest="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions"
+mkdir -p "$dest"
+
+for comp in "$src"/*; do
+  [ -r "$comp" ] || continue
+  # Only replace on success, so a missing tool never leaves an empty file that
+  # shadows a packaged completion.
+  tmp=$(mktemp)
+  if bash "$comp" >"$tmp" 2>/dev/null && [ -s "$tmp" ]; then
+    mv "$tmp" "$dest/${comp##*/}"
+  else
+    rm -f "$tmp"
+  fi
+done
