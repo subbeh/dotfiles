@@ -34,7 +34,6 @@ for dir in "$HOME"/.claude.*; do
   done
 
   install_skills vercel-labs/skills find-skills
-  install_skills juliusbrussee/caveman caveman-commit
   install_skills anthropics/skills mcp-builder
   install_skills mattpocock/skills \
     code-review codebase-design diagnosing-bugs domain-modeling \
