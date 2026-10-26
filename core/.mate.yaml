@@ -1,3 +1,4 @@
+---
 packages:
   - age
   - arp-scan
@@ -37,13 +38,13 @@ packages:
   - xz
   - yq
   - zstd
-  - 7zip: [brew: sevenzip, pacman]
+  - 7zip: [{brew: sevenzip}, pacman]
   - less: pacman
-  - node: [brew, pacman: npm]
+  - node: [brew, {pacman: npm}]
   - openbsd-netcat: pacman
   - sudo: pacman
   - unrar: pacman
-  - shellcheck: [brew, aur: shellcheck-bin]
+  - shellcheck: [brew, {aur: shellcheck-bin}]
   - gnu-sed: brew
   - rar: brew
   - watch: brew

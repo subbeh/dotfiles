@@ -1,3 +1,4 @@
+---
 packages:
   - zoxide
   - zsh: pacman

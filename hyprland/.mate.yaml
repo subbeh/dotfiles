@@ -1,3 +1,4 @@
+---
 ignore:
   - .luacheckrc
   - .luarc.json
@@ -33,4 +34,4 @@ packages:
   - swaync
   - thunar
   - waybar
-  - siji-ng: aur # font
+  - siji-ng: aur  # font

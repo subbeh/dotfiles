@@ -1,6 +1,7 @@
+---
 packages:
   - lazygit
   - worktrunk
   - gitleaks
   - diffnav
-  - gh: [brew, pacman: github-cli]
+  - gh: [brew, {pacman: github-cli}]

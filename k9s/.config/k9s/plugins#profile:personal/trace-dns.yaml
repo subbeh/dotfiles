@@ -17,7 +17,7 @@ plugins:
     background: false
     args:
       - -c
-      - |
+      - |-
         IG_VERSION=v0.34.0
         IG_IMAGE=ghcr.io/inspektor-gadget/ig:$IG_VERSION
         IG_FIELD=k8s.podName,src,dst,qr,qtype,name,rcode,latency_ns

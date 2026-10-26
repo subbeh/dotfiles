@@ -1,3 +1,4 @@
+---
 packages:
   - yazi
   - poppler
@@ -6,6 +7,6 @@ packages:
   - fzf
   - zoxide
   - resvg
-  - ffmpeg: [brew: ffmpeg-full, pacman]
-  - 7zip: [brew: sevenzip, pacman]
-  - imagemagick: [brew: imagemagick-full, pacman]
+  - ffmpeg: [{brew: ffmpeg-full}, pacman]
+  - 7zip: [{brew: sevenzip}, pacman]
+  - imagemagick: [{brew: imagemagick-full}, pacman]

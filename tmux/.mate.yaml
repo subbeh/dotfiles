@@ -1,5 +1,6 @@
+---
 packages:
   - tmux
   - tmuxinator: [brew, aur]
-  - tpack: [brew, aur: tpack-bin]
+  - tpack: [brew, {aur: tpack-bin}]
   - gitmux: [brew, aur]

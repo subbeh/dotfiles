@@ -1,3 +1,4 @@
+---
 packages:
   - bun
   - direnv
@@ -12,4 +13,4 @@ packages:
   - upterm
   - uv
   - kubecolor: brew
-  - pipenv: [brew, pacman: python-pipenv]
+  - pipenv: [brew, {pacman: python-pipenv}]
