@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 Dotfiles managed by [statemate](https://github.com/subbeh/statemate) (`mate`).
-Reference docs: `/Users/Shared/data/workspace/projects/statemate/docs/` — read
+Reference docs: `$XDG_PROJECTS_DIR/statemate/docs/` — read
 those (or `internal/` when the docs are thin) instead of guessing at behavior.
 Run the `mate` on `PATH`; it is what a real apply uses. The checkout's `./mate`
 is a dev build and may be ahead — say so if a feature you need only exists there.
@@ -122,10 +122,10 @@ across managers; otherwise split per manager — cf. `git/.mate.yaml`, where
 ## Adding a source
 
 1. `mkdir <name>/` and lay out files relative to `~`.
-2. Register it: `sources:` in `mate.yaml`, or a profile's `sources:` if it is
+1. Register it: `sources:` in `mate.yaml`, or a profile's `sources:` if it is
    machine-specific.
-3. Add `<name>/.mate.yaml` for its packages.
-4. `mate status` — a half-built source in `sources:` breaks apply on every machine.
+1. Add `<name>/.mate.yaml` for its packages.
+1. `mate status` — a half-built source in `sources:` breaks apply on every machine.
 
 ## Verify before calling it done
 
