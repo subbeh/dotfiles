@@ -1,3 +1,4 @@
+---
 local:
   db_path: null
   blob_dir: null
@@ -18,7 +19,7 @@ daemon:
   wake_addr: 127.0.0.1:47631
 
 workspace:
-  default: tech
+  default: default
   routes:
     - workspace: "work"
       paths: ["{{ .Vars.workspaceDir }}/jamf"]
@@ -28,7 +29,7 @@ workspace:
 project:
   overrides:
     - project: "cloud-ops-tools"
-      paths: ["{{ .Vars.workspaceDir }}/jamf/cloud-ops-tools"]
+      paths: ["{{ .Vars.workspaceDir }}/jamf/repos/cloud-ops-tools", "{{ .Vars.workspaceDir }}/jamf/repos/cloud-ops-tools-worktrees"]
     - project: "dotfiles"
       paths: ["{{ .Vars.workspaceDir }}/dotfiles"]
     - project: "statemate"
