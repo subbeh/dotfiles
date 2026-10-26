@@ -82,7 +82,8 @@ go through the `clops-atlassian-read` agent and writes through
   assignee with aven, and settle each mismatch with `AskUserQuestion`:
   - Jira Done, aven open: recommend `done`.
   - Assigned to someone else: recommend `canceled`.
-  - Jira In Progress, aven not `active`: recommend `active`.
+  - Jira In Progress, aven not `active`: recommend `active`, unless an open
+    aven dep blocks the task, in which case report it only.
   - Jira back in To Do while aven is `active`: report it only.
 - **Start**: `aven edit <ref> --status active`. When the task is mirrored and
   Jira isn't In Progress, ask first, then have `clops-atlassian-write` assign
