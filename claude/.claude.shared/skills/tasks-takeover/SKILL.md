@@ -46,6 +46,10 @@ Then check the repo against **State** and collect each mismatch as **drift**:
 - on aven + Jira: a local task with a pushed branch gets **Backfill**, and a
   mirrored task's **Drift** against Jira joins this list.
 
+Before calling anything stale, stuck or hung, run `date -u` and measure the
+age against it. CI, Jira and aven timestamps are UTC, and the session's
+"today" is the user's local date, which can be a day ahead of UTC.
+
 Done when you can name the next concrete step, the files it touches, and every
 piece of drift.
 
