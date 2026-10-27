@@ -65,15 +65,15 @@ Resume in a new session from <directory>:
   /tasks-takeover <ref>
 ```
 
-## 5. Offer to resume in the background
+## 5. Offer to resume in a new agent-manager session
 
+Only when the agent-manager tools are available; otherwise stop at step 4.
 Ask with `AskUserQuestion` whether to start the next session now, "Resume
-later" first as "(Recommended)". On yes, run from `<directory>`:
-
-```bash
-claude --bg --name "<ref> - <title>" -- "/tasks-takeover <ref>"
-```
+later" first as "(Recommended)". On yes, call agent-manager `create_session`
+with a kebab-case name of 2–4 words starting with the ref (e.g. `cot-fmb8-clops-takeover`),
+directory `<directory>`, this session's group, `worktree: false` (takeover picks
+its own worktree from the note), and prompt `/tasks-takeover <ref>`.
 
 It resumes from the note, not this conversation, so step 3 must be complete.
-`tasks-takeover` asks about **Open** items and drift; the background session waits
-for those answers in `claude agents`.
+`tasks-takeover` asks about **Open** items and drift; the new session waits for
+those answers in agent-manager, where the user attaches to it.
