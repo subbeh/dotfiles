@@ -67,7 +67,10 @@ Resume in a new session from <directory>:
 
 ## 5. Offer to resume in a new agent-manager session
 
-Only when the agent-manager tools are available; otherwise stop at step 4.
+On a task with an `Orchestrated by` note, report `handover` instead (see
+[`../orchestration.md`](../orchestration.md)) and stop: its orchestrator starts
+the next session. Otherwise run this step only when the agent-manager tools
+are available; without them, stop at step 4.
 Ask with `AskUserQuestion` whether to start the next session now, "Resume
 later" first as "(Recommended)". On yes, call agent-manager `create_session`
 with a kebab-case name of 2–4 words starting with the ref (e.g. `cot-fmb8-clops-takeover`),

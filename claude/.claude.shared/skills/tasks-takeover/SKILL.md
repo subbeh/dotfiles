@@ -50,13 +50,18 @@ Before calling anything stale, stuck or hung, run `date -u` and measure the
 age against it. CI, Jira and aven timestamps are UTC, and the session's
 "today" is the user's local date, which can be a day ahead of UTC.
 
+A task with an `Orchestrated by` note makes this session its **worker** (see
+[`../orchestration.md`](../orchestration.md)).
+
 Done when you can name the next concrete step, the files it touches, and every
 piece of drift.
 
 ## 4. Brief and continue
 
 If the task is not in progress yet, **start** it. Either way, add a **note**
-with this session's **claim line** (as `/tasks-pickup` writes it).
+with this session's **claim line** (as `/tasks-pickup` writes it). As a
+worker, report `started`, and from then on report each state
+`../orchestration.md` lists.
 
 Print the brief:
 
