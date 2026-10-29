@@ -1,0 +1,5 @@
+#!/bin/sh
+# Hand off to launchd: run directly from a shell, Firefox starts a second
+# instance tied to the terminal instead of reusing the open one.
+# shortcut: args go to `open` as URLs/files, so Firefox flags (-P, --private-window) don't work; use `open -a Firefox --args ...` when needed.
+exec open -a Firefox "$@"
