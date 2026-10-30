@@ -1,7 +1,7 @@
 {
   "plugins": {
     "blink.cmp": {
-      "rev": "10198f904da1e7f77aeb0368414f871568c0d898",
+      "rev": "d4318ec75309a37e09757de0f16faa67bf22b890",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.lib": {
@@ -41,7 +41,7 @@
       "src": "https://github.com/williamboman/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "e3f2349a65143ff062f0b70ee9d68d8ce35c7059",
+      "rev": "6d5a29e86a7352739506c28e0bc50fe214b5216f",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-bqf": {
@@ -49,7 +49,7 @@
       "src": "https://github.com/kevinhwang91/nvim-bqf"
     },
     "nvim-lint": {
-      "rev": "f6230a5c06ba59e6059c14637f1dbe29a7978b9b",
+      "rev": "52107ce2076a27a285af781248e2c59bad817cd0",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-navic": {
@@ -61,11 +61,11 @@
       "src": "https://github.com/alexghergh/nvim-tmux-navigation"
     },
     "nvim-tree.lua": {
-      "rev": "355bcc85a48f45b3e728219f10b880d569928965",
+      "rev": "45f82f7b2c68c3e2bedbf6ad1d8d687a78e6faf4",
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {
-      "rev": "ca581c3436fc2b236847f5b739ebc263739e5ca6",
+      "rev": "a2f694478be07f89c2d03cc17858a8745a400c4b",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -75,7 +75,7 @@
       "version": "'main'"
     },
     "octo.nvim": {
-      "rev": "8461d99d13cca243f89848bf4d9fadee096f0a48",
+      "rev": "3c4abf9e7a9378fd7dd5181de91cb65080674b04",
       "src": "https://github.com/pwntester/octo.nvim"
     },
     "oil.nvim": {
@@ -95,7 +95,7 @@
       "src": "https://github.com/ahmedkhalf/project.nvim"
     },
     "rainbow-delimiters.nvim": {
-      "rev": "b55decda611755171bc5bf8f4c99603a75de4b41",
+      "rev": "65734f76783705255d9ede8a6e4692e1572801a5",
       "src": "https://github.com/HiPhish/rainbow-delimiters.nvim"
     },
     "render-markdown.nvim": {
@@ -103,7 +103,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "schemastore.nvim": {
-      "rev": "7fca30f2890a6acf9d21d194876c6ac960d92070",
+      "rev": "cc6302a0957806dfc0f2687f1f35ee9652686101",
       "src": "https://github.com/b0o/schemastore.nvim"
     },
     "snacks.nvim": {
