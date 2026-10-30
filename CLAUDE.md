@@ -28,7 +28,7 @@ apply overwrites it.
 ## Commands
 
 - Run freely: `status`, `diff`, `check`, `eval`, `cat`, `managed`, `profile`,
-  `config`, `doctor`, `packages status`, `scripts list`, `secrets status|list`.
+  `config`, `doctor`, `packages list`, `scripts list`, `secrets status|list`.
 - Ask first — these mutate the live machine: `apply`, `clean`, `delete`, `forget`,
   `packages apply`, `scripts run`, `secrets fetch`.
 - `edit`, `encrypt`, `decrypt`, `rename` touch only the repo; use them freely to
@@ -115,9 +115,12 @@ Confirm the result with `mate cat`, then delete the scratch files.
 
 ## Packages
 
-Live in `<source>/.mate.yaml`. `common:` only when the package name is identical
-across managers; otherwise split per manager — cf. `git/.mate.yaml`, where
-`lazygit` is `common` but `gh` (brew) and `github-cli` (pacman) are separate.
+Live in `<source>/.mate.yaml` as a `packages:` list, one package per item. A bare
+name goes to the system manager (brew, else pacman; never the AUR). `name: manager`
+or `name: [managers]` pins managers, and a list entry renames it per manager —
+cf. `git/.mate.yaml`: `lazygit` is bare, `gh: [brew, {pacman: github-cli}]`.
+The old manager-keyed `common:`/`brew:` lists are rejected. Details:
+statemate's `docs/packages.md`.
 
 ## Adding a source
 
