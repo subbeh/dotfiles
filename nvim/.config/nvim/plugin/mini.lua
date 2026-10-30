@@ -282,6 +282,18 @@ require("mini.clue").setup({
   },
 })
 
+-- The snacks dashboard is unlisted and gets its filetype with events ignored,
+-- so mini.clue never maps triggers there. Map them before each update so the
+-- dashboard's item keys (e.g. `g`) are set afterwards and win over triggers.
+vim.api.nvim_create_autocmd("User", {
+  pattern = "SnacksDashboardUpdatePre",
+  callback = function()
+    if vim.bo.filetype == "snacks_dashboard" then
+      require("mini.clue").ensure_buf_triggers()
+    end
+  end,
+})
+
 -- indent scope
 require("mini.indentscope").setup({
   symbol = icons.ui.LineMiddle,
