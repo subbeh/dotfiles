@@ -23,6 +23,10 @@ When none matches, ask the user where the task lives.
 
 - **In progress**: `aven list --status active --json`
 - **Open**: `aven list --ready --json`, leaving out `active` tasks
+- **Other OS**: **In progress** and **Open** also leave out tasks labelled for
+  the other OS: `arch` on Darwin (`uname -s`), `macos` on Linux. `aven list`
+  has no label exclude, so filter the `labels` array of the JSON. A ref the
+  user passes is never filtered.
 - **Read**: `aven context <ref>`, then its `read=` command when it leaves out
   earlier notes
 - **Note**: `aven note <ref> --stdin`
