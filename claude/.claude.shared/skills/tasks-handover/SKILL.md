@@ -25,9 +25,9 @@ Done when you hold exactly one ref.
 
 ## 2. Bring supporting documents up to date
 
-Every document this session created or worked from (a spec in `.specs/`, a
-plan, `TODO.md`, a README it changed, private docs such as
-`~/.claude.work/docs/<repo>/`): record decisions, tick finished items, mark what
+Every document this session created or worked from (a spec, ADR or other
+agent file under `$XDG_WORKSPACE_DIR/agent_data/<repo>/`, a plan, `TODO.md`, a
+README it changed): record decisions, tick finished items, mark what
 is still open. A document marked frozen keeps its text; what changed since goes
 into the handoff note. Leave changes uncommitted unless the user asked for a
 commit.
