@@ -16,5 +16,5 @@ pgrep paru || tmux send-keys -t dropterm:updates 'clear;
 paru -Syu --noconfirm && pkill -SIGRTMIN+8 waybar;
 tmux select-window -t dropterm:1 && \
 hyprctl activewindow -j | jq -c ".class" | grep -q dropterm && \
-hyprctl dispatch togglespecialworkspace dropterm \
+hyprctl eval "hl.dispatch(Dropterm())" \
 ' Enter
