@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if command -v agent-manager &>/dev/null; then
+  while read -r status count; do
+    case "$status" in
+    working) agents+=" #[fg=#{{ .Vars.color.orange.base }}] $count" ;;
+    waiting) agents+=" #[fg=#{{ .Vars.color.magenta.bright }}]󰞌 $count" ;;
+    esac
+  done < <(agent-manager sessions --json 2>/dev/null | jq -r '
+    [.[] | select(.archived | not) | .status] as $s
+    | ("working waiting" | split(" "))[] as $k
+    | ($s | map(select(. == $k)) | length) as $n
+    | select($n > 0) | "\($k) \($n)"')
+fi
+
+echo "${agents# }"

@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 statemate=$(__statemate_status tmux)
+am=$(__am_status tmux)
 git=$(gitmux "$1")
 
 parts=()
 [[ -n "$statemate" ]] && parts+=("$statemate")
+[[ -n "$am" ]] && parts+=("$am")
 [[ -n "$git" ]] && parts+=("$git")
 
 sep=" #[fg=colour243]⏽#[fg=default] "
