@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # description: Reload dbus environment
+# tags: reload
 
 set -euo pipefail
 

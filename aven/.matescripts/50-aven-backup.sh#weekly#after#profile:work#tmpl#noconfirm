@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # description: Create Aven backup
+# tags: backup
 
 set -euo pipefail
 

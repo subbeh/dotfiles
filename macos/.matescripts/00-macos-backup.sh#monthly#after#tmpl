@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # description: Back up applications and system preferences
+# tags: backup
 
 macprefs backup
 mackup backup --force

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # description: Update Claude Code plugins and skills
+# tags: update
 
 command -v npx &>/dev/null || exit 0
 
