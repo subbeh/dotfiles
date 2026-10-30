@@ -34,6 +34,8 @@ project:
       paths: ["{{ .Vars.workspaceDir }}/dotfiles"]
     - project: "statemate"
       paths: ["{{ .Vars.workspaceDir }}/projects/statemate"]
+    - project: "steward"
+      paths: ["{{ .Vars.workspaceDir }}/projects/steward", "{{ .Vars.workspaceDir }}/projects/steward-worktrees"]
     - project: "tmux-tpad"
       paths: ["{{ .Vars.workspaceDir }}/projects/tmux-tpad"]
 
