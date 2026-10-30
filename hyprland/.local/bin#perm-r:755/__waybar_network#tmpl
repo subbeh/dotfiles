@@ -129,7 +129,7 @@ for service in eth wifi tailscale vpn inet dns; do
         if [[ "$service" == "wifi" ]]; then
           ssid=$(grep "ssid=" "$CACHE_DIR/$service" | cut -d= -f2-)
           ((${#ssid} > 16)) && ssid="${ssid:0:15}…"
-          [[ -n "$ssid" ]] && output+="<span color='$COLOR_SSID'>$(escape "$ssid")</span> "
+          [[ -n "$ssid" ]] && output+="<span color='$COLOR_SSID'>[$(escape "$ssid")]</span> "
         fi
       fi
     fi
