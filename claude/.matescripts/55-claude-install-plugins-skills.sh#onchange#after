@@ -9,7 +9,7 @@ command -v npx &>/dev/null || exit 0
 
 # Only installs what is missing, so a run with nothing new stays offline;
 # 60-claude-update-plugins-skills updates what is already installed
-plugins=(skill-creator plugin-dev mcp-server-dev claude-md-management github)
+plugins=(skill-creator plugin-dev mcp-server-dev claude-md-management)
 
 install_skills() {
   local repo=$1 skill missing=()
