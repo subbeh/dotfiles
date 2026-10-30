@@ -9,6 +9,24 @@ model: sonnet
 
 This skill replaces the manual commit workflow documented in CLAUDE.md. It analyzes changed files, groups them by logical relationship, and creates properly formatted Conventional Commits following the project's conventions.
 
+## First: delegate to the commit session
+
+A long-lived agent-manager session named `commit` may own commits for this checkout. Look for it
+before anything else:
+
+```bash
+command -v agent-manager >/dev/null &&
+  agent-manager sessions --json | jq -r --arg dir "$(git rev-parse --show-toplevel)" '
+    (map(select(.self))[0].group) as $g
+    | .[] | select(.name == "commit" and .running and (.archived | not) and (.self | not)
+        and .group == $g and .directory == $dir) | .id'
+```
+
+An id means a running `commit` session shares this session's group and checkout: run
+`agent-manager send <id> "/dotfiles-commit"`, tell the user to review the commits in that session, and
+stop. Don't wait, and commit nothing here. No output (inside the commit session, in a worktree, no
+such session, no agent-manager) means run the workflow below in place.
+
 ## When to use
 
 - User says "commit", "create commit", "commit changes", "/commit"
