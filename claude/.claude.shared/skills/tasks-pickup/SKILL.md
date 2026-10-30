@@ -21,7 +21,8 @@ Done when you know the tracker and how to query it.
 
 With a ref as the argument, use it. Otherwise run the tracker's **open** list
 and print it as a table (ref, priority, status, title; on aven + Jira also the
-`jira` key and the epic): highest priority first, then most recently updated.
+`jira` key and the epic): `todo` before `backlog`, then highest priority, then
+most recently updated.
 Mark a task whose latest **claim line** names another session that is still
 running (agent-manager `list_sessions`) as claimed, and leave it out of the
 recommendation. Ask with `AskUserQuestion`: the top task first as
