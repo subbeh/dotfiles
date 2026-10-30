@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Open the URL under the mouse, including plain-text URLs tmux wrapped across
+# rows of a split pane (the terminal only sees separate rows there).
+# Usage: tmux-open-url <pane> <mouse_x> <mouse_y> [mouse_hyperlink]
+
+pane=$1 x=$2 y=$3 url=$4
+
+if [ -z "$url" ]; then
+  read -r width height history scroll < <(tmux display -p -t "$pane" '#{pane_width} #{pane_height} #{history_size} #{scroll_position}')
+  row=$((y - ${scroll:-0}))
+
+  # Rows r and r+1 come back as one line from capture-pane -J only when r wraps into r+1.
+  wraps() { [ "$(tmux capture-pane -pJ -t "$pane" -S "$1" -E "$(($1 + 1))" | wc -l)" -eq 1 ]; }
+  top=$row
+  while [ "$top" -gt "-$history" ] && wraps "$((top - 1))"; do top=$((top - 1)); done
+  bottom=$row
+  while [ "$bottom" -lt "$((height - 1))" ] && wraps "$bottom"; do bottom=$((bottom + 1)); done
+
+  # shortcut: assumes one cell per character, so wide chars before the URL shift the click offset.
+  line=$(tmux capture-pane -pJ -t "$pane" -S "$top" -E "$bottom")
+  offset=$(((row - top) * width + x))
+
+  re='https?://[^][:space:]<>"'\''`]+'
+  rest=$line pos=0
+  while [[ $rest =~ $re ]]; do
+    match=${BASH_REMATCH[0]}
+    prefix=${rest%%"$match"*}
+    start=$((pos + ${#prefix}))
+    end=$((start + ${#match}))
+    if [ "$offset" -ge "$start" ] && [ "$offset" -lt "$end" ]; then
+      url=$match
+      break
+    fi
+    pos=$end
+    rest=${rest:$((${#prefix} + ${#match}))}
+  done
+  [ -n "$url" ] || exit 0
+
+  url=${url%%[.,;:!?\'\"]}
+  case $url in *"("*) ;; *) url=${url%%)} ;; esac
+fi
+
+if command -v xdg-open >/dev/null; then
+  xdg-open "$url" >/dev/null 2>&1
+else
+  open "$url"
+fi
