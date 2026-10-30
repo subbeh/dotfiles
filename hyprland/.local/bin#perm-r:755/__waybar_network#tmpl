@@ -5,6 +5,7 @@ CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/waybar-network"
 mkdir -p "$CACHE_DIR"
 
 COLOR_FG="#{{ .Vars.color.fg.default }}"
+COLOR_SSID="#{{ .Vars.color.fg.darker }}"
 COLOR_CONNECTED="#{{ .Vars.color.green.bright }}"
 COLOR_DISCONNECTED="#{{ .Vars.color.fg.darkest }}"
 COLOR_MISC="#{{ .Vars.color.orange.base }}"
@@ -18,58 +19,58 @@ is_enabled() {
   local extra_info=""
 
   case "$1" in
-    "eth")
-      if ip -j link show | jq -e '.[] | select(.link_type == "ether" and (.operstate == "UP") and (.ifname | startswith("w") | not))' >/dev/null; then
-        status=true
-        ip_addrs=$(ip -j addr show | jq -r '.[] | 
+  "eth")
+    if ip -j link show | jq -e '.[] | select(.link_type == "ether" and (.operstate == "UP") and (.ifname | startswith("w") | not))' >/dev/null; then
+      status=true
+      ip_addrs=$(ip -j addr show | jq -r '.[] | 
           select(.operstate == "UP" and .link_type == "ether" and 
           (.ifname | startswith("w") | not)) | 
           .addr_info[] | select(.family == "inet" and .scope == "global").local')
-      fi
-      ;;
-    "wifi")
-      if ip -j link show | jq -e '.[] | select(.ifname | startswith("wl")) | select(.operstate == "UP")' >/dev/null; then
-        status=true
-        ip_addrs=$(ip -j addr show | jq -r '.[] | 
+    fi
+    ;;
+  "wifi")
+    if ip -j link show | jq -e '.[] | select(.ifname | startswith("wl")) | select(.operstate == "UP")' >/dev/null; then
+      status=true
+      ip_addrs=$(ip -j addr show | jq -r '.[] | 
           select(.ifname | startswith("wl")) | 
           select(.operstate == "UP") | 
           .addr_info[] | select(.family == "inet" and .scope == "global").local')
-        local ssid
-        local signal
-        ssid=$(nmcli -t -f active,ssid dev wifi | awk -F: '/^yes:/ {print $2}')
-        signal=$(nmcli -f IN-USE,SIGNAL dev wifi | awk '/^\*/ {print $2}')
-        [[ -n "$ssid" ]] && extra_info+="ssid=$ssid\n"
-        [[ -n "$signal" ]] && extra_info+="signal=$signal"
-      fi
-      ;;
-    "tailscale")
-      if ip -j link show | jq -e '.[] | select(.ifname == "tailscale0") | select(.flags | contains(["UP"]))' >/dev/null; then
-        status=true
-        ip_addrs=$(ip -j addr show | jq -r '.[] | 
+      local ssid
+      local signal
+      ssid=$(nmcli -t -f active,ssid dev wifi | awk -F: '/^yes:/ {print $2}')
+      signal=$(nmcli -f IN-USE,SIGNAL dev wifi | awk '/^\*/ {print $2}')
+      [[ -n "$ssid" ]] && extra_info+="ssid=$ssid\n"
+      [[ -n "$signal" ]] && extra_info+="signal=$signal"
+    fi
+    ;;
+  "tailscale")
+    if ip -j link show | jq -e '.[] | select(.ifname == "tailscale0") | select(.flags | contains(["UP"]))' >/dev/null; then
+      status=true
+      ip_addrs=$(ip -j addr show | jq -r '.[] | 
           select(.ifname == "tailscale0") | 
           .addr_info[] | select(.family == "inet" and .scope == "global").local')
-      fi
-      ;;
-    "vpn")
-      if ip -j link show | jq -e '.[] | select(.ifname == "proton0") | select(.flags | contains(["UP"]))' >/dev/null; then
-        status=true
-      fi
-      ;;
-    "inet")
-      if ping -c 1 1.1.1.1 &>/dev/null; then
-        status=true
-        ifconfig="$(curl -s -4 ipconfig.io/json)"
-        ip_addrs="$(echo "$ifconfig" | jq -r '.ip')"
-        country_iso=$(echo "$ifconfig" | jq -r '.country_iso')
-        country="$(echo "$ifconfig" | jq -r '.country')"
-      fi
-      ;;
-    "dns")
-      if nslookup google.com &>/dev/null; then
-        status=true
-        ip_addrs=$(grep -m 1 "nameserver" /etc/resolv.conf | awk '{print $2}')
-      fi
-      ;;
+    fi
+    ;;
+  "vpn")
+    if ip -j link show | jq -e '.[] | select(.ifname == "proton0") | select(.flags | contains(["UP"]))' >/dev/null; then
+      status=true
+    fi
+    ;;
+  "inet")
+    if ping -c 1 1.1.1.1 &>/dev/null; then
+      status=true
+      ifconfig="$(curl -s -4 ipconfig.io/json)"
+      ip_addrs="$(echo "$ifconfig" | jq -r '.ip')"
+      country_iso=$(echo "$ifconfig" | jq -r '.country_iso')
+      country="$(echo "$ifconfig" | jq -r '.country')"
+    fi
+    ;;
+  "dns")
+    if nslookup google.com &>/dev/null; then
+      status=true
+      ip_addrs=$(grep -m 1 "nameserver" /etc/resolv.conf | awk '{print $2}')
+    fi
+    ;;
   esac
 
   # Cache the results
@@ -82,6 +83,11 @@ is_enabled() {
   } >"$CACHE_DIR/$1"
 
   $status
+}
+
+# SSIDs are user-controlled: escape for Pango markup, then for the JSON string
+escape() {
+  sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g; s/\\/\\\\/g' <<<"$1"
 }
 
 # Initialize variables
@@ -120,6 +126,11 @@ for service in eth wifi tailscale vpn inet dns; do
         if [[ -n "$ip_addr" ]]; then
           output+="<span color='$COLOR_FG'>${ip_addr}</span> "
         fi
+        if [[ "$service" == "wifi" ]]; then
+          ssid=$(grep "ssid=" "$CACHE_DIR/$service" | cut -d= -f2-)
+          ((${#ssid} > 16)) && ssid="${ssid:0:15}…"
+          [[ -n "$ssid" ]] && output+="<span color='$COLOR_SSID'>$(escape "$ssid")</span> "
+        fi
       fi
     fi
 
@@ -146,7 +157,7 @@ for service in eth wifi tailscale vpn inet dns; do
       if [[ "$service" == "wifi" ]]; then
         ssid=$(grep "ssid=" "$CACHE_DIR/$service" | cut -d= -f2)
         signal=$(grep "signal=" "$CACHE_DIR/$service" | cut -d= -f2)
-        [[ -n "$ssid" ]] && tooltip+="  SSID: $ssid\n"
+        [[ -n "$ssid" ]] && tooltip+="  SSID: $(escape "$ssid")\n"
         [[ -n "$signal" ]] && tooltip+="  Signal: $signal%\n"
       fi
 
