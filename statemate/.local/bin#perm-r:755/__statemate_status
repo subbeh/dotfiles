@@ -6,7 +6,7 @@ rc=$?
 case "$1" in
 tmux)
   [[ $rc -ne 0 ]] && echo "" && exit 0
-  [[ -z "$status" ]] && echo "#[fg=colour2]#[fg=default]" && exit 0
+  [[ -z "$status" ]] && exit 0
 
   # Parse the short status output
   parts=()
