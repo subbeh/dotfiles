@@ -69,10 +69,31 @@ pct=$(awk -v t="$total" -v w="$eff_win" \
 # fighting with an interactive git command in the same repo. The empty guard
 # matters because `git -C ""` silently falls back to the process cwd, which would
 # report an unrelated repo's branch.
-branch=""
+branch="" oid="" ahead=0 behind=0 staged=0 modified=0 untracked=0 conflicts=0
 if [[ -n $cwd ]]; then
-  branch=$(git --no-optional-locks -C "$cwd" branch --show-current 2>/dev/null)
+  while IFS= read -r line; do
+    case $line in
+      '# branch.oid '*) oid=${line#'# branch.oid '} ;;
+      '# branch.head '*) branch=${line#'# branch.head '} ;;
+      '# branch.ab '*) read -r _ _ ahead behind <<<"$line"; ahead=${ahead#+}; behind=${behind#-} ;;
+      [12]' '*)
+        [[ ${line:2:1} != . ]] && ((++staged))
+        [[ ${line:3:1} != . ]] && ((++modified)) ;;
+      'u '*) ((++conflicts)) ;;
+      '? '*) ((++untracked)) ;;
+    esac
+  done < <(git --no-optional-locks -C "$cwd" status --porcelain=v2 --branch 2>/dev/null)
 fi
+[[ $branch == "(detached)" ]] && branch=${oid:0:7}
+
+# Symbols match gitmux's defaults in the tmux bar.
+git_status=""
+((ahead)) && git_status+=" ↑$ahead"
+((behind)) && git_status+=" ↓$behind"
+((staged)) && git_status+=" ●$staged"
+((modified)) && git_status+=" ✚$modified"
+((untracked)) && git_status+=" …$untracked"
+((conflicts)) && git_status+=" ✖$conflicts"
 
 # Profile from the active config dir (~/.claude.<profile>).
 profile=$(basename "${CLAUDE_CONFIG_DIR:-}")
@@ -101,6 +122,6 @@ if [[ -n $usage ]]; then
 elif [[ -n $cost ]]; then
   out+=" ${green}\$$(printf '%.2f' "$cost")${reset}"
 fi
-[[ -n $branch ]] && out+="  ${cyan}${reset} ${dim}${branch}${reset}"
+[[ -n $branch ]] && out+="  ${cyan}${reset} ${dim}${branch}${git_status}${reset}"
 
 printf '%s\n' "$out"
