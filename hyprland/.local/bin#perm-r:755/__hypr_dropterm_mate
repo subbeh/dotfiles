@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Runs mate apply in dropterm's mate window. On success it selects dropterm:1 and hides dropterm again.
+
+shown() {
+  hyprctl clients -j | jq -e 'any(.[]; .class == "dropterm" and .workspace.name != "special:dropterm")' >/dev/null
+}
+
+# Dropterm() toggles, so only call it when it flips to the state we want
+if [[ $1 == hide ]]; then
+  shown && hyprctl eval 'hl.dispatch(Dropterm())'
+  exit 0
+fi
+
+# open dropterm
+shown || hyprctl eval 'hl.dispatch(Dropterm())'
+until tmux has-session -t =dropterm 2>/dev/null; do sleep 0.1; done
+tmux set-option -t dropterm monitor-activity off
+
+# create and select window
+tmux list-windows -t dropterm -F '#W' | grep -qx mate || tmux new-window -t dropterm -n mate
+tmux select-window -t dropterm:mate
+
+# an apply is already running
+[[ $(tmux display-message -p -t dropterm:mate '#{pane_current_command}') == mate ]] && exit 0
+
+tmux send-keys -t dropterm:mate 'clear; mate apply && tmux select-window -t dropterm:1 && __hypr_dropterm_mate hide' Enter

@@ -3,4 +3,8 @@
 
 # Map statemate apply
 
+{{ if eq .Profile "personal" -}}
+bind -N "Statemate apply" -r . run-shell -b __hypr_dropterm_mate
+{{- else -}}
 bind -N "Statemate apply" -r . display-popup -E -w 40% -h 40% "mate apply"
+{{- end }}
