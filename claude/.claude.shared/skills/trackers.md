@@ -21,6 +21,9 @@ When none matches, ask the user where the task lives.
 
 ## aven
 
+Run `aven prime` once before the first aven operation: it carries aven's rules
+(task refs stay out of commits and PRs) and the open work.
+
 - **In progress**: `aven list --status active`
 - **Open**: `aven list --ready`, leaving out `active` tasks
 - **Other OS**: **In progress** and **Open** also leave out tasks labelled for
