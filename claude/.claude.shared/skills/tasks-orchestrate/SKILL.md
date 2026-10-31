@@ -45,6 +45,9 @@ Print one table: ref, priority, title, aven status, worker session and its
 state, last report, and `owned by <name>` where that applies. Mention it when
 more than 3 workers are `working` at once.
 
+When the **Inbox** count is above 0, first ask with `AskUserQuestion` whether to
+triage it now. On yes, triage the inbox (step 4), then go back to step 2.
+
 Ask with `AskUserQuestion`. Options come from the table, recommended in this
 order:
 
@@ -54,8 +57,8 @@ order:
 4. A `waiting` report: name the session to attach to, where its question is.
 5. Start the next task.
 
-Check a session (`agent-manager read`), triage the inbox, and take over a task
-owned elsewhere go last.
+Check a session (`agent-manager read`) and take over a task owned elsewhere go
+last.
 
 Act on the answer (step 4), then go back to step 2.
 
