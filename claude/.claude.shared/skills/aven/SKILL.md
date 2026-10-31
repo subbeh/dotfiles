@@ -35,4 +35,4 @@ question when the tool isn't available):
 
 ---
 
-!`aven skill 2>&1 || echo "aven skill failed: run it yourself and follow its output."`
+!`aven prime 2>&1 || echo "aven prime failed: run it yourself and follow its output."`
