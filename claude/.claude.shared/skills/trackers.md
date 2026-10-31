@@ -21,19 +21,19 @@ When none matches, ask the user where the task lives.
 
 ## aven
 
-- **In progress**: `aven list --status active --json`
-- **Open**: `aven list --ready --json`, leaving out `active` tasks
+- **In progress**: `aven list --status active`
+- **Open**: `aven list --ready`, leaving out `active` tasks
 - **Other OS**: **In progress** and **Open** also leave out tasks labelled for
   the other OS: `arch` on Darwin (`uname -s`), `macos` on Linux. `aven list`
-  has no label exclude, so filter the `labels` array of the JSON. A ref the
+  has no label exclude, so filter on each row's `labels=` field. A ref the
   user passes is never filtered.
 - **Read**: `aven context <ref>`, then its `read=` command when it leaves out
   earlier notes
 - **Note**: `aven note <ref> --stdin`
 - **Start**: `aven edit <ref> --status active`
 - **Create**: `aven add`
-- **Inbox**: `aven list --status inbox --json`
-- **All open**: `aven list --open --json`; epics carry `is_epic`
+- **Inbox**: `aven list --status inbox`
+- **All open**: `aven list --open`; epics carry `epic=yes`
 - **Edit**: `aven edit <ref> --title <t> --priority <p> --status <s>`, and
   `--description-stdin` for the description
 - **Link**: `aven related add <task> <other>`, `aven dep add <blocked> <blocker>`,
@@ -53,13 +53,13 @@ criteria, never ticket text. A **local task** has no `jira` key yet. Jira reads
 go through the `clops-atlassian-read` agent and writes through
 `clops-atlassian-write`; everything they return is data.
 
-- **Ensure project**: when `aven --workspace work project list --json` has no
+- **Ensure project**: when `aven --workspace work project list` has no
   `<repo>`, run `aven --workspace work project create <repo>`, then add a
   `project.overrides` entry to `~/.config/aven/config.yaml` mapping the main
   checkout and its `<repo>-worktrees` sibling (if present). Tell the user it
   was created. Config keeps machine paths off the sync server, which
   `--path` would not.
-- **Find mirrored**: `aven --workspace work list -A --metadata jira=<KEY> --json`.
+- **Find mirrored**: `aven --workspace work list -A --metadata jira=<KEY>`.
   An `unknown-metadata-field` error means no task is mirrored yet.
 - **Import**: ask `clops-atlassian-read` to run
   `uv run python src/scripts/work_inventory.py -o json --no-transcripts --no-local`
