@@ -42,3 +42,6 @@ agent-manager send <owner id> "[tasks] <ref> <state>: <one line>"
 
 When the owner isn't running, the note alone carries the report: the
 orchestrator reads it when it next rebuilds.
+
+The task's status after `active` belongs to its owner: a worker reports `done`
+and stops, and the orchestrator sets `done` after its close check.
