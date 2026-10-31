@@ -27,7 +27,7 @@ task, then a **ping** to the owner.
 | `waiting` | before asking the user anything mid-task |
 | `blocked` | when the task can't move without someone else |
 | `handover` | after the handoff note, in place of tasks-handover step 5 |
-| `done` | once the work has landed: merged for a PR (stay on the PR until then), else pushed |
+| `done` | once the work has landed: per the repo's `CLAUDE.md` when it says how (e.g. on `main`), else merged for a PR (stay on the PR until then), else pushed |
 
 ```text
 Report: <state> - <one line>
