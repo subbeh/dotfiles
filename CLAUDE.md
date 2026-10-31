@@ -132,6 +132,8 @@ statemate's `docs/packages.md`.
 
 ## Verify before calling it done
 
+In a worktree, run each `mate` check with `STATEMATE_DIR=$PWD` (see Worktrees).
+
 - `mate status` / `mate diff` shows only the intended paths.
 - `mate eval` on every touched `#tmpl`.
 - `stylua --check` and `luacheck` on touched Lua (`nvim/`, `hyprland/`); `selene`
@@ -140,8 +142,32 @@ statemate's `docs/packages.md`.
 
 ## Git
 
-Work on `main` — do **not** create a branch. Commit only when asked, and never
-push unless told to.
+Everything lands on `main`; no PRs, no long-lived branches. Commit only when
+asked, and never push unless told to.
+
+### Worktrees
+
+Agent workers run in agent-manager worktrees (`dotfiles-worktrees/<name>`, branch
+`am/<name>`); every other session works in the main checkout on `main`. The main
+checkout is `dirname "$(git rev-parse --path-format=absolute --git-common-dir)"`.
+
+- Bare `mate` reads the main checkout's source, not the worktree. Run read-only
+  commands as `STATEMATE_DIR=$PWD mate status|diff|eval|check|cat` so they check
+  this worktree's files.
+- Deploying waits until the work has landed: `apply`, `clean`, `delete`,
+  `forget`, `scripts run` and `packages apply` run from the main checkout.
+  `mate rename` also renames the deployed target, so in a worktree change
+  attributes with `git mv` and note in the report that the next apply removes
+  the old target and deploys the new one.
+
+**Land** a worktree once its commits are made and `git status` is clean:
+
+1. `git rebase main` in the worktree. On a conflict, stop and ask.
+1. `git -C <main checkout> merge --ff-only am/<name>`. When `main` moved again,
+   rebase again. When the main checkout's uncommitted changes touch the same
+   files, stop and ask; leave them as they are.
+1. Report the landed commits and what the user still runs: `mate apply`, any
+   `mate clean` for removed or renamed sources, and the push.
 
 **Use the `/dotfiles-commit` skill** — it handles Conventional Commits format,
 intelligent file grouping, and commit splitting rules. The skill analyzes actual

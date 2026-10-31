@@ -27,6 +27,20 @@ An id means a running `commit` session shares this session's group and checkout:
 stop. Don't wait, and commit nothing here. No output (inside the commit session, in a worktree, no
 such session, no agent-manager) means run the workflow below in place.
 
+Read [`instructions.md`](instructions.md) before Phase 1: it holds every phase, check and prompt of the
+workflow.
+
+## In a worktree: commit, then land
+
+A worktree has `git rev-parse --git-dir` different from `git rev-parse --git-common-dir`. There:
+
+- Commit on the worktree's `am/` branch, and run every `mate` verifier as `STATEMATE_DIR=$PWD mate ...`.
+- After the last group, when `git status --porcelain` is empty, ask with `AskUserQuestion`: **Land on main**
+  (Recommended) or **Keep on the branch**. Landing follows **Land** under Worktrees in the repo's
+  `CLAUDE.md`.
+- The workflow ends once `main` holds the commits (`git merge-base --is-ancestor HEAD main`) or the user
+  chose to keep them. An orchestrated worker then reports `done`.
+
 ## When to use
 
 - User says "commit", "create commit", "commit changes", "/commit"

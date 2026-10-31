@@ -355,7 +355,7 @@ Done.
 ## Notes
 
 - You are analyzing changed files in the dotfiles repository only
-- Work on the current branch (never switch branches)
+- Work on the current branch (never switch branches); in a worktree, land on `main` afterwards as SKILL.md describes
 - Never use `git commit -a` or `git add -A` or `git add .`
 - Show your reasoning clearly so users can understand your grouping decisions
 - Be ready to adapt based on user feedback in Edit Grouping
