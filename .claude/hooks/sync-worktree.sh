@@ -4,9 +4,10 @@
 set -euo pipefail
 
 [ "$(git rev-parse --git-dir)" = "$(git rev-parse --git-common-dir)" ] && exit 0
+branch=$(git branch --show-current)
+case "$branch" in am/*) ;; *) exit 0 ;; esac
 git merge-base --is-ancestor main HEAD && exit 0
 
-branch=$(git branch --show-current)
 behind=$(git rev-list --count HEAD..main)
 
 if [ -n "$(git status --porcelain)" ]; then
