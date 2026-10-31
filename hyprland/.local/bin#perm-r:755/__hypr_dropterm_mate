@@ -6,14 +6,20 @@ shown() {
   hyprctl clients -j | jq -e 'any(.[]; .class == "dropterm" and .workspace.name != "special:dropterm")' >/dev/null
 }
 
+# hyprctl prints "ok" (which tmux run-shell shows in view mode) and errors on stdout, so only show failures
+toggle() {
+  local out
+  out=$(hyprctl eval 'hl.dispatch(Dropterm())') || { echo "$out" >&2; return 1; }
+}
+
 # Dropterm() toggles, so only call it when it flips to the state we want
 if [[ $1 == hide ]]; then
-  shown && hyprctl eval 'hl.dispatch(Dropterm())'
+  shown && toggle
   exit 0
 fi
 
 # open dropterm
-shown || hyprctl eval 'hl.dispatch(Dropterm())'
+shown || toggle
 until tmux has-session -t =dropterm 2>/dev/null; do sleep 0.1; done
 tmux set-option -t dropterm monitor-activity off
 
