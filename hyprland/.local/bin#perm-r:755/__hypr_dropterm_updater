@@ -11,10 +11,17 @@ tmux list-windows -t dropterm | grep -q updates || tmux new-window -t dropterm -
 # select window
 tmux select-window -t dropterm:updates
 
+# a lock with no pacman/paru running is stale: clear it instead of updating
+if [[ -e /var/lib/pacman/db.lck ]] && ! pgrep -x 'pacman|paru' &>/dev/null; then
+  cmd='sudo rm -f /var/lib/pacman/db.lck && pkill -SIGRTMIN+8 waybar'
+else
+  cmd='paru -Syu --noconfirm && pkill -SIGRTMIN+8 waybar'
+fi
+
 # send keys
-pgrep paru || tmux send-keys -t dropterm:updates 'clear;
-paru -Syu --noconfirm && pkill -SIGRTMIN+8 waybar;
-tmux select-window -t dropterm:1 && \
+pgrep paru || tmux send-keys -t dropterm:updates "clear;
+$cmd;
+"'tmux select-window -t dropterm:1 && \
 hyprctl activewindow -j | jq -c ".class" | grep -q dropterm && \
 hyprctl eval "hl.dispatch(Dropterm())" \
 ' Enter

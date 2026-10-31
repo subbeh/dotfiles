@@ -1,3 +1,0 @@
-#!/bin/sh
-
-paru -Sy &>/dev/null && paru -Qu | sed -r -e "s/\x1B\[[0-9;]*[mK]//g" -e "s/->//" | column -t

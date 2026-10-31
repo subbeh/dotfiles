@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-if command -v checkupdates &>/dev/null; then
-  updates=$(checkupdates)
+if [[ -e /var/lib/pacman/db.lck ]] && ! pgrep -x 'pacman|paru' &>/dev/null; then
+  echo "{\"text\": \"<span color='#{{ .Vars.color.red.base }}'>󰮯</span> !\", \"tooltip\": \"stale pacman lock: /var/lib/pacman/db.lck, click to remove it\"}"
+elif command -v checkupdates &>/dev/null; then
+  # pacman-contrib's checkupdates syncs a temp db, so it never takes the real lock
+  updates=$({ checkupdates; paru -Qua; } 2>/dev/null | sed -r -e "s/\x1B\[[0-9;]*[mK]//g" -e "s/->//" | column -t)
 
   if [[ -z "$(echo "$updates" | tr -d '[:space:]')" ]]; then
     updates_fmt=""
