@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# description: Initialise the restic repository and enable backup timers
+# description: Initialise the restic repository and enable the backup timer
 
 set -euo pipefail
 
@@ -28,7 +28,7 @@ if ! sudo -E restic cat config >/dev/null 2>&1; then
   sudo -E restic init
 fi
 
-sudo systemctl enable --now restic-backup.timer restic-check.timer
+sudo systemctl enable --now restic-backup.timer
 
 echo ""
 echo "=========================================="

@@ -13,7 +13,6 @@ STALE_HOURS=48
 BACKUP_SVC=restic-backup.service
 BACKUP_TMR=restic-backup.timer
 CHECK_SVC=restic-check.service
-CHECK_TMR=restic-check.timer
 
 prop() { systemctl show "$1" --property="$2" --value 2>/dev/null; }
 
@@ -120,7 +119,6 @@ repo=$(sed -n 's/^RESTIC_REPOSITORY=//p' /etc/restic/env 2>/dev/null)
   printf '\n<b>units</b>\n'
   printf '%s\n' "$(unit_line "$BACKUP_TMR")"
   printf '%s\n' "$(unit_line "$BACKUP_SVC")"
-  printf '%s\n' "$(unit_line "$CHECK_TMR")"
   printf '%s' "$(unit_line "$CHECK_SVC")"
   if ((c_ended > 0)); then printf ' · %s' "$(stamp "$c_ended")"; fi
 } | {

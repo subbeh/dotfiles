@@ -4,6 +4,10 @@ Documentation=https://restic.readthedocs.io/en/stable/040_backup.html
 Wants=network-online.target
 After=network-online.target
 OnFailure=restic-failure@%n.service
+# Check the repository after each successful backup, never alongside one: a
+# backup started while the check holds its exclusive lock waits for it to finish.
+OnSuccess=restic-check.service
+After=restic-check.service
 ; ConditionACPower=true
 
 [Service]
