@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 # description: Enable and start Pipewire services
 
-set -euo pipefail
-
 systemctl --user enable --now pipewire.service pipewire-pulse.service wireplumber.service
