@@ -33,7 +33,13 @@ end
 -- Focuses the first window of `class` (switching workspace), or runs `cmd` when none is open.
 Func.focus_or_launch = function(class, cmd)
   local win = "class:^" .. class .. "$"
-  if hl.get_window(win) then
+  local w = hl.get_window(win)
+  -- an open special workspace stays drawn over the target, so hide it unless the target is on it
+  local special = hl.get_active_special_workspace()
+  if special and not (w and w.workspace and w.workspace.name == special.name) then
+    hl.dispatch(hl.dsp.workspace.toggle_special((special.name:gsub("^special:", ""))))
+  end
+  if w then
     hl.dispatch(hl.dsp.focus({ window = win }))
   else
     hl.exec_cmd(cmd)
