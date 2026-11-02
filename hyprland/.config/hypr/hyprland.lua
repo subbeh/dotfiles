@@ -40,6 +40,20 @@ PROFILES = {
     },
   },
   {
+    name = "docked_lid_closed",
+    monitors = {
+      lg_27 = {
+        pos = 1,
+        ws = { 1 },
+      },
+      lg_32 = {
+        pos = 2,
+        ws = { 2, 3 },
+        waybar = true,
+      },
+    },
+  },
+  {
     name = "undocked",
     monitors = {
       internal_x1 = {

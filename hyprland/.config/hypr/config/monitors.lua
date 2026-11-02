@@ -88,10 +88,30 @@ local function apply_profile(profile, live)
   end
 end
 
+local function lid_closed()
+  local f = io.open("/proc/acpi/button/lid/LID/state")
+  if not f then
+    return false
+  end
+  local closed = f:read("*a"):find("closed") ~= nil
+  f:close()
+  return closed
+end
+
 local function reload_layout()
-  local live = hl.get_monitors()
-  if #live > 0 then
-    local profile = get_profile(live)
+  -- all = true: a panel disabled on lid close must still be listed to re-enable it
+  local live = hl.get_monitors({ all = true })
+  local candidates = live
+  if lid_closed() then
+    candidates = {}
+    for _, mon in ipairs(live) do
+      if not mon.name:match("^eDP") then
+        table.insert(candidates, mon)
+      end
+    end
+  end
+  if #candidates > 0 then
+    local profile = get_profile(candidates)
     if profile then
       apply_profile(profile, live)
     end
@@ -102,6 +122,7 @@ M.init = function()
   hl.timer(function()
     reload_layout()
     hl.on("monitor.added", reload_layout)
+    hl.bind("switch:Lid Switch", reload_layout, { locked = true })
   end, { timeout = 500, type = "oneshot" })
 end
 
