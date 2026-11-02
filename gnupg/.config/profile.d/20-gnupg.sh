@@ -23,6 +23,7 @@ if test -t 0; then
 fi
 
 alias gpgtest="echo test | gpg --clearsign"
-alias gpgkill="gpgconf --kill gpg-agent"
-alias gpgrestart="gpgconf --kill gpg-agent && gpg-connect-agent /bye"
+# scdaemon can wedge on a YubiKey hotplug and gpgconf can't stop it then; relearn points key stubs at the inserted card
+alias gpgkill="pkill -9 -x scdaemon; gpgconf --kill gpg-agent"
+alias gpgrestart="pkill -9 -x scdaemon; gpgconf --kill gpg-agent && gpg-connect-agent 'scd serialno' 'learn --force' /bye"
 alias gpgreload="gpg-connect-agent reloadagent /bye"

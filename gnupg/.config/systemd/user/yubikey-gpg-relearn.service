@@ -3,4 +3,5 @@ Description=Re-learn GPG smartcard stubs for inserted YubiKey
 
 [Service]
 Type=oneshot
+TimeoutStartSec=15
 ExecStart=/usr/bin/gpg-connect-agent "scd serialno" "learn --force" /bye
