@@ -6,10 +6,23 @@ hl.bind("CTRL + ALT + DELETE",            hl.dsp.exec_cmd("hyprshutdown"))
 -- APPS
 hl.bind("SUPER + RETURN",                 hl.dsp.exec_cmd(TERM))
 hl.bind("SUPER + SPACE",                  hl.dsp.exec_cmd("pkill rofi || __rofi_launcher drun launcher"))
+-- Lives here, not in lib/, so a hot reload of this file alone can't call a stale helper.
+-- Resets the submap first: an error later in the callback would otherwise leave it stuck.
+local function focus_or_launch(class, cmd)
+  return function()
+    hl.dispatch(hl.dsp.submap("reset"))
+    local win = "class:^" .. class .. "$"
+    if hl.get_window(win) then
+      hl.dispatch(hl.dsp.focus({ window = win }))
+    else
+      hl.exec_cmd(cmd)
+    end
+  end
+end
 hl.bind("SUPER + A",                      hl.dsp.submap("apps"))
 hl.define_submap("apps", "reset", function()
-  hl.bind("F",                            function() Func.focus_or_launch("firefox", "firefox") end)
-  hl.bind("H",                            function() Func.focus_or_launch("com.nousresearch.hermes", "hermes-desktop") end)
+  hl.bind("F",                            focus_or_launch("firefox", "firefox"))
+  hl.bind("H",                            focus_or_launch("com.nousresearch.hermes", "hermes-desktop"))
   hl.bind("ESCAPE",                       hl.dsp.submap("reset"))
 end)
 
