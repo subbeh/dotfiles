@@ -1,0 +1,3 @@
+---
+packages:
+  - hermes-desktop: [brew, {aur: hermes-agent-desktop-bin}]

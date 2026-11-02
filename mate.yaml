@@ -43,6 +43,7 @@ sources:
   - fzf
   - git
   - gnupg
+  - hermes-agent
   - home-ops
   - k9s
   - kitty
