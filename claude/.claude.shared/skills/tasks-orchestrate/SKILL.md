@@ -20,6 +20,8 @@ on PATH, say so and stop.
 Take this session's name, group and directory from the `self` row of
 `agent-manager sessions --json`. The **scope** is the epic passed as the
 argument (its children, `aven epic list <epic>`), or else the repo's project.
+In epic scope, **Read** the epic: the decisions its description records are
+settled, so never ask the user to make them again.
 
 Done when you hold the tracker, your own name and group, and the scope.
 
@@ -30,7 +32,7 @@ of earlier rounds counts for nothing.
 
 - Every open task in scope (**All open**), and the **Inbox** count.
 - For each task, from **Read**: its owner (latest `Orchestrated by` note) and
-  its latest `Report:` note.
+  its **Latest report**.
 - `agent-manager sessions --json`: a task's sessions are those whose name
   starts with its lowercase ref.
 
@@ -62,8 +64,10 @@ last.
 
 Act on the answer (step 4), then go back to step 2.
 
-A user turn starting with `[tasks]` is a worker's ping. Go back to step 2 and
-recommend that task first.
+A user turn starting with `[tasks]` is a worker's ping. Check the task's
+**Latest report** first: when it is not the report the ping carries, the ping
+is stale, so acknowledge it in one line and stop there. Otherwise go back to
+step 2 and recommend that task first.
 
 ## 4. Actions
 
@@ -86,6 +90,16 @@ agent-manager spawn --name <ref>-<slug> --group <group> --directory <repo> --wor
 The name is kebab-case, 2–4 words, and starts with the lowercase ref. `<entry>`
 is `/tasks-takeover <ref>` for an `active` task, otherwise
 `/tasks-pickup <ref>`.
+
+### Relay a decision
+
+Before you send a worker a decision, check the user hasn't settled it in the
+worker's own session since: **Read** the task's latest note and
+`agent-manager read` the worker's screen. When they conflict, ask the user
+instead of sending. Date the message: `As of <HH:MM>, the user chose <X>.`
+
+After sending, run `agent-manager message-status <message id>`. `held` means
+the worker is at a dialog, so tell the user to answer it there.
 
 ### Close a task
 

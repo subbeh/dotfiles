@@ -32,6 +32,7 @@ Run `aven prime` once before the first aven operation: it carries aven's rules
   user passes is never filtered.
 - **Read**: `aven context <ref>`, then its `read=` command when it leaves out
   earlier notes
+- **Latest report**: `aven context <ref> --json --full | jq -r '[.notes[].body | select(startswith("Report:"))] | last // empty'`
 - **Note**: `aven note <ref> --stdin`
 - **Start**: `aven edit <ref> --status active`
 - **Create**: `aven add`
