@@ -1,6 +1,7 @@
+---
 targets:
   config: "{{ .Vars.configHome }}"
 
 packages:
-  - bitwarden-cli
+  - bitwarden-cli: [brew, {aur: bitwarden-cli-bin}]
   - rbw
