@@ -17,7 +17,7 @@ shell_integration          enabled no-cursor
 
 # Window settings
 window_padding_width       10 10 10 10
-remember_window_size       yes
+remember_window_size       no
 initial_window_width       640
 initial_window_height      400
 
