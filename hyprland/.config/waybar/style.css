@@ -183,6 +183,12 @@ window#waybar.bottom :first-child {
   color: @orange;
 }
 
+/* AGENT MANAGER */
+
+#custom-agent-manager {
+  padding: 0 5px;
+}
+
 #custom-bitwarden {
   padding: 0 5px;
 }

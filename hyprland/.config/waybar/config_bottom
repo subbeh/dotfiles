@@ -17,7 +17,9 @@
     "custom/restic",
     "custom/syncthing",
     "custom/statemate",
-    "custom/updates"
+    "custom/updates",
+    "custom/sep",
+    "custom/agent-manager"
   ],
   "modules-center": [
     "custom/playerctl"

@@ -349,6 +349,18 @@
     "on-click-right": "pkill -SIGRTMIN+6 waybar"
   },
   //
+  // AGENT MANAGER
+  //
+  "custom/agent-manager": {
+    "exec": "__waybar_agent_manager",
+    "return-type": "json",
+    "interval": 5,
+    "tooltip": true,
+    "signal": 11,
+    "on-click": "__waybar_agent_manager click",
+    "on-click-right": "pkill -SIGRTMIN+11 waybar"
+  },
+  //
   // BITWARDEN
   //
   "custom/bitwarden": {

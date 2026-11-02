@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Waybar module: agent-manager session counts per status.
+# `click` shows the term special workspace and opens the tpad agent-manager popup there.
+set -uo pipefail
+
+# Swap glyphs to taste
+ICON='󰲾'
+GLYPHS='{"working": "", "waiting": "", "finished": "󰸞", "errored": ""}'
+COLORS='{"working": "#{{ .Vars.color.orange.base }}", "waiting": "#{{ .Vars.color.magenta.base }}", "finished": "#{{ .Vars.color.green.base }}", "errored": "#{{ .Vars.color.red.base }}"}'
+
+click() {
+  hyprctl monitors -j | jq -e 'any(.[]; .specialWorkspace.name == "special:term")' >/dev/null ||
+    hyprctl eval 'hl.dispatch(hl.dsp.workspace.toggle_special("term"))' >/dev/null
+
+  # The tmux client is a descendant of the kitty window on special:term
+  local kitty client pid p
+  kitty=$(hyprctl clients -j | jq -r 'first(.[] | select(.workspace.name == "special:term") | .pid) // empty')
+  [[ -n $kitty ]] || exit 0
+  while read -r pid name; do
+    p=$pid
+    while [[ -n $p ]] && ((p > 1)); do
+      ((p == kitty)) && client=$name && break 2
+      read -r p < <(ps -o ppid= -p "$p")
+    done
+  done < <(tmux -L default list-clients -F '#{client_pid} #{client_name}')
+  [[ -n ${client:-} ]] || exit 0
+
+  # -b: called from outside tmux, tpad's display-popup blocks until the popup closes
+  tmux -L default run-shell -b "$HOME/.local/share/tmux/plugins/tmux-tpad*/tpad.tmux open agentmgr $client"
+}
+
+[[ ${1:-} == click ]] && {
+  click
+  exit 0
+}
+
+# Hide the module when agent-manager is missing or fails
+sessions=$(agent-manager sessions --json 2>/dev/null) || {
+  echo '{"text": ""}'
+  exit 0
+}
+
+jq -c --arg icon "$ICON" --argjson glyphs "$GLYPHS" --argjson colors "$COLORS" '
+  def esc: gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;");
+  def pad($w): . + " " * ($w - length + 2);
+  map(select((.archived | not) and .status != "dead") | .label = ([.group, .name] | map(select(. != "")) | join("/"))) as $s
+  | (reduce $s[] as $x ({}; .[$x.status] += 1)) as $n
+  | ($s | map(.label | length) | max // 0) as $lw
+  | ($s | map(.tool | length) | max // 0) as $tw
+  | {
+      text: ([$icon] + [["working", "waiting", "finished", "errored"][] | select($n[.]) | "<span color=\"\($colors[.])\">\($glyphs[.]) \($n[.])</span>"] | join("  ")),
+      tooltip: (["<b>agent-manager</b>", ""] + ($s | map("\(.label | pad($lw) | esc)\(.tool | pad($tw))\(.status)")) | join("\n"))
+    }' <<<"$sessions"
