@@ -30,4 +30,14 @@ Func.move_all_workspaces = function(monitor)
   end
 end
 
+-- Focuses the first window of `class` (switching workspace), or runs `cmd` when none is open.
+Func.focus_or_launch = function(class, cmd)
+  local win = "class:^" .. class .. "$"
+  if hl.get_window(win) then
+    hl.dispatch(hl.dsp.focus({ window = win }))
+  else
+    hl.exec_cmd(cmd)
+  end
+end
+
 return Func
