@@ -9,7 +9,10 @@ shown() {
 # hyprctl prints "ok" (which tmux run-shell shows in view mode) and errors on stdout, so only show failures
 toggle() {
   local out
-  out=$(hyprctl eval 'hl.dispatch(Dropterm())') || { echo "$out" >&2; return 1; }
+  out=$(hyprctl eval 'hl.dispatch(Dropterm())') || {
+    echo "$out" >&2
+    return 1
+  }
 }
 
 # Dropterm() toggles, so only call it when it flips to the state we want
