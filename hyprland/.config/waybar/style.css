@@ -193,6 +193,10 @@ window#waybar.bottom :first-child {
   padding: 0 5px;
 }
 
+#custom-bitwarden.locked {
+  color: @red;
+}
+
 #custom-bitwarden.unlocked {
   color: @green;
 }

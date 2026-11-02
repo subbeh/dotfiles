@@ -366,7 +366,7 @@
   "custom/bitwarden": {
     "exec": "__waybar_bitwarden",
     "return-type": "json",
-    "interval": 30,
+    "interval": 15,
     "tooltip": true,
     "signal": 10,
     "on-click": "__waybar_bitwarden unlock"
