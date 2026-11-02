@@ -6,12 +6,9 @@ hl.bind("CTRL + ALT + DELETE",            hl.dsp.exec_cmd("hyprshutdown"))
 -- APPS
 hl.bind("SUPER + RETURN",                 hl.dsp.exec_cmd(TERM))
 hl.bind("SUPER + SPACE",                  hl.dsp.exec_cmd("pkill rofi || __rofi_launcher drun launcher"))
-hl.bind("SUPER + A",                      hl.dsp.submap("apps"))
-hl.define_submap("apps", "reset", function()
-  hl.bind("F",                            function() Func.focus_or_launch("firefox", "firefox") end)
-  hl.bind("H",                            function() Func.focus_or_launch("com.nousresearch.hermes", "hermes-desktop") end)
-  hl.bind("ESCAPE",                       hl.dsp.submap("reset"))
-end)
+hl.bind("ALT + F",                        function() Func.focus_or_launch("firefox", "firefox") end)
+hl.bind("ALT + H",                        function() Func.focus_or_launch("com.nousresearch.hermes", "hermes-desktop") end)
+hl.bind("ALT + T",                        function() Func.focus_or_launch("kitty", "kitty") end)
 
 -- WINDOWS
 hl.bind("SUPER + Q",                      hl.dsp.window.close("activewindow"))

@@ -30,17 +30,22 @@ Func.move_all_workspaces = function(monitor)
   end
 end
 
--- Focuses the first window of `class` (switching workspace), or runs `cmd` when none is open.
+-- Focuses the first window of `class` outside special workspaces, or runs `cmd` when none is open.
 Func.focus_or_launch = function(class, cmd)
-  local win = "class:^" .. class .. "$"
-  local w = hl.get_window(win)
-  -- an open special workspace stays drawn over the target, so hide it unless the target is on it
+  local target
+  for _, w in ipairs(hl.get_windows()) do
+    if w.class == class and not (w.workspace and w.workspace.special) then
+      target = w
+      break
+    end
+  end
+  -- an open special workspace stays drawn over the target, so hide it
   local special = hl.get_active_special_workspace()
-  if special and not (w and w.workspace and w.workspace.name == special.name) then
+  if special then
     hl.dispatch(hl.dsp.workspace.toggle_special((special.name:gsub("^special:", ""))))
   end
-  if w then
-    hl.dispatch(hl.dsp.focus({ window = win }))
+  if target then
+    hl.dispatch(hl.dsp.focus({ window = "address:" .. target.address }))
   else
     hl.exec_cmd(cmd)
   end
