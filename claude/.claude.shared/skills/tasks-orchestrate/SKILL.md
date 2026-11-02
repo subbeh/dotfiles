@@ -70,7 +70,8 @@ recommend that task first.
 ### Start a task
 
 Show tasks in scope that nobody owns and nobody has claimed (pickup's
-**claim line** rule), highest priority first, and ask which one. Then:
+**claim line** rule), in pickup's order: `todo` before `backlog`, then
+highest priority, then most recently updated. Ask which one. Then:
 
 1. Write the ownership **note**: `Orchestrated by <your name> in <group>`.
 2. Pick the group. In repo scope it is your group. In epic scope it is
