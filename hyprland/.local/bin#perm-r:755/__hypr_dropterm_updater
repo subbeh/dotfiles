@@ -1,5 +1,33 @@
 #!/usr/bin/env bash
 
+shown() {
+  hyprctl clients -j | jq -e 'any(.[]; .class == "dropterm" and .workspace.name != "special:dropterm")' >/dev/null
+}
+
+focused() {
+  hyprctl activewindow -j | jq -e '.class == "dropterm"' >/dev/null
+}
+
+# hyprctl eval prints "ok" on success, which would land under the update output
+dispatch() {
+  local out
+  out=$(hyprctl eval "hl.dispatch($1)") || echo "$out" >&2
+}
+
+# after <status>: back to window 1 and hide on success, bring the error into view on failure.
+# Dropterm() hides whenever dropterm is shown, so a shown but unfocused dropterm only gets focus.
+if [[ $1 == after ]]; then
+  if (($2 == 0)); then
+    tmux select-window -t dropterm:1
+    focused && dispatch 'Dropterm()'
+  elif ! shown; then
+    dispatch 'Dropterm()'
+  elif ! focused; then
+    dispatch 'hl.dsp.focus({ window = "class:^dropterm$" })'
+  fi
+  exit 0
+fi
+
 # open dropterm
 hyprctl eval 'hl.dispatch(Dropterm())'
 while ! tmux list-sessions -F \#S | grep -q dropterm; do sleep 0; done
@@ -19,4 +47,4 @@ else
 fi
 
 # one line: sudo's pty relay swallows any typeahead queued behind paru
-pgrep paru || tmux send-keys -t dropterm:updates "clear; $cmd && "'tmux select-window -t dropterm:1 && hyprctl activewindow -j | jq -c ".class" | grep -q dropterm && hyprctl eval "hl.dispatch(Dropterm())"' Enter
+pgrep paru || tmux send-keys -t dropterm:updates "clear; $cmd; __hypr_dropterm_updater after "'$?' Enter
