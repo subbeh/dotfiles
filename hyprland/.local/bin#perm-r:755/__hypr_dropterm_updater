@@ -18,10 +18,5 @@ else
   cmd='paru -Syu --noconfirm && pkill -SIGRTMIN+8 waybar'
 fi
 
-# send keys
-pgrep paru || tmux send-keys -t dropterm:updates "clear;
-$cmd;
-"'tmux select-window -t dropterm:1 && \
-hyprctl activewindow -j | jq -c ".class" | grep -q dropterm && \
-hyprctl eval "hl.dispatch(Dropterm())" \
-' Enter
+# one line: sudo's pty relay swallows any typeahead queued behind paru
+pgrep paru || tmux send-keys -t dropterm:updates "clear; $cmd && "'tmux select-window -t dropterm:1 && hyprctl activewindow -j | jq -c ".class" | grep -q dropterm && hyprctl eval "hl.dispatch(Dropterm())"' Enter
