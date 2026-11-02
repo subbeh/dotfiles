@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# description: Set D-Bus power profile to balanced
+
+powerprofilesctl set balanced

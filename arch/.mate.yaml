@@ -42,6 +42,7 @@ packages:
   - linux-lts-headers
   - os-prober
   - pacman-contrib
+  - power-profiles-daemon
   - sbctl
   - snap-pac
   - snapper
