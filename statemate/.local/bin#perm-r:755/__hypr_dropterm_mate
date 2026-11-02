@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Runs mate apply in dropterm's mate window. On success it selects dropterm:1 and hides dropterm again.
+# Runs mate apply in dropterm's mate window, then refreshes the waybar module. On success it selects dropterm:1 and hides dropterm again.
 
 shown() {
   hyprctl clients -j | jq -e 'any(.[]; .class == "dropterm" and .workspace.name != "special:dropterm")' >/dev/null
@@ -30,4 +30,5 @@ tmux select-window -t dropterm:mate
 # an apply is already running
 [[ $(tmux display-message -p -t dropterm:mate '#{pane_current_command}') == mate ]] && exit 0
 
-tmux send-keys -t dropterm:mate 'clear; mate apply && tmux select-window -t dropterm:1 && __hypr_dropterm_mate hide' Enter
+# refresh the waybar module (signal 6) whatever the outcome
+tmux send-keys -t dropterm:mate 'clear; mate apply; s=$?; pkill -SIGRTMIN+6 waybar; ((s)) || { tmux select-window -t dropterm:1 && __hypr_dropterm_mate hide; }' Enter
