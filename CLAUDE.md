@@ -29,7 +29,9 @@ apply overwrites it.
 
 - Run freely: `status`, `diff`, `check`, `eval`, `cat`, `managed`, `profile`,
   `config`, `doctor`, `packages list`, `scripts list`, `secrets status|list`.
-- Ask first — these mutate the live machine: `apply`, `clean`, `delete`, `forget`,
+- Never run `apply`, and never offer or ask to: the user always runs it. When a
+  change needs deploying, say what it deploys and leave it there.
+- Ask first — these mutate the live machine: `clean`, `delete`, `forget`,
   `packages apply`, `scripts run`, `secrets fetch`.
 - `edit`, `encrypt`, `decrypt`, `rename` touch only the repo; use them freely to
   carry out a requested change.
@@ -154,8 +156,9 @@ checkout is `dirname "$(git rev-parse --path-format=absolute --git-common-dir)"`
 - Bare `mate` reads the main checkout's source, not the worktree. Run read-only
   commands as `STATEMATE_DIR=$PWD mate status|diff|eval|check|cat` so they check
   this worktree's files.
-- Deploying waits until the work has landed: `apply`, `clean`, `delete`,
-  `forget`, `scripts run` and `packages apply` run from the main checkout.
+- Deploying waits until the work has landed: `clean`, `delete`, `forget`,
+  `scripts run` and `packages apply` run from the main checkout, and the user
+  runs `apply` there.
   `mate rename` also renames the deployed target, so in a worktree change
   attributes with `git mv` and note in the report that the next apply removes
   the old target and deploys the new one.
