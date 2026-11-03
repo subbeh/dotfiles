@@ -336,9 +336,11 @@ If both checks pass (or user chose to skip), proceed with push.
 
 **PR creation:**
 
+Before creating, ask with `AskUserQuestion` whether to open it as a draft; on yes, add `--draft`.
+
 ```bash
 git push -u origin <branch-name>
-gh pr create --fill
+gh pr create --fill [--draft]
 ```
 
 Use `--fill` to auto-populate title and body from commit message(s). If multiple commits, the PR body will list them.
