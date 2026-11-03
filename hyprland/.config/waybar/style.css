@@ -189,6 +189,16 @@ window#waybar.bottom :first-child {
   padding: 0 5px;
 }
 
+/* CLAUDE */
+
+#custom-claude {
+  padding: 0 5px;
+}
+
+#custom-claude.stale {
+  color: @white;
+}
+
 #custom-bitwarden {
   padding: 0 5px;
 }

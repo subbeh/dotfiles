@@ -19,6 +19,7 @@
     "clock#date"
   ],
   "modules-right": [
+    "custom/playerctl",
     "bluetooth",
     "custom/sep",
     "wireplumber",
@@ -26,8 +27,6 @@
     "backlight",
     "custom/sep",
     "idle_inhibitor",
-    // "custom/sep",
-    // "custom/notification",
     "group/powermenu"
   ]
 }

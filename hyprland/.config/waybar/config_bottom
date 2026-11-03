@@ -19,14 +19,10 @@
     "custom/statemate",
     "custom/updates",
     "custom/sep",
+    "custom/claude",
     "custom/agent-manager"
   ],
-  "modules-center": [
-    "custom/playerctl"
-  ],
   "modules-right": [
-    // "custom/k8s",
-    // "custom/sep",
     "custom/network"
   ]
 }

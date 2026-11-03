@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Waybar module: Claude plan usage (5h and 7d windows) as cached by __claude_statusline.
+set -uo pipefail
+
+# Swap glyph to taste
+ICON=''
+# Bar colour by usage: the cpu module's ramp in waybar/modules
+COLORS='["#{{ .Vars.color.green.bright }}", "#bceaa3", "#c6d497", "#cdbe8b", "#d2a880", "#d59175", "#d7796a", "#{{ .Vars.color.red.base }}"]'
+# Nerd Font progress glyphs (U+EE00-EE05): start/middle/end, empty then filled
+GLYPHS='{"empty": ["", "", ""], "full": ["", "", ""]}'
+CACHE=${XDG_STATE_HOME:-$HOME/.local/state}/claude/usage.json
+
+hide() {
+  echo '{"text": ""}'
+  exit 0
+}
+
+# Hidden until a personal session has written the cache
+if [[ ! -r $CACHE ]] || ! command -v jq &>/dev/null; then hide; fi
+
+jq -c --arg icon "$ICON" --argjson colors "$COLORS" --argjson glyphs "$GLYPHS" --argjson now "$(date +%s)" --argjson mtime "$(date -r "$CACHE" +%s)" '
+  def epoch: if type == "number" then . else sub("\\.[0-9]+"; "") | fromdateiso8601 end;
+  . as $rl
+  | [["5h", "five_hour", "%H:%M"], ["7d", "seven_day", "%a %H:%M"]]
+  | map(. as [$l, $k, $f] | $rl[$k] | select(. != null)
+      | {l: $l, p: (.used_percentage | round), r: (.resets_at | epoch)}
+      | .at = (.r | localtime | strftime($f)))
+  # Past the 5h reset the numbers are old: an uncoloured bar so the stale CSS colour shows
+  | any(.[]; .l == "5h" and .r <= $now) as $stale
+  | def bar: . as $p
+      | [range(1; 6) | $glyphs[if $p >= . * 20 - 10 then "full" else "empty" end][if . == 1 then 0 elif . == 5 then 2 else 1 end]]
+      | join("")
+      | if $stale then . else "<span color=\"\($colors[[($p / 12.5 | floor), 7] | min])\">\(.)</span>" end;
+  {
+    text: ("\($icon) " + (map("\(.l) \(.p | bar) \(.p)%") | join("  "))),
+    class: (if $stale then "stale" else "" end),
+    tooltip: (["<b>Claude plan usage</b>", ""] + map("\(.l)  \(.p)%  resets \(.at)")
+              + ["", "updated \(($now - $mtime) / 60 | floor)m ago"] | join("\n"))
+  }' "$CACHE" 2>/dev/null || hide

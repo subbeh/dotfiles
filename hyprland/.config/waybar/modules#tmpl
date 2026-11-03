@@ -361,6 +361,17 @@
     "on-click-right": "pkill -SIGRTMIN+11 waybar"
   },
   //
+  // CLAUDE
+  //
+  "custom/claude": {
+    "exec": "__waybar_claude",
+    "return-type": "json",
+    "interval": 60,
+    "tooltip": true,
+    "signal": 12,
+    "on-click-right": "pkill -SIGRTMIN+12 waybar"
+  },
+  //
   // BITWARDEN
   //
   "custom/bitwarden": {
