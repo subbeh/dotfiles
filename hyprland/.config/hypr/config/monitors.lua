@@ -118,11 +118,18 @@ local function reload_layout()
   end
 end
 
+-- a full reload re-runs M.init, which applies the layout again
+local function reload()
+  hl.dispatch(hl.dsp.reload_config())
+end
+
 M.init = function()
   hl.timer(function()
     reload_layout()
-    hl.on("monitor.added", reload_layout)
-    hl.bind("switch:Lid Switch", reload_layout, { locked = true })
+    hl.on("monitor.added", reload)
+    hl.on("monitor.removed", reload)
+    hl.bind("switch:on:Lid Switch", reload_layout, { locked = true })
+    hl.bind("switch:off:Lid Switch", reload, { locked = true })
   end, { timeout = 500, type = "oneshot" })
 end
 
