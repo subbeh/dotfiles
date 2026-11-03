@@ -7,10 +7,12 @@ variables:
   bws:
     secrets:
       ATUIN_OPENAI_API_KEY: [openai.com, field, atuin-api-key]
+      AVEN_MCP_TOKEN: [aven.vps.sbbh.cloud, field, mcp-server-token]
       CLOUDFLARE_API_TOKEN: [cloudflare.com, field, sbbh-cloud-dns-api-token]
       GATUS_EXTERNAL_TOKEN: [gatus.int.sbbh.cloud, field, external-token]
       GATUS_PUSHOVER_APP_TOKEN: [pushover.net, field, api-token-gatus]
       GATUS_PUSHOVER_USER_KEY: [pushover.net, field, user-key]
+      HERMES_GITHUB_ACTIONS_TOKEN: [github.com, field, hermes-agent-token]
       HERMES_DASHBOARD_PASSWORD: [hermes.vps.sbbh.cloud, login, password]
       HERMES_DASHBOARD_SECRET: [hermes.vps.sbbh.cloud, field, dashboard-secret]
       HERMES_OPENCODE_GO_API_KEY: [opencode.ai, field, hermes-api-key]
@@ -19,6 +21,7 @@ variables:
       HERMES_FIRECRAWL_API_KEY: [firecrawl.dev, field, hermes-api-key]
       HERMES_LANGFUSE_PUBLIC_KEY: [langfuse.com, field, hermes-public-key]
       HERMES_LANGFUSE_SECRET_KEY: [langfuse.com, field, hermes-secret-key]
+      HERMES_OPS_SEMAPHORE_TOKEN: [semaphore.vps.sbbh.cloud, field, hermes-ops-api-token]
       KARAKEEP_MEILI_MASTER_KEY: [karakeep.vps.sbbh.cloud, field, meili-master-key]
       KARAKEEP_NEXTAUTH_SECRET: [karakeep.vps.sbbh.cloud, field, nextauth-secret]
       KARAKEEP_OPENAI_API_KEY: [openai.com, field, karakeep-api-key]
