@@ -9,6 +9,7 @@ packages:
   - azure-cli
   - jamf/internal-tap/cloudtools@9
   - jamf/internal-tap/hermes
+  - jx
   - podman
   - postman
   - slack
