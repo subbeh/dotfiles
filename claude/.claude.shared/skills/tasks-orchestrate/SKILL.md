@@ -60,7 +60,9 @@ order:
 5. Start the next task.
 
 Check a session (`agent-manager read`) and take over a task owned elsewhere go
-last.
+last. A `review` report is parked on teammates and gets no option: show its PR's
+CI and review state in the table, and recommend the task again once that PR
+merges (close it) or goes red or gets comments (ping its worker).
 
 Act on the answer (step 4), then go back to step 2.
 
@@ -97,6 +99,9 @@ Before you send a worker a decision, check the user hasn't settled it in the
 worker's own session since: **Read** the task's latest note and
 `agent-manager read` the worker's screen. When they conflict, ask the user
 instead of sending. Date the message: `As of <HH:MM>, the user chose <X>.`
+
+A go-ahead to commit, push, merge or delete is never relayed: workers act on it
+only when it's typed in their own session. Name the session to attach to instead.
 
 After sending, run `agent-manager message-status <message id>`. `held` means
 the worker is at a dialog, so tell the user to answer it there.
