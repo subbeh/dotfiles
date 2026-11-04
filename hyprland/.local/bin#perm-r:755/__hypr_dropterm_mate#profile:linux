@@ -26,8 +26,8 @@ shown || toggle
 until tmux has-session -t =dropterm 2>/dev/null; do sleep 0.1; done
 tmux set-option -t dropterm monitor-activity off
 
-# create and select window
-tmux list-windows -t dropterm -F '#W' | grep -qx mate || tmux new-window -t dropterm -n mate
+# create and select window; the trailing colon targets the session, since bare "dropterm" matches window dropterm:1
+tmux list-windows -t dropterm -F '#W' | grep -qx mate || tmux new-window -t dropterm: -n mate
 tmux select-window -t dropterm:mate
 
 # an apply is already running

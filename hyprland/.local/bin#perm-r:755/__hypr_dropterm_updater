@@ -33,8 +33,8 @@ hyprctl eval 'hl.dispatch(Dropterm())'
 while ! tmux list-sessions -F \#S | grep -q dropterm; do sleep 0; done
 tmux set-option -t dropterm monitor-activity off
 
-# create window
-tmux list-windows -t dropterm | grep -q updates || tmux new-window -t dropterm -n updates
+# create window; the trailing colon targets the session, since bare "dropterm" matches window dropterm:1
+tmux list-windows -t dropterm | grep -q updates || tmux new-window -t dropterm: -n updates
 
 # select window
 tmux select-window -t dropterm:updates
