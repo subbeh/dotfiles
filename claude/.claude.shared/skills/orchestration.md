@@ -73,3 +73,21 @@ agent-manager reserve live/<host>/<service> --note "<ref>: <what and why>" --ttl
   `release-files` with no path drops every lease the session holds.
 
 The orchestrator shows each held lease and its holder in its table.
+
+## Worker model and effort
+
+A task carries one `model-<alias>` label and one `effort-<level>` label, set
+at triage. `agent-manager spawn` takes `--model` (an alias: `sonnet`, `opus`)
+and `--effort` (`low`, `medium`, `high`, `xhigh`, `max`, for every Claude
+model). A restart, revive or fork keeps the model.
+
+| Label | When |
+|---|---|
+| `model-sonnet` | docs-only, research or "find whether / decide" tasks; a single config tweak with clear acceptance |
+| `model-opus` | code with tests; any live change or Deploy on a Host; secrets or security; open design questions |
+| `effort-low` | mechanical edits |
+| `effort-medium` | small changes with clear acceptance |
+| `effort-high` | code, live changes, design |
+
+A task with no `model-` or `effort-` label gets the rule's pick. A successor
+takes the task's labels.

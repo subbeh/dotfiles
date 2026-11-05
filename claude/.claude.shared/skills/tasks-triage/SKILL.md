@@ -2,6 +2,7 @@
 name: tasks-triage
 description: Triage the aven inbox - import assigned Jira tickets where aven mirrors Jira, then rename, describe, prioritise and link each task and move it to todo or backlog.
 disable-model-invocation: true
+model: opus
 ---
 
 # Triage
@@ -48,6 +49,9 @@ Draft:
 - **Priority**: `urgent` to `none`, from its impact and what it blocks.
 - **Status**: `todo` for soon, `backlog` for someday, `canceled` when the
   redundancy check found it already done.
+- **Model and effort**: one `model-` and one `effort-` label, per
+  **Worker model and effort** in [`../orchestration.md`](../orchestration.md).
+  Create a missing label with `aven label create`.
 - **Links**: a duplicate (propose cancelling one), a related task, a blocker,
   or an epic it belongs to.
 

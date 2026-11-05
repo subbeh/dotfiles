@@ -45,8 +45,8 @@ Done when every task in scope has its owner, last report and sessions.
 
 ## 3. Report and ask
 
-Print one table: ref, priority, title, aven status, worker session and its
-state, last report, any `live/` lease it holds, and `owned by <name>` where
+Print one table: ref, priority, title, aven status, worker session, its model
+and effort, its state, last report, any `live/` lease it holds, and `owned by <name>` where
 that applies. Mention it when more than 3 workers are `working` at once.
 
 When the **Inbox** count is above 0, first ask with `AskUserQuestion` whether to
@@ -79,7 +79,9 @@ step 2 and recommend that task first.
 
 Show tasks in scope that nobody owns and nobody has claimed (pickup's
 **claim line** rule), in pickup's order: `todo` before `backlog`, then
-highest priority, then most recently updated. Ask which one. Then:
+highest priority, then most recently updated. Name each option's model and effort: the task's `model-` and `effort-`
+labels, else the rule in **Worker model and effort** of
+[`../orchestration.md`](../orchestration.md). Ask which one. Then:
 
 1. Write the ownership **note**: `Orchestrated by <your name> in <group>`.
 2. Pick the group. In repo scope it is your group. In epic scope it is
@@ -88,7 +90,7 @@ highest priority, then most recently updated. Ask which one. Then:
 3. Spawn the worker:
 
 ```sh
-agent-manager spawn --name <ref>-<slug> --group <group> --directory <repo> --worktree --prompt "<entry>"
+agent-manager spawn --name <ref>-<slug> --group <group> --directory <repo> --worktree --model <alias> --effort <level> --prompt "<entry>"
 ```
 
 The name is kebab-case, 2–4 words, and starts with the lowercase ref. `<entry>`
@@ -132,8 +134,10 @@ For a `handover` report: archive the worker, then spawn the successor in its
 directory (that is the worktree) with a new name, following the same rule:
 
 ```sh
-agent-manager spawn --name <ref>-<slug> --group <group> --directory <worker directory> --prompt "/tasks-takeover <ref>"
+agent-manager spawn --name <ref>-<slug> --group <group> --directory <worker directory> --model <alias> --effort <level> --prompt "/tasks-takeover <ref>"
 ```
+
+The successor takes the task's labels.
 
 ### Dead or errored worker
 
