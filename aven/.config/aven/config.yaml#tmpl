@@ -19,7 +19,7 @@ daemon:
   wake_addr: 127.0.0.1:47631
 
 workspace:
-  default: default
+  default: work
   routes:
     - workspace: "work"
       paths: ["{{ .Vars.workspaceDir }}/jamf"]
