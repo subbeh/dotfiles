@@ -1,7 +1,7 @@
 ---
 packages:
   - gnupg
-  - ykman: brew
+  - ykman: [brew, {pacman: yubikey-manager}]
   - ykpers: brew
   - pinentry-mac: brew
   - pcsclite: pacman
