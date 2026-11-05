@@ -51,3 +51,25 @@ orchestrator reads it when it next rebuilds.
 
 The task's status after `active` belongs to its owner: a worker reports `done`
 and stops, and the orchestrator sets `done` after its close check.
+
+## Live Services
+
+Before a live config edit, restart or Deploy, a worker takes a **lease** on
+each Service it touches, so two workers never change a running Service at once.
+A lease is an exclusive agent-manager reservation on `live/<host>/<service>`
+(e.g. `live/vps/hermes`), a name rather than a file:
+
+```sh
+agent-manager reserve live/<host>/<service> --note "<ref>: <what and why>" --ttl 1h --json
+```
+
+- **When**: reserve before asking the user for the run, with a TTL that covers
+  the change and its verification (default 30m, max 4h).
+- **Conflict**: `reserve` always succeeds and exits 0; another holder shows up
+  only in the `conflicts` list, with its name and note. Then release yours
+  (`agent-manager release-files live/<host>/<service>`) and report `blocked`
+  naming the holder. Don't ask the user for the run.
+- **Release**: hold the lease through verification, then release it by path.
+  `release-files` with no path drops every lease the session holds.
+
+The orchestrator shows each held lease and its holder in its table.

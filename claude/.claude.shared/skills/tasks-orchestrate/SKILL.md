@@ -35,6 +35,8 @@ of earlier rounds counts for nothing.
   its **Latest report**.
 - `agent-manager sessions --json`: a task's sessions are those whose name
   starts with its lowercase ref.
+- `agent-manager reservations --json`: the `live/` leases (see **Live
+  Services** in `../orchestration.md`) and their holders.
 
 A task whose owner is another session that is still running is **owned
 elsewhere**. A repo-wide orchestrator sees epic orchestrators' tasks this way.
@@ -44,8 +46,8 @@ Done when every task in scope has its owner, last report and sessions.
 ## 3. Report and ask
 
 Print one table: ref, priority, title, aven status, worker session and its
-state, last report, and `owned by <name>` where that applies. Mention it when
-more than 3 workers are `working` at once.
+state, last report, any `live/` lease it holds, and `owned by <name>` where
+that applies. Mention it when more than 3 workers are `working` at once.
 
 When the **Inbox** count is above 0, first ask with `AskUserQuestion` whether to
 triage it now. On yes, triage the inbox (step 4), then go back to step 2.
