@@ -20,7 +20,8 @@ worker until the task closes, through handovers and restarts.
 
 A worker reports at each of these points, in this order: a **note** on the
 task, then a **ping** to the owner. `started` is a note only: its ping would
-arrive stale and cost the owner a turn.
+arrive stale and cost the owner a turn. `waiting` is a note only too: the user
+answers in the worker's own session, so a ping only asks them twice.
 
 | State | When |
 |---|---|
