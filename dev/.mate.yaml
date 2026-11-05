@@ -8,8 +8,10 @@ packages:
   - kubectl
   - kubectx
   - mise
+  - perf: pacman
   - pyright
   - rust
+  - strace: pacman
   - upterm
   - uv
   - kubecolor: brew
