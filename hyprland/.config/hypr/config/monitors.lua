@@ -123,11 +123,18 @@ local function reload()
   hl.dispatch(hl.dsp.reload_config())
 end
 
+-- the panel is toggled by the lid binds; reloading on it loops while the lid is closed
+local function on_monitor_change(mon)
+  if not mon.name:match("^eDP") then
+    reload()
+  end
+end
+
 M.init = function()
   hl.timer(function()
     reload_layout()
-    hl.on("monitor.added", reload)
-    hl.on("monitor.removed", reload)
+    hl.on("monitor.added", on_monitor_change)
+    hl.on("monitor.removed", on_monitor_change)
     hl.bind("switch:on:Lid Switch", reload_layout, { locked = true })
     hl.bind("switch:off:Lid Switch", reload, { locked = true })
   end, { timeout = 500, type = "oneshot" })
