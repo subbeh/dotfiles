@@ -1,12 +1,14 @@
 ---
 name: tasks-pickup
-description: Pick an open task from the repo's tracker, confirm it with the user, and start on it.
+description: Pick an open task from the repo's tracker, confirm it with the user, and start on it - in a worker session it spawns under agent-manager, otherwise here.
 disable-model-invocation: true
 ---
 
 # Pickup
 
 Starts a task nobody has begun; `/tasks-takeover` resumes one already in progress.
+Under agent-manager this session hands the task to a worker session of its own
+and stays on as its orchestrator.
 The commands behind each **operation** below are in
 [`../trackers.md`](../trackers.md), by tracker.
 
@@ -31,7 +33,23 @@ With no candidates, say so and stop.
 
 Done when you hold exactly one ref the user named or confirmed.
 
-## 3. Read the task
+## 3. Hand off to a worker
+
+Skip this step, and work the task in this session, when any of these holds:
+
+- The tracker is not aven or aven + Jira, or `agent-manager` is not on PATH.
+- `agent-manager sessions --json` has no `self` row.
+- The task's latest `Orchestrated by` note names another session: this session
+  is its **worker**.
+
+Otherwise this session orchestrates the task and never edits the repo itself.
+Run [`/tasks-orchestrate`](../tasks-orchestrate/SKILL.md)'s step 1 in repo
+scope, then steps 1–3 of its **Start a task** for this ref, then continue from
+its step 2.
+
+Done when a worker runs the task, or you know this session works it.
+
+## 4. Read the task
 
 **Read** the task, then the code it touches. For a mirrored task, settle
 **Drift** first. Where it leaves scope or acceptance criteria unclear, collect
@@ -41,7 +59,7 @@ session its **worker** (see [`../orchestration.md`](../orchestration.md)).
 Done when you can name the first concrete step, the files it touches, and every
 open question.
 
-## 4. Brief and start
+## 5. Brief and start
 
 **Start** the task, then add a **note** holding the **claim line**:
 `Claimed by <session> in <directory>`, where `<session>` is this session's
