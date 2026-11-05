@@ -77,6 +77,13 @@ local function apply_profile(profile, live)
               monitor = "desc:" .. mon.description,
               persistent = true,
             })
+            if role.lone_right then
+              -- a lone tiled window takes the master's spot (right 60%); the left gap mirrors the slave column
+              hl.workspace_rule({
+                workspace = "r[" .. n .. "-" .. n .. "]w[tv1]",
+                gaps_out = { top = 10, right = 10, bottom = 10, left = 10 + math.floor(logical_width(cat) * 0.4) },
+              })
+            end
           end
         end
         if role.waybar then

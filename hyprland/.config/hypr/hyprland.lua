@@ -31,6 +31,7 @@ PROFILES = {
       lg_27 = {
         pos = 2,
         ws = { 1 },
+        lone_right = true,
       },
       lg_32 = {
         pos = 3,
@@ -45,6 +46,7 @@ PROFILES = {
       lg_27 = {
         pos = 1,
         ws = { 1 },
+        lone_right = true,
       },
       lg_32 = {
         pos = 2,
