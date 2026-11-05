@@ -93,6 +93,11 @@ labels, else the rule in **Worker model and effort** of
 agent-manager spawn --name <ref>-<slug> --group <group> --directory <repo> --worktree --model <alias> --effort <level> --prompt "<entry>"
 ```
 
+   When the repo's `CLAUDE.md` says work lands on `main` with no PRs
+   (dotfiles), leave out `--worktree`: the worker runs in the main checkout on
+   `main` and commits straight to it. Workers share that checkout, so each
+   stages explicit paths and may `reserve_files` what it edits.
+
 The name is kebab-case, 2–4 words, and starts with the lowercase ref. `<entry>`
 is `/tasks-takeover <ref>` for an `active` task, otherwise
 `/tasks-pickup <ref>`.
@@ -114,7 +119,9 @@ the worker is at a dialog, so tell the user to answer it there.
 
 In the worker's directory, `git status --porcelain` is empty, and its commits
 are on `main` (`git merge-base --is-ancestor HEAD main`) or pushed
-(`git branch -r --contains HEAD`). If either check
+(`git branch -r --contains HEAD`). A worker in the main checkout shares it
+with others: only paths the worker touched count for the first check, and the
+second holds by construction. If either check
 fails, report what is missing and stop. Work that goes through a PR is not
 closable until the PR merges: leave the task and its worker running, since the
 worker monitors the PR and fixes what CI, Sonar or review raise. If both pass,
@@ -124,7 +131,8 @@ ask before you:
 2. Archive each of its sessions (`agent-manager archive <id>`).
 3. Tell the user to delete the row that owns the worktree, which is its first
    worker, with `d` in agent-manager. This removes the worktree and its `am/`
-   branch, and nothing else can.
+   branch, and nothing else can. A worker spawned without `--worktree` has
+   none: skip this step.
 4. When it was the epic's last open task, offer
    `agent-manager delete-group <path>`.
 

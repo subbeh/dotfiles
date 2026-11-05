@@ -149,9 +149,11 @@ asked, and never push unless told to.
 
 ### Worktrees
 
-Agent workers run in agent-manager worktrees (`dotfiles-worktrees/<name>`, branch
-`am/<name>`); every other session works in the main checkout on `main`. The main
-checkout is `dirname "$(git rev-parse --path-format=absolute --git-common-dir)"`.
+Workers spawned by `/tasks-orchestrate` run in the main checkout on `main` and
+commit straight to it: they share the checkout, so stage explicit paths and use
+`reserve_files` on contested files. Only a session started with its own
+agent-manager worktree (`dotfiles-worktrees/<name>`, branch `am/<name>`) follows
+the rest of this section. The main checkout is `dirname "$(git rev-parse --path-format=absolute --git-common-dir)"`.
 
 - Bare `mate` reads the main checkout's source, not the worktree. Run read-only
   commands as `STATEMATE_DIR=$PWD mate status|diff|eval|check|cat` so they check
