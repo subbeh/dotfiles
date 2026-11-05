@@ -1,6 +1,6 @@
 ---
 name: tasks-triage
-description: Triage the aven inbox - import assigned Jira tickets where aven mirrors Jira, then rename, describe, prioritise and link each task and move it to todo or backlog.
+description: Triage the aven inbox, or one inbox task given by ref - import assigned Jira tickets where aven mirrors Jira, then rename, describe, prioritise and link each task and move it to todo or backlog.
 disable-model-invocation: true
 model: opus
 ---
@@ -15,12 +15,16 @@ when that tracker applies.
 
 ## 1. Load the inbox
 
-On aven + Jira, run **Import** first and report how many tasks it added, as
+With a ref as the argument, triage that task alone: skip **Import**, **Read**
+it, and stop when its status is not `inbox`. `/tasks-pickup` passes one when the
+task it picked is still in the inbox.
+
+Otherwise, on aven + Jira, run **Import** first and report how many tasks it added, as
 `active` and as `inbox`. Then run **Inbox**. With no tasks, say so and stop. Run
 **All open** too: those are the tasks and epics an inbox task may duplicate or
 link to.
 
-Done when you hold every inbox ref and the open-task list.
+Done when you hold every inbox ref (or the one ref) and the open-task list.
 
 ## 2. Triage each task
 

@@ -31,7 +31,12 @@ recommendation. Ask with `AskUserQuestion`: the top task first as
 "(Recommended)", then the next three; "Other" takes any ref from the table.
 With no candidates, say so and stop.
 
-Done when you hold exactly one ref the user named or confirmed.
+When the task's aven status is `inbox`, run [`/tasks-triage`](../tasks-triage/SKILL.md)
+on that ref alone, here and before step 3. Continue only when triage applied it
+as `todo` or `backlog`; when it was skipped or `canceled`, say so and stop
+without starting the task.
+
+Done when you hold exactly one ref the user named or confirmed, triaged.
 
 ## 3. Hand off to a worker
 
