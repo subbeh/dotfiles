@@ -3,6 +3,16 @@
 How `/tasks-handover`, `/tasks-takeover`, `/tasks-pickup` and `/tasks-triage` find a repo's task tracker and run
 each operation on it.
 
+## Naming a task
+
+Whenever a task is named to the user (`AskUserQuestion` questions and options,
+tables, reports, final summaries), write it as `<REF> (<title>)`, e.g.
+`DOT-Q8WR (yank to end of line with Y in copy mode)`. The title may drop its
+`type(scope): ` prefix. When an option label is too short for the title, the
+label holds the ref and a few-word subject, and the option's description
+carries the full title. Worker pings (`[tasks] <ref> <state>: ...`) and notes
+stay ref-only.
+
 ## Finding the tracker
 
 A ref names its tracker by shape: `DTF-WN8C` is aven, `ABC-123` is Jira, `#123`
