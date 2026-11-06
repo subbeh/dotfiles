@@ -47,8 +47,9 @@ It leaves a draft as a draft.
 Report: <state> - <one line>
 ```
 
-The ping goes to the owner's id, looked up by name in
-`agent-manager sessions --json`:
+The ping goes to the owner's id: the row of `agent-manager sessions --json`
+whose name and group both match the ownership note. Every orchestrator is
+named `tasks`, so a name alone finds the wrong one:
 
 ```sh
 agent-manager send <owner id> "[tasks] <ref> <state>: <one line>"
