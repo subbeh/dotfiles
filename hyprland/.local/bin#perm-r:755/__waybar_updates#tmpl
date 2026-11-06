@@ -7,7 +7,35 @@ elif command -v checkupdates &>/dev/null; then
   updates=$({
     checkupdates
     paru -Qua
-  } 2>/dev/null | sed -r -e "s/\x1B\[[0-9;]*[mK]//g" -e "s/->//" | column -t)
+  } 2>/dev/null | sed -r -e "s/\x1B\[[0-9;]*[mK]//g" -e "s/->//" | column -t |
+    # colour the changed part of the new version by bump size: major, minor, patch, pkgrel only
+    awk -v major='#{{ .Vars.color.red.base }}' -v minor='#{{ .Vars.color.yellow.base }}' \
+      -v patch='#{{ .Vars.color.green.base }}' -v rebuild='#{{ .Vars.color.fg.darkest }}' '
+      function parse(v, o,  i) {
+        o["e"] = 0
+        if ((i = index(v, ":"))) { o["e"] = substr(v, 1, i - 1); v = substr(v, i + 1) }
+        o["r"] = ""
+        if ((i = match(v, /-[^-]*$/))) { o["r"] = substr(v, i + 1); v = substr(v, 1, i - 1) }
+        o["v"] = v
+      }
+      NF < 4 { print; next }
+      {
+        new = $NF; parse($(NF - 2), o); parse(new, n)
+        if (o["e"] != n["e"]) { col = major; start = 1 }
+        else if (o["v"] == n["v"]) { col = rebuild; start = length(new) - length(n["r"]) + 1 }
+        else {
+          nc = split(n["v"], nv, /[^[:alnum:]]+/); split(o["v"], ov, /[^[:alnum:]]+/)
+          for (i = 1; i < nc && nv[i] == ov[i]; i++);
+          col = i == 1 ? major : i == 2 ? minor : patch
+          start = index(new, ":"); rest = n["v"]
+          for (j = 1; j <= i; j++) {
+            match(rest, /[[:alnum:]]+/)
+            if (j < i) { start += RSTART + RLENGTH - 1; rest = substr(rest, RSTART + RLENGTH) }
+            else start += RSTART
+          }
+        }
+        print substr($0, 1, length($0) - length(new)) substr(new, 1, start - 1) "<span color=\047" col "\047>" substr(new, start) "</span>"
+      }')
 
   if [[ -z "$(echo "$updates" | tr -d '[:space:]')" ]]; then
     updates_fmt=""
