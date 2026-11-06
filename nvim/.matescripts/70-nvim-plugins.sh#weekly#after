@@ -14,6 +14,10 @@ echo
 echo "Cleaning inactive plugins..."
 nvim --headless -c ':lua vim.pack.clean(nil, { inactive = true })' -c qa
 
+echo "Building blink.cmp..."
+nvim --headless -c 'lua if not require("blink.cmp").build():pwait() then vim.cmd.cquit() end' -c qa
+echo
+
 echo "Updating Treesitter languages..."
 nvim --headless -c ':TSUpdate' -c qa
 echo

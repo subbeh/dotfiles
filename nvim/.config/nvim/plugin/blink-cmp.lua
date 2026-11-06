@@ -1,3 +1,6 @@
+-- macOS 27 dyld rejects dylibs stripped by CLT 27 strip (misaligned string table)
+vim.env.CARGO_PROFILE_RELEASE_STRIP = "false"
+
 vim.pack.add({
   "https://github.com/saghen/blink.lib",
   "https://github.com/saghen/blink.cmp",
@@ -18,10 +21,12 @@ end
 
 local cmp = require("blink.cmp")
 
--- macOS 27 dyld rejects dylibs stripped by CLT 27 strip (misaligned string table)
-vim.env.CARGO_PROFILE_RELEASE_STRIP = "false"
-cmp.build():pwait()
 cmp.setup({
+  -- Lua matcher until the Rust library is built (pack.lua hook, 70-nvim-plugins.sh)
+  fuzzy = {
+    implementation = "prefer_rust",
+  },
+
   keymap = {
     preset = "default",
     ["<Up>"] = { "select_prev", "fallback" },

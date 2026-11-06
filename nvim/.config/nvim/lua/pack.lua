@@ -1,4 +1,13 @@
 local hooks = {
+  ["blink.cmp"] = {
+    kind = { "install", "update" },
+    build = function()
+      -- headless: 70-nvim-plugins.sh builds it as its own step
+      if #vim.api.nvim_list_uis() > 0 then
+        require("blink.cmp").build()
+      end
+    end,
+  },
   ["mason.nvim"] = {
     kind = { "update" },
     build = "MasonUpdate",
