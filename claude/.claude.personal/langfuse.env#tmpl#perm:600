@@ -1,0 +1,4 @@
+# Langfuse tracing keys, loaded by the claude wrapper for this profile only
+CC_LANGFUSE_PUBLIC_KEY='{{ bitwarden "langfuse.com" "field" "claude-code-public-key" }}'
+CC_LANGFUSE_SECRET_KEY='{{ bitwarden "langfuse.com" "field" "claude-code-secret-key" }}'
+CC_LANGFUSE_BASE_URL='https://cloud.langfuse.com'

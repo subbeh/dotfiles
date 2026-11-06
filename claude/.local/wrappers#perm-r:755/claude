@@ -1,3 +1,9 @@
 #!/bin/sh
-# Loads the cwd's .envrc (e.g. CLAUDE_CONFIG_DIR) for callers that skip the shell hook, like agent-manager.
-exec direnv exec . "$HOME/.local/bin/claude" "$@"
+# Loads the cwd's .envrc (e.g. CLAUDE_CONFIG_DIR) for callers that skip the shell hook, like agent-manager,
+# then the profile's langfuse.env (tracing keys) if it has one.
+# shellcheck disable=SC2016 # expands in the inner sh, after direnv
+exec direnv exec . sh -c '
+  env="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/langfuse.env"
+  if [ -r "$env" ]; then set -a; . "$env"; set +a; fi
+  exec "$HOME/.local/bin/claude" "$@"
+' claude "$@"

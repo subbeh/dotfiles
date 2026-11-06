@@ -43,3 +43,13 @@ for dir in "$HOME"/.claude.*; do
     to-questionnaire to-spec to-tickets triage wait-what wayfinder wizard \
     writing-for-agents
 done
+
+# Langfuse tracing, personal only: work prompts and code must not leave the company.
+# Keys come from langfuse.env, which the claude wrapper loads.
+export CLAUDE_CONFIG_DIR="$HOME/.claude.personal"
+if [[ -d "$CLAUDE_CONFIG_DIR" ]]; then
+  jq -e '."langfuse-observability"' "$CLAUDE_CONFIG_DIR/plugins/known_marketplaces.json" &>/dev/null ||
+    claude plugin marketplace add langfuse/Claude-Observability-Plugin
+  jq -e '.plugins."langfuse-observability@langfuse-observability"' "$CLAUDE_CONFIG_DIR/plugins/installed_plugins.json" &>/dev/null ||
+    claude plugin install langfuse-observability@langfuse-observability
+fi
