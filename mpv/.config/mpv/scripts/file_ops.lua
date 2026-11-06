@@ -14,27 +14,34 @@ local function current_file()
 	return utils.join_path(mp.get_property_native("working-directory"), path)
 end
 
-local function trash()
+local function delete()
 	local path = current_file()
 	if not path then
-		mp.osd_message("Can't trash: not a local file")
+		mp.osd_message("Can't delete: not a local file")
 		return
 	end
 
-	-- Removing the current entry advances to the next, or ends playback if last.
-	mp.commandv("playlist-remove", "current")
+	local _, name = utils.split_path(path)
 
-	local res = mp.command_native({
-		name = "subprocess",
-		args = { "gio", "trash", "--", path },
-		playback_only = false,
+	input.get({
+		prompt = "Delete " .. name .. "? (y/N)",
+		submit = function(answer)
+			input.terminate()
+			if answer:lower() ~= "y" then
+				mp.osd_message("Delete canceled")
+				return
+			end
+
+			local ok, err = os.remove(path)
+			if ok then
+				-- Removing the current entry advances to the next, or ends playback if last.
+				mp.commandv("playlist-remove", "current")
+				mp.osd_message("Deleted: " .. path)
+			else
+				mp.osd_message("Delete failed: " .. tostring(err))
+			end
+		end,
 	})
-
-	if res.status == 0 then
-		mp.osd_message("Trashed: " .. path)
-	else
-		mp.osd_message("Trash failed: " .. path)
-	end
 end
 
 local function rename()
@@ -67,5 +74,5 @@ local function rename()
 	})
 end
 
-mp.add_key_binding(nil, "trash-file", trash)
+mp.add_key_binding(nil, "delete-file", delete)
 mp.add_key_binding(nil, "rename-file", rename)
