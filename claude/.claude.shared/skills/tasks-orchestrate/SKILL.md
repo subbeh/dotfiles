@@ -136,6 +136,10 @@ ask before you:
 4. When it was the epic's last open task, offer
    `agent-manager delete-group <path>`.
 
+When the `done` report says the task needs more PRs, skip step 1 and step 4:
+the task stays open, and its next PR goes into **Start a task**'s options as
+a new worker (`/tasks-takeover <ref>`, fresh `--worktree`).
+
 ### Start a successor
 
 For a `handover` report: archive the worker, then spawn the successor in its

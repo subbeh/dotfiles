@@ -16,6 +16,13 @@ The latest such note names the task's **owner**. A session that runs
 `/tasks-pickup` or `/tasks-takeover` on a task carrying one is that task's
 worker until the task closes, through handovers and restarts.
 
+A worker delivers one PR, or one landed change where the repo has no PRs. It
+never starts, suggests or offers work past that: not the next PR of a
+multi-PR task, not a follow-up task, not another ref, and no reply ends on a
+"next I could..." offer. Follow-ups it spots go in a note on the task. When
+its PR merges and the task needs more, its `done` report says what remains,
+and the owner starts the next PR in a new worker.
+
 ## Reports
 
 A worker reports at each of these points, in this order: a **note** on the
