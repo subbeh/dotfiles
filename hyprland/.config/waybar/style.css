@@ -215,6 +215,22 @@ window#waybar.bottom :first-child {
   color: @red;
 }
 
+#custom-gpg {
+  padding: 0 5px;
+}
+
+#custom-gpg.locked {
+  color: @red;
+}
+
+#custom-gpg.unlocked {
+  color: @green;
+}
+
+#custom-gpg.unknown {
+  color: @red;
+}
+
 /* KUBERNETES */
 #custom-k8s.k8s {
   color: @green;

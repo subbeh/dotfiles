@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Waybar module: whether the gpg smartcard's signing PIN is verified, so a signature won't prompt.
+set -uo pipefail
+
+ICON_LOCKED='󰌾'
+ICON_UNLOCKED='󰌿'
+
+# `__waybar_gpg unlock`: sign a throwaway message so pinentry asks for the PIN, refresh the module.
+if [[ ${1:-} == unlock ]]; then
+  echo test | gpg --clearsign >/dev/null 2>&1 || notify-send -a gpg -u critical "GnuPG" "Card unlock failed"
+  pkill -SIGRTMIN+13 waybar
+  exit 0
+fi
+
+# A signature won't prompt when the card has PW1 verified or gpg-agent caches the PIN (pcscd resets
+# the card's state within seconds, so the cache is what usually counts). VERIFY (00 20) of PW1 for
+# signing (81) without data only reports status: 9000 verified, 63Cx not, x retries left.
+sw=$(timeout 3 gpg-connect-agent --no-autostart --hex 'scd switchapp openpgp' 'scd apdu 00200081' /bye 2>/dev/null |
+  awk '/^D\[/ {print toupper($2 $3); exit}')
+
+# Ask the agent's cache with a real signature that errors instead of prompting. Only at full retries
+# (3, the default), so a stale cached PIN can't burn more than one.
+if [[ $sw == 63C3 ]] && echo test | timeout 5 gpg --batch --pinentry-mode error --clearsign >/dev/null 2>&1; then
+  sw=9000
+fi
+
+case $sw in
+  9000) icon=$ICON_UNLOCKED class=unlocked status='PIN cached' ;;
+  63C?) icon=$ICON_LOCKED class=locked status="PIN not cached, ${sw:3} retries left" ;;
+  *) icon=$ICON_LOCKED class=unknown status='card unavailable' ;;
+esac
+
+jq -nc --arg text "$icon" --arg class "$class" --arg tooltip "<b>gpg card</b>  $status" \
+  '{text: $text, class: $class, tooltip: $tooltip}'

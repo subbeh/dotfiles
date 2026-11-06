@@ -383,6 +383,17 @@
     "on-click": "__waybar_bitwarden unlock"
   },
   //
+  // GPG
+  //
+  "custom/gpg": {
+    "exec": "__waybar_gpg",
+    "return-type": "json",
+    "interval": 15,
+    "tooltip": true,
+    "signal": 13,
+    "on-click": "__waybar_gpg unlock"
+  },
+  //
   // KUBERNETES
   //
   "custom/k8s": {
