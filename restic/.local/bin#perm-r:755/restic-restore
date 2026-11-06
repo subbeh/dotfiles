@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Restore a file or directory from a restic snapshot picked with fzf.
+# Usage: restic-restore <path>
+
+set -euo pipefail
+
+[[ $# -eq 1 ]] || { echo "usage: restic-restore <path>" >&2; exit 2; }
+
+# Absolute and lexically clean; resolve symlinks in the parent only, so a symlinked
+# leaf is looked up as the link the backup stored.
+path=$(realpath -m -s -- "$1")
+[[ $path != / ]] || { echo "refusing to restore /" >&2; exit 2; }
+parent=$(realpath -m -- "$(dirname -- "$path")")
+name=$(basename -- "$path")
+path="${parent%/}/$name"
+
+set -a
+# shellcheck disable=SC1091
+source /etc/restic/env
+set +a
+
+echo "Searching snapshots for $path..." >&2
+snapshots=$(sudo -E restic snapshots --json)
+# shortcut: restic find takes glob patterns, so a path with * ? [ can match extra names;
+# the exact-path filter below drops those.
+rows=$(sudo -E restic find --json -- "$path" | jq -r --arg path "$path" --argjson snaps "$snapshots" '
+  ($snaps | map({(.id): .}) | add) as $by_id
+  | .[]
+  | (.matches[] | select(.path == $path)) as $m
+  | $by_id[.snapshot] as $s
+  | [$s.short_id,
+     ($s.time[0:16] | sub("T"; " ")),
+     (($s.tags // []) | join(",") | if . == "" then "-" else . end),
+     (if $m.type == "dir" then "dir" else ($m.size | tostring) end),
+     ($m.mtime[0:16] | sub("T"; " "))]
+  | @tsv')
+
+if [[ -z $rows ]]; then
+  echo "No snapshot holds $path" >&2
+  exit 1
+fi
+
+snap=$(numfmt --to=iec --field=4 --delimiter=$'\t' --invalid=ignore <<<"$rows" |
+  column -t -s $'\t' -N SNAPSHOT,TAKEN,TAGS,SIZE,MODIFIED |
+  fzf --header-lines=1 --no-sort --prompt="snapshot> " --header="Restore $path from" |
+  awk '{print $1}') || exit 1
+
+action=$(printf '%s\n' "overwrite" "backup, then overwrite" "restore elsewhere" |
+  fzf --no-sort --prompt="action> " --header="Restore $path from $snap") || exit 1
+
+target=$parent
+case $action in
+  "backup, then overwrite")
+    if sudo test -e "$path" -o -L "$path"; then
+      bak="$path.bak-$(date +%Y%m%d-%H%M%S)"
+      sudo cp -a -- "$path" "$bak"
+      echo "Backed up to $bak" >&2
+    fi
+    ;;
+  "restore elsewhere")
+    read -r -e -p "Restore into directory: " target
+    target=${target/#\~/$HOME}
+    [[ -n $target ]] || exit 1
+    # Created as the user: restic would make a missing target root-owned 0700.
+    mkdir -p -- "$target"
+    ;;
+esac
+
+# Restore the parent subtree with only this entry included, so it lands at
+# <target>/<name>. No --delete: files missing from the snapshot are kept.
+sudo -E restic restore "$snap:$parent" --target "$target" --include "/$name"
+echo "Restored $name into $target" >&2
