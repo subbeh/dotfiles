@@ -67,8 +67,8 @@ Resume in a new session from <directory>:
 
 ## 5. Offer to resume in a new agent-manager session
 
-On a task with an `Orchestrated by` note, report `handover` instead (see
-[`../orchestration.md`](../orchestration.md)) and stop: its orchestrator starts
+On a task with an `Orchestrated by` note, report `handover` instead with
+`bash <skill-dir>/../tasks-report.sh <ref> handover "<one line>"` and stop: its orchestrator starts
 the next session. Otherwise run this step only when the agent-manager tools
 are available; without them, stop at step 4.
 Ask with `AskUserQuestion` whether to start the next session now, "Resume

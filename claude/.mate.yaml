@@ -7,3 +7,6 @@ targets:
 
 packages:
   - claude: brew
+
+ignore:
+  - "*.test.sh"

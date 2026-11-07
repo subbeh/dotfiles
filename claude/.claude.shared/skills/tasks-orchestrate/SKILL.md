@@ -58,10 +58,10 @@ order:
 1. A dead or errored worker.
 2. A `done` report: close the task.
 3. A `handover` report: start the successor.
-4. A `waiting` report: name the session to attach to, where its question is.
-   This covers the ping of a worker whose work is finished and who waits for
-   the go-ahead to land it.
-5. Start the next task.
+4. A `landing` report: name the session to attach to, where the go-ahead to
+   land its finished work is asked.
+5. A `waiting` report: name the session to attach to, where its question is.
+6. Start the next task.
 
 Check a session (`agent-manager read`) and take over a task owned elsewhere go
 last. A `review` report is parked on teammates and gets no option: show its PR's

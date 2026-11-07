@@ -72,8 +72,8 @@ agent-manager name (the `self` row of `list_sessions`) or `interactive`. When
 the work gets its own branch, name it per the tracker's **Branch name**, or put
 the ref in it when the tracker has none: that is how `/tasks-takeover` finds the
 task later. As a worker, first read [`../orchestration.md`](../orchestration.md) in
-full: it holds the report notes and the ping command. Then report `started`,
-and from then on report each state it lists.
+full: it holds when to report, the one-PR rule and leases. Then report `started`
+with its `tasks-report.sh`, and from then on report each state it lists.
 
 Print the brief:
 

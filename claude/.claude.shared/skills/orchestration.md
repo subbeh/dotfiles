@@ -25,39 +25,31 @@ and the owner starts the next PR in a new worker.
 
 ## Reports
 
-A worker reports at each of these points, in this order: a **note** on the
-task, then a **ping** to the owner. `started` is a note only: its ping would
-arrive stale and cost the owner a turn. A mid-task `waiting` question is a note
-only too: the user answers in the worker's own session, so a ping only asks
-them twice. A `waiting` for the go-ahead to land finished work is pinged.
+A worker reports at each of these points with one command, run from the
+repo:
+
+```sh
+bash <skill-dir>/../tasks-report.sh <ref> <state> "<one line>"
+```
+
+It writes the report note and pings the owner when the state calls for it.
+It prints one line saying what it did; exit 1 means the note failed, so retry
+or tell the user. Exit 2 means the task has no owner, so the session is not a
+worker and reports nothing.
 
 | State | When |
 |---|---|
 | `started` | right after the claim line |
-| `waiting` | before asking the user anything mid-task. Also, with a ping, once the work is finished and only the user's go-ahead to land it (commit, push, merge, a live run) is left; the one line says so. In a repo without PRs this is where every worker ends. It is not `review`, which is PR-only |
+| `waiting` | before asking the user anything mid-task |
+| `landing` | once the work is finished and only the user's go-ahead to land it (commit, push, merge, a live run) is left; the one line says which. In a repo without PRs this is where every worker ends |
 | `blocked` | when the task can't move without someone else |
 | `handover` | after the handoff note, in place of tasks-handover step 5 |
-| `review` | once the PR is open with CI green, no Claude review comment unanswered, and only teammates' reviews left; send it again after each later fix |
-| `done` | once the work has landed: per the repo's `CLAUDE.md` when it says how (e.g. on `main`), else merged for a PR (stay on the PR until then), else pushed. When the acceptance criteria need a live change (a Deploy, a config edit on a host), also once it is live and those criteria are checked. A run that needs the user's go-ahead is a `waiting` question, asked outright, not a step left in the report |
+| `review` | once the PR is open with CI green, no Claude review comment unanswered, and only teammates' reviews left; send it again after each later fix. PR-only |
+| `done` | once the work has landed: per the repo's `CLAUDE.md` when it says how (e.g. on `main`), else merged for a PR (stay on the PR until then), else pushed. When the acceptance criteria need a live change (a Deploy, a config edit on a host), also once it is live and those criteria are checked. A run that needs the user's go-ahead is a `landing` report, asked outright, not a step left in the report |
 
 Once its PR is open, a worker runs `/monitor-pr <n> --loop=15m`
 and fixes or answers every Claude review comment before it reports `review`.
 It leaves a draft as a draft.
-
-```text
-Report: <state> - <one line>
-```
-
-The ping goes to the owner's id: the row of `agent-manager sessions --json`
-whose name and group both match the ownership note. Every orchestrator is
-named `tasks`, so a name alone finds the wrong one:
-
-```sh
-agent-manager send <owner id> "[tasks] <ref> <state>: <one line>"
-```
-
-When the owner isn't running, the note alone carries the report: the
-orchestrator reads it when it next rebuilds.
 
 The task's status after `active` belongs to its owner: a worker reports `done`
 and stops, and the orchestrator sets `done` after its close check.
