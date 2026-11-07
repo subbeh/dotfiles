@@ -35,7 +35,8 @@ settled.
 
 Run **GitHub items**. For each, **Find GitHub mirrored**:
 
-- Not mirrored: **Mirror** it, which links a worker's PR to its task.
+- Not mirrored: **Link** it to the task that tracks it, else **Mirror** it and
+  **Relate** it. Then add its **Comments**, which notes the existing thread.
 - Mirrored on an open task: add its new **Comments**.
 - Mirrored on a `done` or `canceled` task: report it as drift.
 
@@ -48,7 +49,8 @@ settled.
 ## 4. Report
 
 Print one row per item: the task (`<REF> (<title>)`), the item (`issue #<n>`,
-`PR #<n>` or the Jira key), and what happened: `imported`,
+`PR #<n>` or the Jira key), and what happened: `imported` (plus
+`, related <REF>` when **Relate** ran, or the candidate task **Link** found),
 `linked`, `noted` (new comments), `drift: <resolution>`, `skipped` (with why,
 e.g. a Jira item whose PR merged), or `unchanged`. A second run with nothing new
 shows only `unchanged` rows.

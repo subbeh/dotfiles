@@ -78,13 +78,23 @@ the PR that implements it. `aven show <ref> --full --json` prints its metadata.
   or `gh pr view <n> --json state,comments,reviews`, plus `--comments` for the
   body and thread.
 - **Mirror**: `aven add "<title>" --status inbox --description "Mirrors <url>"
-  --metadata <key>=<owner>/<repo>#<n> --metadata synced=<now>`, with key
-  `issue` or `pr`. An authored PR whose head branch carries a ref of an
-  existing task (case-insensitive, e.g. `am/dot-zgtr-...`) is linked instead:
-  `aven edit <ref> --metadata pr=<owner>/<repo>#<n> --metadata synced=<now>`.
+  --metadata <key>=<owner>/<repo>#<n>`, with key `issue` or `pr`. It sets no
+  `synced`: **Comments** does. Try **Link** before adding, then **Relate** the new task.
+- **Link**: attach the item to an existing task instead of adding one, with
+  `aven edit <ref> --metadata <key>=<owner>/<repo>#<n>` (no `synced`).
+  - An authored PR whose head branch carries a ref of an existing task
+    (case-insensitive, e.g. `am/dot-zgtr-...`) links to it.
+  - An issue or PR also links to the one open task in the same aven project
+    whose description or notes name it (its URL or `#<n>`) as the work that
+    task tracks. When several tasks name it, or one only mentions it in
+    passing, import it instead and name the candidate task in the report row.
+- **Relate**: when an open task in another aven project mentions an item that
+  is imported, run `aven related add <new ref> <mentioning ref>`. The item
+  still gets its own task.
 - **Comments**: comments and reviews created after the task's `synced` time
-  (all of them when it has none) go into one **note** that summarises them in your own words, then
-  `aven edit <ref> --metadata synced=<now>`.
+  (all of them when it has none, as on a new or linked task) go into one
+  **note** that summarises them in your own words. A thread with none gets no
+  note. Either way, then `aven edit <ref> --metadata synced=<now>`.
 - **GitHub drift**: for each open GitHub-mirrored task
   (`aven list --open --has-metadata <key>` per key; `unknown-metadata-field`
   means none), **GitHub read** its items and settle each mismatch with
