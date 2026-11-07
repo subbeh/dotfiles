@@ -1,6 +1,6 @@
 ---
 name: tasks-triage
-description: Triage the aven inbox, or one inbox task given by ref - import assigned Jira tickets where aven mirrors Jira, then rename, describe, prioritise and link each task and move it to todo or backlog.
+description: Triage the aven inbox, or one inbox task given by ref - optionally sync untracked GitHub or Jira work first, then rename, describe, prioritise and link each task and move it to todo or backlog.
 disable-model-invocation: true
 model: opus
 ---
@@ -15,14 +15,16 @@ when that tracker applies.
 
 ## 1. Load the inbox
 
-With a ref as the argument, triage that task alone: skip **Import**, **Read**
+With a ref as the argument, triage that task alone: skip the sync, **Read**
 it, and stop when its status is not `inbox`. `/tasks-pickup` passes one when the
 task it picked is still in the inbox.
 
-Otherwise, on aven + Jira, run **Import** first and report how many tasks it added, as
-`active` and as `inbox`. Then run **Inbox**. With no tasks, say so and stop. Run
-**All open** too: those are the tasks and epics an inbox task may duplicate or
-link to.
+Otherwise, where [`/tasks-sync`](../tasks-sync/SKILL.md) has something to sync
+(aven + Jira, or aven with a GitHub repo), ask with `AskUserQuestion` whether
+to run it first; on aven + Jira say its Jira inventory takes a few minutes. On
+yes, run it here and report how many tasks it added. Then run **Inbox**. With
+no tasks, say so and stop. Run **All open** too: those are the tasks and epics
+an inbox task may duplicate or link to.
 
 Done when you hold every inbox ref (or the one ref) and the open-task list.
 
@@ -48,7 +50,7 @@ Draft:
   the user's answers; every gap becomes a question. For a mirrored task, write
   the user's answers in your own words: ticket text stays in Jira. A research
   task's acceptance criterion is its findings, written into its own description.
-- **Project** (aven + Jira): the one **Import** chose; the user can move it to
+- **Project** (aven + Jira): the one it was imported into; the user can move it to
   another repo's project.
 - **Priority**: `urgent` to `none`, from its impact and what it blocks.
 - **Status**: `todo` for soon, `backlog` for someday, `canceled` when the
