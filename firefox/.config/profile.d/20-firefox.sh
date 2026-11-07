@@ -1,3 +1,3 @@
 #!/bin/sh
 
-export BROWSER="firefox"
+export BROWSER="firefox -P default"

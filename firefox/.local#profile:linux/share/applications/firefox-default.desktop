@@ -2,7 +2,7 @@
 Type=Application
 Version=1.0
 Name=Firefox Default
-Exec=/usr/lib/firefox/firefox -P default
+Exec=/usr/lib/firefox/firefox -P default %u
 Icon=firefox
 Terminal=false
 Categories=GNOME;GTK;Network;WebBrowser;
