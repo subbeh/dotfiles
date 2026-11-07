@@ -90,23 +90,23 @@ model and effort** of [`../orchestration.md`](../orchestration.md). Ask which
 one. Then:
 
 1. Write the ownership **note**: `Orchestrated by <your name> in <group>`.
-2. Pick the group. In repo scope it is your group. In epic scope it is
-   `<your group>/<epic-slug>`: run `agent-manager create-group <path> --directory <repo>`
-   the first time.
+2. Pick the subgroup: `<your group>/<name>`, where `<name>` is the epic's slug
+   in epic scope and your own session name in repo scope (e.g. `dotfiles/tasks`).
+   The first time, run `agent-manager create-group <path> --directory <repo>`.
 3. Spawn the worker:
 
 ```sh
-agent-manager spawn --name <ref>-<slug> --group <group> --directory <repo> --worktree --model <alias> --effort <level> --prompt "<entry>"
+agent-manager spawn --name <ref>-<slug> --group <subgroup> --directory <repo> --worktree --model <alias> --effort <level> --prompt "<entry>"
 ```
 
    Leave out `--worktree` when the group's own stored worktree setting is
    `off`:
 
 ```sh
-agent-manager export --groups - 2>/dev/null | jq -r '.groups[] | select(.name=="<group>") .worktree'
+agent-manager export --groups - 2>/dev/null | jq -r '.groups[] | select(.name=="<subgroup>") .worktree'
 ```
 
-   An epic subgroup (`<group>/<epic-slug>`) with an empty value takes the
+   A subgroup with an empty value takes the
    nearest ancestor's non-empty value; empty all the way up means `--worktree`.
    Don't use `agent-manager groups --json`: it reports null for an `off` group.
    Without a worktree the worker runs in the repo's checkout and shares it with
@@ -152,7 +152,7 @@ ask before you:
    worker, with `d` in agent-manager. This removes the worktree and its `am/`
    branch, and nothing else can. A worker spawned without `--worktree` has
    none: skip this step.
-4. When it was the epic's last open task, offer
+4. When its subgroup has no sessions left, offer
    `agent-manager delete-group <path>`.
 
 When the `done` report says the task needs more PRs, skip step 1 and step 4:
@@ -166,7 +166,7 @@ step 2, #915), then spawn the successor in its
 directory (its worktree, if it has one) with a new name, following the same rule:
 
 ```sh
-agent-manager spawn --name <ref>-<slug> --group <group> --directory <worker directory> --model <alias> --effort <level> --prompt "/tasks-takeover <ref>"
+agent-manager spawn --name <ref>-<slug> --group <subgroup> --directory <worker directory> --model <alias> --effort <level> --prompt "/tasks-takeover <ref>"
 ```
 
 The successor takes the task's labels.
