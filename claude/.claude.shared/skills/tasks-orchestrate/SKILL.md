@@ -89,7 +89,7 @@ effort: the task's `model-` and `effort-` labels, else the rule in **Worker
 model and effort** of [`../orchestration.md`](../orchestration.md). Ask which
 one. Then:
 
-1. Write the ownership **note**: `Orchestrated by <your name> in <group>`.
+1. Write the ownership **note**: `Orchestrated by <your name> in <your group>`.
 2. Pick the subgroup: `<your group>/<name>`, where `<name>` is the epic's slug
    in epic scope and your own session name in repo scope (e.g. `dotfiles/tasks`).
    The first time, run `agent-manager create-group <path> --directory <repo>`.
@@ -152,8 +152,9 @@ ask before you:
    worker, with `d` in agent-manager. This removes the worktree and its `am/`
    branch, and nothing else can. A worker spawned without `--worktree` has
    none: skip this step.
-4. When its subgroup has no sessions left, offer
-   `agent-manager delete-group <path>`.
+4. In epic scope, when the epic has no open tasks left and its subgroup no
+   sessions, offer `agent-manager delete-group <path>`. Repo scope never offers
+   it: the next spawn recreates the subgroup.
 
 When the `done` report says the task needs more PRs, skip step 1 and step 4:
 the task stays open, and its next PR goes into **Start a task**'s options as
