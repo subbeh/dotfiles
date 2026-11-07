@@ -48,7 +48,7 @@ settled.
 ## 4. Report
 
 Print one row per item: the task (`<REF> (<title>)`), the item (`issue #<n>`,
-`PR #<n>`, `review #<n>` or the Jira key), and what happened: `imported`,
+`PR #<n>` or the Jira key), and what happened: `imported`,
 `linked`, `noted` (new comments), `drift: <resolution>`, `skipped` (with why,
 e.g. a Jira item whose PR merged), or `unchanged`. A second run with nothing new
 shows only `unchanged` rows.
