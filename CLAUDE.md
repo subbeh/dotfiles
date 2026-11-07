@@ -101,19 +101,9 @@ foo update
 - Never hardcode a secret — use the `bitwarden` template function, or a
   `generate:` block (see `ssh/.mate.yaml`).
 - Never drop an `#enc` suffix; check the staged diff for it before committing.
-- Edit an encrypted file without decrypting into the worktree. `mate edit` execs
-  `$VISUAL` directly, so it must be an **executable file path**, not a shell string:
-
-```bash
-cat >/tmp/mate-editor.sh <<'EOF'
-#!/bin/sh
-exec python3 /tmp/patch.py "$1"      # or sed -i, etc.
-EOF
-chmod +x /tmp/mate-editor.sh
-VISUAL=/tmp/mate-editor.sh mate edit 'work/.config/profile.d/05-work.sh#tmpl#enc'
-```
-
-Confirm the result with `mate cat`, then delete the scratch files.
+- Edit an encrypted file without decrypting into the worktree: read
+  `.claude/docs/secrets-edit.md` first (`mate edit` needs `$VISUAL` as an
+  executable file path).
 
 ## Packages
 
@@ -126,11 +116,8 @@ statemate's `docs/packages.md`.
 
 ## Adding a source
 
-1. `mkdir <name>/` and lay out files relative to `~`.
-1. Register it: `sources:` in `mate.yaml`, or a profile's `sources:` if it is
-   machine-specific.
-1. Add `<name>/.mate.yaml` for its packages.
-1. `mate status` — a half-built source in `sources:` breaks apply on every machine.
+Follow `.claude/docs/new-source.md`. A half-built source in `sources:` breaks
+apply on every machine.
 
 ## Verify before calling it done
 
@@ -156,29 +143,11 @@ setting is `off` (a new machine needs that set: `r` on the group row). They shar
 agent-manager worktree (`dotfiles-worktrees/<name>`, branch `am/<name>`) follows
 the rest of this section. The main checkout is `dirname "$(git rev-parse --path-format=absolute --git-common-dir)"`.
 
-- Bare `mate` reads the main checkout's source, not the worktree. Run read-only
-  commands as `STATEMATE_DIR=$PWD mate status|diff|eval|check|cat` so they check
-  this worktree's files.
-- Deploying waits until the work has landed: `clean`, `delete`, `forget`,
-  `scripts run` and `packages apply` run from the main checkout, and the user
-  runs `apply` there.
-  `mate rename` also renames the deployed target, so in a worktree change
-  attributes with `git mv` and note in the report that the next apply removes
-  the old target and deploys the new one.
+In such a worktree, read `.claude/docs/worktree.md` before running `mate` or
+landing: it covers `STATEMATE_DIR=$PWD`, deferred deploys, `git mv` for
+attributes, and the rebase + ff-only land steps.
 
-**Land** a worktree once its commits are made and `git status` is clean:
-
-1. `git rebase main` in the worktree. On a conflict, stop and ask.
-1. `git -C <main checkout> merge --ff-only am/<name>`. When `main` moved again,
-   rebase again. When the main checkout's uncommitted changes touch the same
-   files, stop and ask; leave them as they are.
-1. Report the landed commits and what the user still runs: `mate apply`, any
-   `mate clean` for removed or renamed sources, and the push.
-
-**Use the `/dotfiles-commit` skill** — it handles Conventional Commits format,
-intelligent file grouping, and commit splitting rules. The skill analyzes actual
-diffs, groups files logically, and creates properly formatted commits with
-interactive review.
+**Commit with the `/dotfiles-commit` skill.**
 
 **Safety**: Stage explicit paths per commit; never `git add -A` or `git commit -a`.
 The skill enforces this. If one file holds multiple commits' worth of changes,
