@@ -113,6 +113,8 @@ agent-manager export --groups - 2>/dev/null | jq -r '.groups[] | select(.name=="
    the group's other workers, so each stages explicit paths and may
    `reserve_files` what it edits.
 
+Leave out `--effort` for a `model-haiku` task: it lists no effort levels.
+
 The name is kebab-case, 2–4 words, and starts with the lowercase ref. `<entry>`
 is `/tasks-takeover <ref>` for an `active` task, otherwise
 `/tasks-pickup <ref>`.
