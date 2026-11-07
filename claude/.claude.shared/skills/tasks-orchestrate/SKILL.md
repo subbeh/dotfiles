@@ -134,7 +134,9 @@ worker monitors the PR and fixes what CI, Sonar or review raise. If both pass,
 ask before you:
 
 1. **Edit** the task to `done`.
-2. Archive each of its sessions (`agent-manager archive <id>`).
+2. Kill, then archive, each of its sessions (`agent-manager kill <id>`, then
+   `agent-manager archive <id>`): archive alone leaves it running (agent-manager
+   issue #915; drop the kill once that ships).
 3. Tell the user to delete the row that owns the worktree, which is its first
    worker, with `d` in agent-manager. This removes the worktree and its `am/`
    branch, and nothing else can. A worker spawned without `--worktree` has
@@ -148,7 +150,8 @@ a new worker (`/tasks-takeover <ref>`, fresh `--worktree`).
 
 ### Start a successor
 
-For a `handover` report: archive the worker, then spawn the successor in its
+For a `handover` report: kill and archive the worker (as in **Close a task**
+step 2, #915), then spawn the successor in its
 directory (that is the worktree) with a new name, following the same rule:
 
 ```sh
