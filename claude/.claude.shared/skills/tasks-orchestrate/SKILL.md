@@ -103,7 +103,7 @@ agent-manager spawn --name <ref>-<slug> --group <group> --directory <repo> --wor
    `off`:
 
 ```sh
-agent-manager export --groups - | jq -r '.groups[] | select(.name=="<group>") .worktree'
+agent-manager export --groups - 2>/dev/null | jq -r '.groups[] | select(.name=="<group>") .worktree'
 ```
 
    An epic subgroup (`<group>/<epic-slug>`) with an empty value takes the
