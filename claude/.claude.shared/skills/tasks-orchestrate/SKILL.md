@@ -99,10 +99,19 @@ one. Then:
 agent-manager spawn --name <ref>-<slug> --group <group> --directory <repo> --worktree --model <alias> --effort <level> --prompt "<entry>"
 ```
 
-   When the repo's `CLAUDE.md` says work lands on `main` with no PRs
-   (dotfiles), leave out `--worktree`: the worker runs in the main checkout on
-   `main` and commits straight to it. Workers share that checkout, so each
-   stages explicit paths and may `reserve_files` what it edits.
+   Leave out `--worktree` when the group's own stored worktree setting is
+   `off`:
+
+```sh
+agent-manager export --groups - | jq -r '.groups[] | select(.name=="<group>") .worktree'
+```
+
+   An epic subgroup (`<group>/<epic-slug>`) with an empty value takes the
+   nearest ancestor's non-empty value; empty all the way up means `--worktree`.
+   Don't use `agent-manager groups --json`: it reports null for an `off` group.
+   Without a worktree the worker runs in the repo's checkout and shares it with
+   the group's other workers, so each stages explicit paths and may
+   `reserve_files` what it edits.
 
 The name is kebab-case, 2–4 words, and starts with the lowercase ref. `<entry>`
 is `/tasks-takeover <ref>` for an `active` task, otherwise
@@ -146,13 +155,13 @@ ask before you:
 
 When the `done` report says the task needs more PRs, skip step 1 and step 4:
 the task stays open, and its next PR goes into **Start a task**'s options as
-a new worker (`/tasks-takeover <ref>`, fresh `--worktree`).
+a new worker (`/tasks-takeover <ref>`, with a fresh worktree unless the group's is `off`).
 
 ### Start a successor
 
 For a `handover` report: kill and archive the worker (as in **Close a task**
 step 2, #915), then spawn the successor in its
-directory (that is the worktree) with a new name, following the same rule:
+directory (its worktree, if it has one) with a new name, following the same rule:
 
 ```sh
 agent-manager spawn --name <ref>-<slug> --group <group> --directory <worker directory> --model <alias> --effort <level> --prompt "/tasks-takeover <ref>"

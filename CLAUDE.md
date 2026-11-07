@@ -150,7 +150,8 @@ asked, and never push unless told to.
 ### Worktrees
 
 Workers spawned by `/tasks-orchestrate` run in the main checkout on `main` and
-commit straight to it: they share the checkout, so stage explicit paths and use
+commit straight to it, because the `dotfiles` agent-manager group's worktree
+setting is `off` (a new machine needs that set: `r` on the group row). They share the checkout, so stage explicit paths and use
 `reserve_files` on contested files. Only a session started with its own
 agent-manager worktree (`dotfiles-worktrees/<name>`, branch `am/<name>`) follows
 the rest of this section. The main checkout is `dirname "$(git rev-parse --path-format=absolute --git-common-dir)"`.
