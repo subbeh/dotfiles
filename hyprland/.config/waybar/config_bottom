@@ -11,14 +11,15 @@
   "modules-left": [
     "battery",
     "user",
-    "group/hardware",
-    "custom/sep",
+    "group/hardware"
+  ],
+  "modules-center": [
+    "custom/statemate",
+    "custom/updates",
     "custom/bitwarden",
     "custom/gpg",
     "custom/restic",
     "custom/syncthing",
-    "custom/statemate",
-    "custom/updates",
     "custom/sep",
     "custom/claude",
     "custom/agent-manager"
