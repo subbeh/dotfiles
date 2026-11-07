@@ -86,10 +86,18 @@ the PR that implements it. `aven show <ref> --full --json` prints its metadata.
     (case-insensitive, e.g. `am/dot-zgtr-...`) links to it.
   - An issue or PR also links to the one open task in the same aven project
     whose description or notes name it (its URL or `#<n>`) as the work that
-    task tracks. When several tasks name it, or one only mentions it in
-    passing, import it instead and name the candidate task in the report row.
-- **Relate**: when an open task in another aven project mentions an item that
-  is imported, run `aven related add <new ref> <mentioning ref>`. The item
+    task tracks, found with **Mentions** scoped `-p <project>`. When several
+    tasks name it, or one only mentions it in passing, import it instead and
+    name the candidate task in the report row.
+- **Mentions**: `aven search -A --json "<url>"` and
+  `aven search -A --json "#<n>"`, merged by ref. It matches titles,
+  descriptions and notes. Keep tasks that are not `done` or `canceled`, and
+  read each hit's `snippet`: a URL query matches that exact URL, but a `#<n>`
+  query also matches the bare number anywhere (and `<repo>#<n>` matches
+  nothing), so drop a hit whose snippet shows no `#<n>` or the URL. Replace
+  `-A` with `-p <project>` to stay in one project.
+- **Relate**: when an open task outside the item's own project is a **Mentions**
+  hit, run `aven related add <new ref> <mentioning ref>`. The item
   still gets its own task.
 - **Comments**: comments and reviews created after the task's `synced` time
   (all of them when it has none, as on a new or linked task) go into one
