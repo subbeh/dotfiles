@@ -18,17 +18,10 @@ case $state in
   *) usage ;;
 esac
 
-# aven + Jira repos keep their tasks in the work workspace (see trackers.md).
-ws=
-if common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null) &&
-  grep -q '^## Local orchestration: aven' "$(dirname "$common")/docs/agents/issue-tracker.md" 2>/dev/null; then
-  ws=work
-fi
-av() { aven "$@" ${ws:+--workspace "$ws"}; }
+# shellcheck source=tasks-lib.sh
+. "$(dirname "${BASH_SOURCE[0]}")/tasks-lib.sh"
 
-# Last by array order: two notes can share a created_at second.
-if ! owner=$(av context "$ref" --json --full |
-  jq -r '[.notes[].body | select(startswith("Orchestrated by ")) | split("\n")[0]] | last // empty'); then
+if ! owner=$(av context "$ref" --json --full | jq -r "$tasks_jq"'owner | values | "\(.name) in \(.group)"'); then
   echo "tasks-report: cannot read $ref" >&2
   exit 2
 fi
@@ -36,7 +29,6 @@ if [[ -z $owner ]]; then
   echo "tasks-report: $ref has no Orchestrated by note, so there is no owner to report to" >&2
   exit 2
 fi
-owner=${owner#Orchestrated by }
 name=${owner%% in *} group=${owner#* in }
 
 if ! printf 'Report: %s - %s\n' "$state" "$line" | av note "$ref" --stdin >/dev/null; then
@@ -50,7 +42,7 @@ fi
 
 if ! sessions=$(agent-manager sessions --json) ||
   ! match=$(jq -r --arg n "$name" --arg g "$group" \
-    '[.[] | select(.name == $n and .group == $g and .running and (.archived | not)) | .id] | "\(length) \(.[0] // "")"' <<<"$sessions"); then
+    "$tasks_jq"'live({name: $n, group: $g}) | map(.id) | "\(length) \(.[0] // "")"' <<<"$sessions"); then
   echo "noted, ping failed: cannot list agent-manager sessions"
   exit 0
 fi

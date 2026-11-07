@@ -21,13 +21,21 @@ Done when you know the tracker and how to query it.
 
 ## 2. Pick the task
 
-With a ref as the argument, use it. Otherwise run the tracker's **open** list
-and print it as a table (ref, priority, status, title; on aven + Jira also the
-`jira` key and the epic): `todo` before `backlog`, then highest priority, then
-most recently updated.
-Mark a task whose latest **claim line** names another session that is still
-running (agent-manager `list_sessions`) as claimed, and leave it out of the
-recommendation. Ask with `AskUserQuestion`: the top task first as
+With a ref as the argument, use it. Otherwise print the open tasks as a table
+(ref, priority, status, title; on aven + Jira also the `jira` key and the
+epic):
+
+- On aven and aven + Jira, run `bash <skill-dir>/../tasks-board.sh` from the
+  repo. Its rows other than `status=active` and `os=other` make the table, in
+  its order, with `jira` and `parent` for the last two columns. Mark rows with
+  an owner or a `claimed` session, and recommend only `offer=yes` rows.
+- On other trackers, run the tracker's **open** list: `todo` before
+  `backlog`, then highest priority, then most recently updated. Mark a task
+  whose latest **claim line** names another session that is still running
+  (agent-manager `list_sessions`) as claimed, and leave it out of the
+  recommendation.
+
+Ask with `AskUserQuestion`: the top task first as
 "(Recommended)", then the next three; "Other" takes any ref from the table.
 With no candidates, say so and stop.
 

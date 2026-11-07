@@ -28,28 +28,33 @@ Done when you hold the tracker, your own name and group, and the scope.
 ## 2. Rebuild
 
 Build the state from aven and agent-manager alone: this conversation's memory
-of earlier rounds counts for nothing.
+of earlier rounds counts for nothing. Run the board from the repo, passing the
+epic in epic scope:
 
-- Every open task in scope (**All open**), and the **Inbox** count.
-- For each task, from **Read**: its owner (latest `Orchestrated by` note) and
-  its **Latest report**.
-- `agent-manager sessions --json`: a task's sessions are those whose name
-  starts with its lowercase ref.
-- `agent-manager reservations --json`: the `live/` leases (see **Live
-  Services** in `../orchestration.md`) and their holders.
+```sh
+bash <skill-dir>/../tasks-board.sh [<epic ref>]
+```
 
-A task whose owner is another session that is still running is **owned
-elsewhere**. A repo-wide orchestrator sees epic orchestrators' tasks this way.
+Its first line holds the scope, the `inbox` count, the `live/` leases (see
+**Live Services** in `../orchestration.md`) with their holders, and `strays`:
+archived sessions still running. Every other line is one open task in scope,
+in pickup's order, with its owner, worker session, the worker's status and the
+latest `report`; the script's header comment lists every field.
+`owned_elsewhere=yes` marks a task whose owner is another session that is
+still running. A repo-wide orchestrator sees epic orchestrators' tasks this way.
 
-Done when every task in scope has its owner, last report and sessions.
+Done when you hold this round's board.
 
 ## 3. Report and ask
 
-Print one table: ref, priority, title, aven status, worker session, its model
-and effort, its state, last report, any `live/` lease it holds, and `owned by <name>` where
-that applies. Mention it when more than 3 workers are `working` at once.
+Print one table from the board's rows: ref, priority, title, aven status,
+worker session, its model and effort, its state, last report, any `live/` lease
+it holds, and `owned by <name>` where that applies. Mention it when more than 3
+workers are `working` at once. When `strays` isn't `-`, name them: archive
+alone leaves a session running (agent-manager issue #915), and the user decides
+whether to kill them.
 
-When the **Inbox** count is above 0, first ask with `AskUserQuestion` whether to
+When the board's `inbox` count is above 0, first ask with `AskUserQuestion` whether to
 triage it now. On yes, triage the inbox (step 4), then go back to step 2.
 
 Ask with `AskUserQuestion`. Options come from the table, recommended in this
@@ -70,20 +75,19 @@ merges (close it) or goes red or gets comments (ping its worker).
 
 Act on the answer (step 4), then go back to step 2.
 
-A user turn starting with `[tasks]` is a worker's ping. Check the task's
-**Latest report** first: when it is not the report the ping carries, the ping
-is stale, so acknowledge it in one line and stop there. Otherwise go back to
-step 2 and recommend that task first.
+A user turn starting with `[tasks]` is a worker's ping. Run step 2 first, then
+compare the ping's `<state>: <line>` with the task's `report`
+(`<state> - <line>`): when they differ, the ping is stale, so acknowledge it in
+one line and stop there. Otherwise continue here and recommend that task first.
 
 ## 4. Actions
 
 ### Start a task
 
-Show tasks in scope that nobody owns and nobody has claimed (pickup's
-**claim line** rule), in pickup's order: `todo` before `backlog`, then
-highest priority, then most recently updated. Name each option's model and effort: the task's `model-` and `effort-`
-labels, else the rule in **Worker model and effort** of
-[`../orchestration.md`](../orchestration.md). Ask which one. Then:
+Show the board's `offer=yes` rows, in its order. Name each option's model and
+effort: the task's `model-` and `effort-` labels, else the rule in **Worker
+model and effort** of [`../orchestration.md`](../orchestration.md). Ask which
+one. Then:
 
 1. Write the ownership **note**: `Orchestrated by <your name> in <group>`.
 2. Pick the group. In repo scope it is your group. In epic scope it is
