@@ -27,13 +27,14 @@ and the owner starts the next PR in a new worker.
 
 A worker reports at each of these points, in this order: a **note** on the
 task, then a **ping** to the owner. `started` is a note only: its ping would
-arrive stale and cost the owner a turn. `waiting` is a note only too: the user
-answers in the worker's own session, so a ping only asks them twice.
+arrive stale and cost the owner a turn. A mid-task `waiting` question is a note
+only too: the user answers in the worker's own session, so a ping only asks
+them twice. A `waiting` for the go-ahead to land finished work is pinged.
 
 | State | When |
 |---|---|
 | `started` | right after the claim line |
-| `waiting` | before asking the user anything mid-task |
+| `waiting` | before asking the user anything mid-task. Also, with a ping, once the work is finished and only the user's go-ahead to land it (commit, push, merge, a live run) is left; the one line says so. In a repo without PRs this is where every worker ends. It is not `review`, which is PR-only |
 | `blocked` | when the task can't move without someone else |
 | `handover` | after the handoff note, in place of tasks-handover step 5 |
 | `review` | once the PR is open with CI green, no Claude review comment unanswered, and only teammates' reviews left; send it again after each later fix |

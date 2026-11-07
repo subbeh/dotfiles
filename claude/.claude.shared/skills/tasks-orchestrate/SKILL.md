@@ -59,6 +59,8 @@ order:
 2. A `done` report: close the task.
 3. A `handover` report: start the successor.
 4. A `waiting` report: name the session to attach to, where its question is.
+   This covers the ping of a worker whose work is finished and who waits for
+   the go-ahead to land it.
 5. Start the next task.
 
 Check a session (`agent-manager read`) and take over a task owned elsewhere go

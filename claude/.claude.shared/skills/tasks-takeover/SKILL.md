@@ -60,8 +60,9 @@ piece of drift.
 
 If the task is not in progress yet, **start** it. Either way, add a **note**
 with this session's **claim line** (as `/tasks-pickup` writes it). As a
-worker, report `started`, and from then on report each state
-`../orchestration.md` lists.
+worker, first read [`../orchestration.md`](../orchestration.md) in full: it
+holds the report notes and the ping command. Then report `started`, and from
+then on report each state it lists.
 
 Print the brief:
 
