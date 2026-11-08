@@ -6,4 +6,4 @@ alias xc="pbcopy"
 alias xp="pwd | tr -d '\n' | pbcopy"
 
 # misc
-alias bu="brew update && brew upgrade --quiet --force"
+alias bu="brew update && brew upgrade --quiet --force --no-ask"
