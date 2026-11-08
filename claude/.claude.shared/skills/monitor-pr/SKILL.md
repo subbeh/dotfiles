@@ -1,6 +1,6 @@
 ---
 name: monitor-pr
-description: Watch a GitHub PR until it's healthy, in any repo (personal, public or work). Diagnoses and fixes failing CI checks, merges the base branch in when the PR is behind, addresses and resolves Claude review threads, and optionally marks a green draft ready. Use for "watch PR 123", "monitor my PR", "fix failing checks", "my branch is behind", "address Claude's review comments", "check all my PRs", or recurring runs via --loop or "/loop 10m /monitor-pr 123".
+description: Watch a GitHub PR until it's healthy, in any repo (personal, public or work). Diagnoses and fixes failing CI checks, merges the base branch in when the PR is behind, addresses and resolves bot review threads (Claude, CodeRabbit, Copilot and the like), and optionally marks a green draft ready. Use for "watch PR 123", "monitor my PR", "fix failing checks", "my branch is behind", "address Claude's review comments", "check the CodeRabbit comments", "check all my PRs", or recurring runs via --loop or "/loop 10m /monitor-pr 123".
 argument-hint: "<PR-number|all> [--promote] [--loop[=INTERVAL]]"
 ---
 
@@ -15,7 +15,7 @@ One run is one **tick**: look at the PR, fix at most one thing, push, report.
   the current branch (`gh pr view --json number`); if there is none, ask.
 - `all`: report on every open PR you authored in this repo. Report only; it
   never fixes or pushes. See [All mode](#all-mode).
-- `--promote`: once the PR is green, up to date and has no open Claude threads,
+- `--promote`: once the PR is green, up to date and has no open bot threads,
   run `gh pr ready <N>`. Never promote without this flag: it notifies reviewers.
 - `--loop[=INTERVAL]`: schedule recurring ticks (default `10m`, minimum `5m`).
   See [Loop mode](#loop-mode).
@@ -74,7 +74,8 @@ gh pr checks <N> --json name,state,bucket,link,workflow
 
 `bucket` is one of `pass`, `fail`, `pending`, `skipping`, `cancel`.
 
-- **Any `pending`**: report and end the tick. Don't fix on a partial picture.
+- **Any `pending`**, none `fail`: don't touch CI on a partial picture, but
+  continue to step 4: bot reviews often land while CI runs.
 - **Any `fail`**: pick one per the guardrails and diagnose it.
   - GitHub Actions: the run ID is in `link` (`.../actions/runs/<run-id>/job/...`).
     Read `gh run view <run-id> --log-failed` (pipe through `tail -n 200` first;
@@ -90,7 +91,9 @@ gh pr checks <N> --json name,state,bucket,link,workflow
     Then end the tick: new CI is running.
 - **All `pass`/`skipping`**: continue.
 
-### 4. Claude review feedback (CI green only)
+A `fail` takes the tick, so step 4 waits for the next one.
+
+### 4. Bot review feedback (no failing checks)
 
 Run the bundled script from this skill's base directory (shown when the skill
 loads):
@@ -99,8 +102,7 @@ loads):
 bash <skill-dir>/review-items.sh <owner> <repo> <N>
 ```
 
-It returns `botThreads` (unresolved inline threads a `claude*` or
-`github-actions` bot opened), `botNotes` (top-level bot comments and
+It returns `botThreads` (unresolved inline threads any bot opened), `botNotes` (top-level bot comments and
 non-approving reviews you haven't marked with 👀), `humanThreads` (URLs), and
 `threadsFetched`/`threadsTotal`. If `threadsFetched < threadsTotal`, say in the
 report that some threads weren't seen.
@@ -112,8 +114,11 @@ For each bot thread:
 2. Decide: apply the change, or decline because it's wrong, already done, or
    out of scope. Batch every applied change into one commit
    (`fix(review): <summary>`) and push it before replying.
-3. Reply in the thread with what you did (commit SHA) or why you declined, then
-   resolve it:
+3. Reply in the thread with what you did (commit SHA) or why you declined, in
+   one or two plain lines: no thanks, greetings or recap. A thread reply needs
+   no @-mention, since bots watch their own threads. A top-level reply to a bot
+   note @-mentions the bot only when it should answer: a mention like
+   `@claude` or `@coderabbitai` starts a new run. Then resolve it:
 
 ```bash
 gh api graphql -f id=<thread-id> -f body=<reply> -f query='mutation($id: ID!, $body: String!) { addPullRequestReviewThreadReply(input: {pullRequestReviewThreadId: $id, body: $body}) { comment { url } } }'
@@ -174,7 +179,9 @@ The tick is **terminal** when any of these hold:
   `gh auth refresh` for the latter).
 
 End with a short report: checks summary, what was pushed or resolved, open
-human threads, and the next step if any.
+human threads, and the next step if any. Say whether bot feedback was read
+this tick; when a failing check skipped step 4, say it is unread, never that
+nothing needs fixing.
 
 ## Loop mode
 

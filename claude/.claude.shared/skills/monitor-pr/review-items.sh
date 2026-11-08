@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Usage: review-items.sh <owner> <repo> <pr>
-# Prints the PR's open Claude review feedback as JSON: botThreads (unresolved
-# inline threads opened by a Claude/Actions bot), botNotes (top-level bot
+# Prints the PR's open bot review feedback as JSON: botThreads (unresolved
+# inline threads opened by a bot), botNotes (top-level bot
 # comments/reviews not yet marked with your 👀) and humanThreads (URLs only).
 set -euo pipefail
 
@@ -26,7 +26,7 @@ query($owner: String!, $repo: String!, $pr: Int!) {
   }
 }' --jq '
 .data.repository.pullRequest as $p
-| def bot: .author.__typename == "Bot" and (.author.login | test("^(claude|github-actions)"; "i"));
+| def bot: .author.__typename == "Bot";
   def seen: any(.reactionGroups[]?; .content == "EYES" and .viewerHasReacted);
   def open: $p.reviewThreads.nodes[] | select(.isResolved | not);
 {
