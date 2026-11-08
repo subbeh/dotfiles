@@ -2,8 +2,8 @@
 # Waybar module: whether the gpg smartcard's signing PIN is verified, so a signature won't prompt.
 set -uo pipefail
 
-ICON_LOCKED='󰌾'
-ICON_UNLOCKED='󰌿'
+ICON_LOCKED='󰦝'
+ICON_UNLOCKED='󰦝'
 
 # `__waybar_gpg unlock`: sign a throwaway message so pinentry asks for the PIN, refresh the module.
 if [[ ${1:-} == unlock ]]; then
@@ -25,9 +25,9 @@ if [[ $sw == 63C3 ]] && echo test | timeout 5 gpg --batch --pinentry-mode error 
 fi
 
 case $sw in
-  9000) icon=$ICON_UNLOCKED class=unlocked status='PIN cached' ;;
-  63C?) icon=$ICON_LOCKED class=locked status="PIN not cached, ${sw:3} retries left" ;;
-  *) icon=$ICON_LOCKED class=unknown status='card unavailable' ;;
+9000) icon=$ICON_UNLOCKED class=unlocked status='PIN cached' ;;
+63C?) icon=$ICON_LOCKED class=locked status="PIN not cached, ${sw:3} retries left" ;;
+*) icon=$ICON_LOCKED class=unknown status='card unavailable' ;;
 esac
 
 jq -nc --arg text "$icon" --arg class "$class" --arg tooltip "<b>gpg card</b>  $status" \

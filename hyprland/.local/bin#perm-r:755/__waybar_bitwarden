@@ -2,8 +2,8 @@
 # Waybar module: Bitwarden CLI (bw) vault lock state, the session statemate uses.
 set -uo pipefail
 
-ICON_LOCKED='󰌾'
-ICON_UNLOCKED='󰌿'
+ICON_LOCKED=''
+ICON_UNLOCKED=''
 
 # waybar's environment lacks the bw variables; reuse the shell setup, which also loads BW_SESSION.
 # shellcheck source=/dev/null
@@ -23,9 +23,9 @@ fi
 
 status=$(bw status 2>/dev/null | jq -r '.status // empty')
 case $status in
-  unlocked) icon=$ICON_UNLOCKED class=unlocked ;;
-  locked) icon=$ICON_LOCKED class=locked ;;
-  *) icon=$ICON_LOCKED class=unknown status=${status:-unavailable} ;;
+unlocked) icon=$ICON_UNLOCKED class=unlocked ;;
+locked) icon=$ICON_LOCKED class=locked ;;
+*) icon=$ICON_LOCKED class=unknown status=${status:-unavailable} ;;
 esac
 
 jq -nc --arg text "$icon" --arg class "$class" --arg tooltip "<b>bitwarden</b>  $status" \

@@ -18,8 +18,8 @@
     "custom/updates",
     "custom/bitwarden",
     "custom/gpg",
-    "custom/restic",
     "custom/syncthing",
+    "custom/restic",
     "custom/sep",
     "custom/claude",
     "custom/agent-manager"

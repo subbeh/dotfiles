@@ -4,8 +4,8 @@
 set -uo pipefail
 
 # Swap glyphs to taste
-ICON_IDLE='󰁯'
-ICON_RUNNING='󰑐'
+ICON_IDLE='󱉛'
+ICON_RUNNING='󱝯'
 
 # Flag a green-forever module whose timer silently stopped firing
 STALE_HOURS=48
