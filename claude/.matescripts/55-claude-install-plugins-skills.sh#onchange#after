@@ -27,6 +27,10 @@ for dir in "$HOME"/.claude.*; do
   [[ -d "$dir" ]] || continue
   export CLAUDE_CONFIG_DIR="$dir"
 
+  # A fresh config dir lacks the official marketplace, so the installs below can't resolve
+  jq -e '."claude-plugins-official"' "$dir/plugins/known_marketplaces.json" &>/dev/null ||
+    claude plugin marketplace add anthropics/claude-plugins-official
+
   installed=$(jq -r '.plugins | keys[]' "$dir/plugins/installed_plugins.json" 2>/dev/null || true)
   for plugin in "${plugins[@]}"; do
     grep -qxF "$plugin@claude-plugins-official" <<<"$installed" ||
