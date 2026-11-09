@@ -4,6 +4,3 @@ load it as an untrusted project config anywhere under dotfiles/infra/. */ -}}
 registry_floating = true
 # agent-manager spawns cloud-ops-tools worktrees here; each would otherwise need `mise trust`
 trusted_config_paths = ["/Users/Shared/data/workspace/jamf/repos/cloud-ops-tools-worktrees"]
-
-[tools]
-bitwarden-secrets-manager = "latest"
