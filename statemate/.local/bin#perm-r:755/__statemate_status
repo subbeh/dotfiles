@@ -29,6 +29,14 @@ tmux)
 waybar)
   [[ $rc -ne 0 ]] && exit 0
 
+  # Notify once on clean -> dirty; no saved state means first run, so stay quiet
+  state_file="${XDG_STATE_HOME:-$HOME/.local/state}/statemate/last-status"
+  mkdir -p "${state_file%/*}"
+  if [[ -f "$state_file" && -z "$(<"$state_file")" && -n "$status" ]]; then
+    notify-send -a statemate "statemate" "$status"
+  fi
+  printf '%s' "$status" >"$state_file"
+
   if [[ -z "$status" ]]; then
     jq -cn '{text: "", class: "clean", tooltip: "statemate: up to date"}'
   else
