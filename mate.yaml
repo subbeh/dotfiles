@@ -117,3 +117,10 @@ hooks:
       - ".config/tmux/**"
     do:
       - run: tmux-reload
+
+  mise-install:
+    match:
+      - ".config/mise/**"
+    description: Install tools a changed mise config adds
+    do:
+      - run: command -v mise >/dev/null || exit 0; cd ~ && mise install

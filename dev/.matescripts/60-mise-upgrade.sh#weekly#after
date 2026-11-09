@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# description: Upgrade mise tools
+# tags: update
+
+set -euo pipefail
+
+command -v mise &>/dev/null || exit 0
+cd ~
+mise upgrade
