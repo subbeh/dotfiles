@@ -30,6 +30,7 @@ variables:
       RESTIC_VPS_PASSWORD: [restic, login, password]
       RESTIC_VPS_SSH_KEY: [restic-ssh-key-vps, ssh, private]
       RESTIC_VPS_SSH_USER: [hetzner.com, field, storage-box-vps-user]
+      SEARXNG_SECRET_KEY: [searxng.vps.sbbh.cloud, field, secret-key]
       SEMAPHORE_ACCESS_KEY_ENCRYPTION: [semaphore.vps.sbbh.cloud, field, access-key-encryption]
       SEMAPHORE_ADMIN_PASSWORD: [semaphore.vps.sbbh.cloud, login, password]
       SEMAPHORE_API_TOKEN: [semaphore.vps.sbbh.cloud, field, gh-runner-api-token]
