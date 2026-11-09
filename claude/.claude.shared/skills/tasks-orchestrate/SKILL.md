@@ -70,8 +70,8 @@ order:
 
 Check a session (`agent-manager read`) and take over a task owned elsewhere go
 last. A `review` report is parked on teammates and gets no option: show its PR's
-CI and review state in the table, and recommend the task again once that PR
-merges (close it) or goes red or gets comments (ping its worker).
+CI and review state in the table, and recommend the task again once the user
+reports the merge (ping its worker to report `done`, then close it) or asks for a fix (ping its worker).
 
 Act on the answer (step 4), then go back to step 2.
 
@@ -140,8 +140,8 @@ are on `main` (`git merge-base --is-ancestor HEAD main`) or pushed
 with others: only paths the worker touched count for the first check, and the
 second holds by construction. If either check
 fails, report what is missing and stop. Work that goes through a PR is not
-closable until the PR merges: leave the task and its worker running, since the
-worker monitors the PR and fixes what CI, Sonar or review raise. If both pass,
+closable until the PR merges: leave the task and its worker running, idle: the
+worker acts when pinged. If both pass,
 ask before you:
 
 1. **Edit** the task to `done`.
