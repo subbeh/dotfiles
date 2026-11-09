@@ -22,7 +22,8 @@ A worktree has `git rev-parse --git-dir` different from `git rev-parse --git-com
   `CLAUDE.md`.
 - The workflow ends once `main` holds the commits (`git merge-base --is-ancestor HEAD main`) or the user
   chose to keep them. An orchestrated worker then reports `done`.
-- Never run `mate apply`, and never offer or ask to: the user always runs it.
+- Never run `mate apply`, and never offer or ask to: the user always runs it. You may
+  mention it as a reminder, but never wait on it or list it as an action item.
 
 ## When to use
 

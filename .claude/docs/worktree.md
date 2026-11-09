@@ -18,5 +18,5 @@ Applies to a session in its own worktree (`dotfiles-worktrees/<name>`, branch `a
 1. `git -C <main checkout> merge --ff-only am/<name>`. When `main` moved again,
    rebase again. When the main checkout's uncommitted changes touch the same
    files, stop and ask; leave them as they are.
-1. Report the landed commits and what the user still runs: `mate apply`, any
-   `mate clean` for removed or renamed sources, and the push.
+1. Report the landed commits and what the user still runs (`mate apply` is a reminder,
+   not something to wait on): any `mate clean` for removed or renamed sources, and the push.
