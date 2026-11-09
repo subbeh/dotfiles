@@ -1,0 +1,4 @@
+{{- /* #tmpl only so mise doesn't load the source as an untrusted project config, as in dev's config.toml. */ -}}
+[tools]
+# claude-swap: switch Claude accounts within one CLAUDE_CONFIG_DIR
+"pipx:claude-swap" = "latest"

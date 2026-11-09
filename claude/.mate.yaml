@@ -1,7 +1,6 @@
 targets:
   .claude.shared:
     - .claude.personal
-    - .claude.extra
 {{- if eq .Profile "work" }}
     - .claude.work
 {{- end }}
