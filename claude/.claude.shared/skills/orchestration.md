@@ -45,7 +45,7 @@ worker and reports nothing.
 | `blocked` | when the task can't move without someone else |
 | `handover` | after the handoff note, in place of tasks-handover step 5 |
 | `review` | once the PR is open with CI green, no Claude review comment unanswered, and only teammates' reviews left; send it again after each later fix. PR-only |
-| `done` | once the work has landed: per the repo's `CLAUDE.md` when it says how (e.g. on `main`), else merged for a PR (the user says when it has merged; the worker is idle until then), else pushed. When the acceptance criteria need a live change (a Deploy, a config edit on a host), also once it is live and those criteria are checked. A run that needs the user's go-ahead is a `landing` report, asked outright, not a step left in the report |
+| `done` | once the work has landed: per the repo's `CLAUDE.md` when it says how (e.g. on `main`), else merged for a PR (the user says when it has merged; the worker is idle until then), else pushed. When the acceptance criteria need a live change (a Deploy, a config edit on a host), also once it is live and those criteria are checked. A run that needs the user's go-ahead is a `landing` report, asked outright, not a step left in the report. Never while a path the worker touched is uncommitted: report `landing` instead. Send it again after any later commit lands |
 
 Once its PR is open, a worker runs `/monitor-pr <n> --loop=15m`
 and fixes or answers every Claude review comment before it reports `review`.
