@@ -33,7 +33,12 @@ waybar)
   state_file="${XDG_STATE_HOME:-$HOME/.local/state}/statemate/last-status"
   mkdir -p "${state_file%/*}"
   if [[ -f "$state_file" && -z "$(<"$state_file")" && -n "$status" ]]; then
-    notify-send -a statemate "statemate" "$status"
+    full_status=$(mate status 2>/dev/null)
+    # shellcheck disable=SC2001
+    body=$(sed $'s/\x1b\\[[0-9;]*m//g' <<<"$full_status" | head -n 10)
+    total=$(wc -l <<<"$full_status")
+    ((total > 10)) && body+=$'\n'"… $((total - 10)) more"
+    notify-send -a statemate "statemate: $status" "$body"
   fi
   printf '%s' "$status" >"$state_file"
 
