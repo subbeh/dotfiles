@@ -1,6 +1,6 @@
 # Orchestration
 
-How a `/tasks-orchestrate` session and the **worker** sessions it spawns talk
+How a `/tasks-pickup` orchestrator session and the **worker** sessions it spawns talk
 through aven and agent-manager. The aven commands behind each **operation** are
 in [`trackers.md`](trackers.md).
 

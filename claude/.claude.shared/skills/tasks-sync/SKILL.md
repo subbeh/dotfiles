@@ -6,8 +6,8 @@ disable-model-invocation: true
 
 # Sync
 
-Brings work tracked outside aven into it, so `/tasks-triage`, `/tasks-pickup`
-and `/tasks-orchestrate` can see it. New tasks land in `inbox` for triage. The
+Brings work tracked outside aven into it, so `/tasks-triage` and `/tasks-pickup`
+can see it. New tasks land in `inbox` for triage. The
 commands behind each **operation** below are in
 [`../trackers.md`](../trackers.md).
 

@@ -136,7 +136,7 @@ asked, and never push unless told to.
 
 ### Worktrees
 
-Workers spawned by `/tasks-orchestrate` run in the main checkout on `main` and
+Workers spawned by `/tasks-pickup` run in the main checkout on `main` and
 commit straight to it, because the `dotfiles` agent-manager group's worktree
 setting is `off` (a new machine needs that set: `r` on the group row). They share the checkout, so stage explicit paths and use
 `reserve_files` on contested files. Only a session started with its own
