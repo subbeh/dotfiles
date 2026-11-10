@@ -1,0 +1,36 @@
+[global]
+    follow = mouse
+    origin = top-right
+    offset = (15, 15)
+    width = 350
+    notification_limit = 5
+    font = FiraMono Nerd Font Mono 9
+    markup = full
+    format = "<b><i>%s</i></b>\n%b"
+    icon_position = left
+    max_icon_size = 48
+    frame_width = 2
+    padding = 10
+    horizontal_padding = 10
+    gap_size = 5
+    corner_radius = 0
+    mouse_left_click = close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#{{ .Vars.color.bg.dark }}"
+    foreground = "#{{ .Vars.color.fg.darker }}"
+    frame_color = "#{{ .Vars.color.bg.lighter }}"
+    timeout = 5
+
+[urgency_normal]
+    background = "#{{ .Vars.color.bg.dark }}"
+    foreground = "#{{ .Vars.color.fg.default }}"
+    frame_color = "#{{ .Vars.color.blue.bright }}"
+    timeout = 5
+
+[urgency_critical]
+    background = "#{{ .Vars.color.bg.dark }}"
+    foreground = "#{{ .Vars.color.red.bright }}"
+    frame_color = "#{{ .Vars.color.red.bright }}"
+    timeout = 0

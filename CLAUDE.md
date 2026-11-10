@@ -61,7 +61,7 @@ Variables: `.Profile` `.Hostname` `.OS` `.Arch` `.HomeDir` `.Username`
 `.mate.yaml` files and `#tmpl` scripts are rendered too.
 
 `.mate/theme.yaml` feeds `.Vars.color.*` into ~15 templates (kitty, tmux, nvim
-`colors.lua`, waybar, rofi, hyprlock, swaync, vivid, k9s). Adding a colour is
+`colors.lua`, waybar, rofi, hyprlock, dunst, vivid, k9s). Adding a colour is
 safe; renaming or removing one breaks all of them — grep first.
 
 Verify every template you touch: `mate eval <path>`, plus

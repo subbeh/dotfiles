@@ -6,7 +6,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("wl-paste --type text --watch cliphist store")
   hl.exec_cmd("wl-paste --type image --watch cliphist store")
   hl.exec_cmd("hyprpaper")
-  hl.exec_cmd("swaync")
+  hl.exec_cmd("dunst")
   hl.exec_cmd("hypridle")
   hl.exec_cmd("Thunar --daemon")
   -- Attach here rather than in __hypr_tmux_sessions: exec_cmd inherits
