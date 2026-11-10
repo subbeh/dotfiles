@@ -110,6 +110,17 @@ case $profile in
   *) profile_color=$yellow ;;
 esac
 
+# Personal shares one config dir across cswap accounts: show the active one's
+# alias (else the email's local part). Falls back to "personal" on any failure.
+label=$profile
+if [[ $profile == personal ]]; then
+  acct=$(jq -r --slurpfile c "${CLAUDE_CONFIG_DIR}/.claude.json" '
+    ($c[0].oauthAccount.emailAddress // empty) as $e
+    | [.accounts[] | select(.email == $e)][0] | (.alias // (.email | split("@")[0])) // empty
+  ' "${XDG_DATA_HOME:-$HOME/.local/share}/claude-swap/sequence.json" 2>/dev/null)
+  [[ -n $acct ]] && label=$acct
+fi
+
 # Usage: a subscription (Max) reports its 5h/7d rate-limit windows, which make
 # the list-price cost meaningless; API billing (Bedrock) has no windows, so the
 # cost is the usage figure. The windows only arrive after the first response.
@@ -139,7 +150,7 @@ if [[ $profile == personal && -n $five_h ]]; then
 fi
 
 out=""
-[[ -n $profile ]] && out+="${profile_color}${profile}${reset} "
+[[ -n $label ]] && out+="${profile_color}${label}${reset} "
 out+="${blue}${path}${reset} ${purple}❯${reset}"
 [[ -n $model ]] && out+=" ${dim}${model}${effort:+ ($effort)}${reset}"
 (( total > 0 )) && out+=" ${dim}• $((total / 1000))k (${pct}%)${reset}"
