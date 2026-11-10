@@ -56,10 +56,10 @@ Draft:
 - **Status**: `todo` for soon, `backlog` for someday, `canceled` when the
   redundancy check found it already done.
 - **Model and effort**: one `model-` and one `effort-` label (none for
-  `model-haiku`), per **Worker model and effort** in
-  [`../orchestration.md`](../orchestration.md), from the code you read in this
-  step. Show both with a one-line reason, e.g. `model-opus, effort-high: new
-  script with tests`. Create a missing label with `aven label create`.
+  `model-haiku`), per [`../worker-sizing.md`](../worker-sizing.md), from the
+  code you read in this step. Show both with a one-line reason, e.g.
+  `model-opus, effort-high: new script with tests`. Create a missing label with
+  `aven label create`.
 - **Links**: a duplicate (propose cancelling one), a related task, a blocker,
   or an epic it belongs to.
 
