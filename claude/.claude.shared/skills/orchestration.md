@@ -52,6 +52,14 @@ and fixes or answers every Claude review comment before it reports `review`.
 It ends the loop with that report and goes idle: it acts again only when pinged
 (the user reports the merge, or asks for a fix). It leaves a draft as a draft.
 
+Once its PR is open, and only when its session name starts with the lowercase
+ref (a user-named session keeps its name), a worker renames itself with
+agent-manager's `rename` to `<ref>-#<n>-<slug>` (`dot-kq4b-session-pr` becomes
+`dot-kq4b-#123-session-pr`), then adds a fresh claim line
+(`Claimed by <new name> in <dir>`): the board matches the claim by running
+session name, so the old line goes stale. The name keeps starting with
+`<ref>-`, which is how the board finds the task's worker.
+
 The task's status after `active` belongs to its owner: a worker reports `done`
 and stops, and the orchestrator sets `done` after its close check.
 
