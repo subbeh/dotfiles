@@ -44,13 +44,13 @@ worker and reports nothing.
 | `landing` | once the work is finished and only the user's go-ahead to land it (commit, push, merge, a live run) is left; the one line says which. In a repo without PRs this is where every worker ends |
 | `blocked` | when the task can't move without someone else |
 | `handover` | after the handoff note, in place of tasks-handover step 5 |
-| `review` | once the PR is open with CI green, no Claude review comment unanswered, and only teammates' reviews left; send it again after each later fix. PR-only |
+| `review` | once the PR is open; send it again after each later fix. PR-only |
 | `done` | once the work has landed: per the repo's `CLAUDE.md` when it says how (e.g. on `main`), else merged for a PR (the user says when it has merged; the worker is idle until then), else pushed. When the acceptance criteria need a live change (a Deploy, a config edit on a host), also once it is live and those criteria are checked. A run that needs the user's go-ahead is a `landing` report, asked outright, not a step left in the report. Never while a path the worker touched is uncommitted: report `landing` instead. Send it again after any later commit lands |
 
-Once its PR is open, a worker runs `/monitor-pr <n> --loop=15m`
-and fixes or answers every Claude review comment before it reports `review`.
-It ends the loop with that report and goes idle: it acts again only when pinged
-(the user reports the merge, or asks for a fix). It leaves a draft as a draft.
+Once its PR is open, a worker reports `review` and goes idle; it never starts
+`/monitor-pr` on its own. It acts again only when pinged (the user asks it to
+monitor the PR or fix something, or reports the merge). It leaves a draft as a
+draft.
 
 Once its PR is open, and only when its session name starts with the lowercase
 ref (a user-named session keeps its name), a worker renames itself with
