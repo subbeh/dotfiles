@@ -31,8 +31,9 @@ Pick the mode, first match wins:
   argument (`epic=yes`; its children, `aven epic list <epic>`), or else the
   repo's project. In epic scope, the decisions the epic's description records
   are settled, so never ask the user to make them again. With a task passed
-  as the argument, run step 2 for it, then steps 1–3 of **Start a task** for
-  it; then go to step 5. Otherwise go straight to step 5.
+  as the argument, run step 2 for it, then **Start a task**'s Nighthawk
+  check and steps 1–3 for it; then go to step 5. Otherwise go straight to
+  step 5.
 
 Done when you hold the tracker and the mode, and as orchestrator also your own
 name and group and the scope.
@@ -158,7 +159,24 @@ one line and stop there. Otherwise continue here and recommend that task first.
 Show the board's `offer=yes` rows, in its order. Name each option's model and
 effort: the task's `model-` and `effort-` labels, else the rule in
 [`../worker-sizing.md`](../worker-sizing.md). Ask which one, unless the task
-came as the argument. Then:
+came as the argument.
+
+**Nighthawk check**: when `../nighthawk.md` exists and the tracker is aven +
+Jira, read that file and run its availability check. Then ask "Nighthawk fix
+(Recommended)" / "Local worker" / "Cancel"; when `unavailable`, drop the first
+option and give its setup note. On Nighthawk:
+
+1. Write the ownership **note** as in step 1 below.
+2. A local task with no `jira` key gets one first: **Ticket** in
+   `../trackers.md`.
+3. Launch through the `vector-nighthawk:cli` skill:
+   `jx nighthawk fix <KEY> --repo <repo> -o json` (`--repos` per repo when the
+   task spans several), with the task's scope and acceptance criteria in
+   `--context`. No aven ref goes in `--context`, Jira or the PR.
+4. Add a **note** `Nighthawk run <id> on <KEY>`, and report the outcome, cost
+   and PR link the skill gives.
+
+On Local worker:
 
 1. Write the ownership **note**: `Orchestrated by <your name> in <your group>`.
 2. Pick the subgroup: `<your group>/<name>`, where `<name>` is the epic's slug
