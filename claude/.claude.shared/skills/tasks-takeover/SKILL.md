@@ -75,4 +75,18 @@ Drift: <mismatches, or none>
 ```
 
 When **Open** or **Drift** is not none, settle it with `AskUserQuestion` first.
+
+**Nighthawk check**: when `../nighthawk.md` exists, the tracker is aven + Jira
+and the task's PR is open with unresolved review threads or failing checks
+(`gh pr checks <n>`; threads through `gh api graphql` `reviewThreads`), read
+that file and run its availability check. Then ask "Nighthawk iterate
+(Recommended)" / "Local takeover" / "Cancel"; when `unavailable`, drop the first
+option and give its setup note. On Nighthawk, in place of **Next**:
+
+1. Launch through the `vector-nighthawk:cli` skill:
+   `jx nighthawk iterate <KEY> --repo <repo> --pr <n> -o json`. No aven ref
+   goes in `--context`, Jira or the PR.
+2. Add a **note** `Nighthawk run <id> on <KEY>`, and report the outcome, cost
+   and PR link the skill gives.
+
 Then start on **Next**.

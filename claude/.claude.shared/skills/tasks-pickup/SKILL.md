@@ -143,7 +143,11 @@ order:
 Check a session (`agent-manager read`) and take over a task owned elsewhere go
 last. A `review` report is parked on teammates and gets no option: show its PR's
 CI and review state in the table, and recommend the task again once the user
-reports the merge (ping its worker to report `done`, then close it) or asks for a fix (ping its worker).
+reports the merge (ping its worker to report `done`, then close it) or asks for a fix (ping its worker). A fix on a task whose latest run note is
+`Nighthawk run <id> on <KEY>` has no worker to ping: launch `jx nighthawk
+iterate <KEY> --repo <repo> --pr <n> -o json` through the `vector-nighthawk:cli`
+skill after **Start a task**'s Nighthawk check, add a **note** with the new run
+id, and report its outcome and cost.
 
 Act on the answer (step 7), then go back to step 5.
 
