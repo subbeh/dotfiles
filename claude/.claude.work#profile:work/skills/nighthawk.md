@@ -44,6 +44,12 @@ Launch through the `vector-nighthawk:cli` skill, which holds the command
 syntax. Pass `-o json` and keep the run id from its output. Never put an aven
 ref in `--context`, Jira or the PR: they are private to this setup.
 
+Before `iterate`, check `gh pr view <n> --json isDraft`: on a PR that is ready
+for review, the run skips at once (outcome `pr_blocked_review`, no cost). Ask
+the user whether to launch with `--force-push` (honored when they are the PR's
+author or an assignee) or to convert it back to a draft; don't convert it
+yourself.
+
 ## Hand-off protocol
 
 A Nighthawk run is not a worker session:
