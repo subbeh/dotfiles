@@ -28,6 +28,7 @@ ignore:
   - "*.md"
   - "!**/.claude*/**/*.md"
   - .gitkeep
+  - ".DS_Store"
 
 sources:
   - core

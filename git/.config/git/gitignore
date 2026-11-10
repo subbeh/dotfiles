@@ -1,7 +1,7 @@
 .stversions/
 .direnv/
-.DS_Store/
 __pycache__/
+.DS_Store
 .claude/settings.local.json
 .claude/specs
 .agents/
