@@ -178,10 +178,9 @@ go through the `clops-atlassian-read` agent and writes through
   `git rev-parse --abbrev-ref @{upstream}` or `gh pr view --json headRefName`,
   then `aven edit <ref> --metadata jira=<KEY>`.
 - **Ticket**: for a local task that needs a key before any push (a Nighthawk
-  run), have `clops-atlassian-write` create a CA Task with
-  `change_creator.py --ca-ticket`, as cloud-ops-tools' `clops-plan-dispatch`
-  does. Pass the task's title as the summary, never its aven ref. Then
-  `aven edit <ref> --metadata jira=<KEY>`.
+  run), have `clops-atlassian-write` create a CA Task, as cloud-ops-tools'
+  `clops-plan-dispatch` does. Pass the task's title as the summary, never its
+  aven ref. Then `aven edit <ref> --metadata jira=<KEY>`.
 - **Note**: aven only. Jira changes from these skills stop at **Start**:
   review and Done states belong to `ca-pr-sync` and the merge flow.
 

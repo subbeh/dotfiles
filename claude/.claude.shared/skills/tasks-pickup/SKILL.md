@@ -31,9 +31,9 @@ Pick the mode, first match wins:
   argument (`epic=yes`; its children, `aven epic list <epic>`), or else the
   repo's project. In epic scope, the decisions the epic's description records
   are settled, so never ask the user to make them again. With a task passed
-  as the argument, run step 2 for it, then **Start a task**'s Nighthawk
-  check and steps 1–3 for it; then go to step 5. Otherwise go straight to
-  step 5.
+  as the argument, run step 2 for it, then **Start a task** for it: the
+  Nighthawk check, or on Local worker steps 1–3; then go to step 5.
+  Otherwise go straight to step 5.
 
 Done when you hold the tracker and the mode, and as orchestrator also your own
 name and group and the scope.
@@ -114,6 +114,8 @@ in step 2's order, with its owner, worker session, the worker's status and the
 latest `report`; the script's header comment lists every field.
 `owned_elsewhere=yes` marks a task whose owner is another session that is
 still running. A repo-wide orchestrator sees epic orchestrators' tasks this way.
+`nighthawk=<run id>` marks a task whose worker is a Nighthawk run: it has no
+session, so take its state from `jx nighthawk runs get <id> -o json`.
 
 Done when you hold this round's board.
 
@@ -121,10 +123,16 @@ Done when you hold this round's board.
 
 Print one table from the board's rows: ref, priority, title, aven status,
 worker session, its model and effort, its state, last report, any `live/` lease
-it holds, and `owned by <name>` where that applies. Mention it when more than 3
-workers are `working` at once. When `strays` isn't `-`, name them: archive
-alone leaves a session running (agent-manager issue #915), and the user decides
-whether to kill them.
+it holds, and `owned by <name>` where that applies. A Nighthawk row shows
+`nighthawk <run id>` as its worker and the run's state as its state. Mention
+it when more than 3 workers are `working` at once. When `strays` isn't `-`,
+name them: archive alone leaves a session running (agent-manager issue #915),
+and the user decides whether to kill them.
+
+When a Nighthawk run has opened its draft PR and the row has no `pr`, record
+it before asking: **Start** the task if it isn't `active`, add a **note**
+with the PR URL and the run's cost, and set the task's `pr` metadata with
+**Link** in `../trackers.md`.
 
 When the board's `inbox` count is above 0, first ask with `AskUserQuestion` whether to
 triage it now. On yes, triage the inbox (step 7), then go back to step 5.
@@ -132,7 +140,7 @@ triage it now. On yes, triage the inbox (step 7), then go back to step 5.
 Ask with `AskUserQuestion`. Options come from the table, recommended in this
 order:
 
-1. A dead or errored worker.
+1. A dead or errored worker, or a failed or canceled Nighthawk run.
 2. A `done` report: close the task.
 3. A `handover` report: start the successor.
 4. A `landing` report: name the session to attach to, where the go-ahead to
@@ -141,13 +149,15 @@ order:
 6. Start the next task.
 
 Check a session (`agent-manager read`) and take over a task owned elsewhere go
-last. A `review` report is parked on teammates and gets no option: show its PR's
-CI and review state in the table, and recommend the task again once the user
-reports the merge (ping its worker to report `done`, then close it) or asks for a fix (ping its worker). A fix on a task whose latest run note is
-`Nighthawk run <id> on <KEY>` has no worker to ping: launch `jx nighthawk
-iterate <KEY> --repo <repo> --pr <n> -o json` through the `vector-nighthawk:cli`
-skill after **Start a task**'s Nighthawk check, add a **note** with the new run
-id, and report its outcome and cost.
+last. A `review` report, or a Nighthawk run whose PR is open, is parked on
+teammates and gets no option: show its PR's CI and review state in the table,
+and recommend the task again once the user reports the merge (ping its worker
+to report `done`, then close it; a Nighthawk task has no worker to ping) or
+asks for a fix (ping its worker). A fix on a Nighthawk task has no worker to
+ping: run the availability check in `../nighthawk.md`, then launch `jx
+nighthawk iterate <KEY> --repo <repo> --pr <n> -o json` through the
+`vector-nighthawk:cli` skill, add a **note** `Nighthawk run <id> on <KEY>`,
+and report its outcome and cost.
 
 Act on the answer (step 7), then go back to step 5.
 
@@ -250,6 +260,10 @@ ask before you:
    sessions, offer `agent-manager delete-group <path>`. Repo scope never offers
    it: the next spawn recreates the subgroup.
 
+A Nighthawk task has no session, worktree or local commits: its close check is
+its PR merged (`gh pr view <n> --repo <owner>/<repo> --json state`), and only
+step 1, and step 4 in epic scope, apply.
+
 When the `done` report says the task needs more PRs, skip step 1 and step 4:
 the task stays open, and its next PR goes into **Start a task**'s options as
 a new worker (`/tasks-takeover <ref>`, with a fresh worktree unless the group's is `off`).
@@ -271,6 +285,11 @@ The successor takes the task's labels.
 
 Ask whether to revive it (`agent-manager revive <id>`, which resumes its
 conversation), start a successor as above, or leave it.
+
+For a failed or canceled Nighthawk run, ask whether to re-run it (**Start a
+task**'s Nighthawk steps 3–4, or the `iterate` launch in step 6 when its PR is
+open), start a local worker (**Start a task**'s Local worker steps), or leave
+it.
 
 ### Take over a task owned elsewhere
 

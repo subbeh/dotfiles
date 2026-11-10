@@ -70,8 +70,8 @@ for r in $(seq 13); do notes "T-$r"; done
 notes T-1 "Orchestrated by old in g" "Claimed by t-1-a in $repo" "Report: started - a" "Orchestrated by orch in g" "Report: landing - b
 second line"
 notes T-2 "Orchestrated by epicorch in g/epic"
-notes T-3 "Orchestrated by gone in g"
-jq '.metadata = {jira: "CA-1"}' "$NOTES/T-3.json" >"$tmp/x" && mv "$tmp/x" "$NOTES/T-3.json"
+notes T-3 "Orchestrated by gone in g" "Nighthawk run r-old on CA-1" "Nighthawk run r-2 on CA-1"
+jq '.metadata = {jira: "CA-1", pr: "o/r#7"}' "$NOTES/T-3.json" >"$tmp/x" && mv "$tmp/x" "$NOTES/T-3.json"
 notes T-4 "Claimed by someone in /work"
 notes T-5 "Claimed by deadone in /work"
 notes T-12 "Claimed by t-12-a in $repo"
@@ -141,6 +141,10 @@ has T-12 claimed=-
 has T-12 worker_status=errored
 has T-12 offer=yes
 has T-3 jira=CA-1
+has T-3 nighthawk=r-2
+has T-3 pr=o/r#7
+lacks T-1 nighthawk=
+lacks T-1 pr=
 has T-3 parent=T-E
 lacks T-4 jira=
 lacks T-4 parent=

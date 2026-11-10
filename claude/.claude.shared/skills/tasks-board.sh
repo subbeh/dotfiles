@@ -6,7 +6,9 @@
 # owned_elsewhere=yes (owner is another running session), claimed (a running
 # session the latest claim line names, other than the worker), worker and
 # worker_status (newest non-archived session named after the ref), report
-# (latest Report: note), and jira (mirrored key), parent (epic ref), blocked,
+# (latest Report: note), and nighthawk (run id of the latest "Nighthawk run"
+# note: the task's worker when it has no session), pr (GitHub metadata), jira
+# (mirrored key), parent (epic ref), blocked,
 # epic, os=other, offer=yes (a start candidate) only when they apply. Header: scope, inbox count, live/ leases and
 # strays (archived sessions of this repo still running).
 set -euo pipefail
@@ -83,6 +85,8 @@ def rank($xs): . as $x | $xs | index($x) // length;
       "worker=\($worker | if . then "\(.name)(\(.id))" else null end | v)",
       "worker_status=\($worker.status | v)",
       "report=\($notes[$t.ref] | latest("Report: ") | v)",
+      ($notes[$t.ref] | latest("Nighthawk run ") | values | "nighthawk=\(split(" ")[0] | v)"),
+      ($notes[$t.ref].metadata.pr | values | "pr=\(v)"),
       ($notes[$t.ref].metadata.jira | values | "jira=\(v)"),
       ($t.epic_parent.ref | values | "parent=\(v)"),
       (select($t.blocked_by > 0) | "blocked=yes"),
