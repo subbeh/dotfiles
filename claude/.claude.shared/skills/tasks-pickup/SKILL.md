@@ -159,6 +159,15 @@ nighthawk iterate <KEY> --repo <repo> --pr <n> -o json` through the
 `vector-nighthawk:cli` skill, add a **note** `Nighthawk run <id> on <KEY>`,
 and report its outcome and cost.
 
+When `../nighthawk.md` exists, a task with a `review` report, or a Nighthawk
+run whose PR is open, also gets a "Nighthawk review" option, unless its PR is
+a draft the user hasn't marked ready (offer it then only when asked). Run the
+availability check, then launch `jx nighthawk run <KEY> --skill pr-review:review
+--param pr_url=<url> -o json` through the `vector-nighthawk:cli` skill, add a
+**note** `Nighthawk run <id> on <KEY>`, and report the rating, the cost and
+that the findings landed in Jira. Acting on them stays the user's call: ping
+the worker, or run `iterate`. A task with no `jira` key gets none.
+
 Act on the answer (step 7), then go back to step 5.
 
 A user turn starting with `[tasks]` is a worker's ping. Run step 5 first, then
