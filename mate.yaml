@@ -37,7 +37,7 @@ sources:
   - aven
   - bitwarden
   - claude
-  - dev
+  - ops
   - eza
   - fd
   - firefox

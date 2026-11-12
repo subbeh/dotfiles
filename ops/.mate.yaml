@@ -1,6 +1,7 @@
 ---
 packages:
   - bun
+  - dash
   - direnv
   - docker
   - golangci-lint
