@@ -29,10 +29,12 @@ Pick the mode, first match wins:
 - **Orchestrator**: everything else. Take this session's name, group and
   directory from the `self` row. The **scope** is the epic passed as the
   argument (`epic=yes`; its children, `aven epic list <epic>`), or else the
-  repo's project. In epic scope, the decisions the epic's description records
-  are settled, so never ask the user to make them again. With a task passed
-  as the argument, run step 2 for it, then **Start a task** for it: the
-  Nighthawk check, or on Local worker steps 1–3; then go to step 5.
+  repo's project, leaving out every task in an epic: an epic is run on its
+  own with `/tasks-pickup <epic ref>`. In epic scope, the decisions the
+  epic's description records are settled, so never ask the user to make them
+  again. With a task passed as the argument, run step 2 for it, then **Start
+  a task** for it: the Nighthawk check, or on Local worker steps 1–3; then go
+  to step 5.
   Otherwise go straight to step 5.
 
 Done when you hold the tracker and the mode, and as orchestrator also your own
@@ -113,7 +115,7 @@ archived sessions still running. Every other line is one open task in scope,
 in step 2's order, with its owner, worker session, the worker's status and the
 latest `report`; the script's header comment lists every field.
 `owned_elsewhere=yes` marks a task whose owner is another session that is
-still running. A repo-wide orchestrator sees epic orchestrators' tasks this way.
+still running.
 `nighthawk=<run id>` marks a task whose worker is a Nighthawk run: it has no
 session, so take its state from `jx nighthawk runs get <id> -o json`.
 

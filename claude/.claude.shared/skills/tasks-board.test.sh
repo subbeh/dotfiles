@@ -75,6 +75,8 @@ jq '.metadata = {jira: "CA-1", pr: "o/r#7"}' "$NOTES/T-3.json" >"$tmp/x" && mv "
 notes T-4 "Claimed by someone in /work"
 notes T-5 "Claimed by deadone in /work"
 notes T-12 "Claimed by t-12-a in $repo"
+# Over the kernel's per-argument limit (128 KiB): the notes must not reach jq as one argument.
+head -c 200000 /dev/zero | tr '\0' x | jq -Rs '{notes: [{body: .}]}' >"$NOTES/T-13.json"
 {
   session s0 orch g "$repo" true false true working
   session s1 t-1-a g "$repo" true false false working
@@ -106,7 +108,8 @@ header=$(head -1 <<<"$out")
 want='scope="project demo" inbox=1 leases="live/vps/hermes by t-1-a" strays=t-6-old(s6)'
 [[ $header == "$want" ]] || fail "header: $header"
 order=$(tail -n +2 <<<"$out" | cut -d' ' -f1 | tr '\n' ' ')
-[[ $order == "T-2 T-1 T-12 T-10 T-5 T-4 T-3 T-8 T-7 T-6 T-13 T-11 T-9 " ]] || fail "order: $order"
+# T-3 is an epic child: only its epic's board shows it.
+[[ $order == "T-2 T-1 T-12 T-10 T-5 T-4 T-8 T-7 T-6 T-13 T-11 T-9 " ]] || fail "order: $order"
 
 has T-1 owner=self
 lacks T-1 owned_elsewhere
@@ -118,9 +121,6 @@ lacks T-1 offer
 has T-2 'owner="epicorch in g/epic"'
 has T-2 owned_elsewhere=yes
 lacks T-2 offer
-has T-3 'owner="gone in g"'
-lacks T-3 owned_elsewhere
-lacks T-3 offer
 has T-4 claimed=someone
 lacks T-4 offer
 has T-5 claimed=-
@@ -140,18 +140,12 @@ lacks T-11 offer
 has T-12 claimed=-
 has T-12 worker_status=errored
 has T-12 offer=yes
-has T-3 jira=CA-1
-has T-3 nighthawk=r-2
-has T-3 pr=o/r#7
 lacks T-1 nighthawk=
 lacks T-1 pr=
-has T-3 parent=T-E
 lacks T-4 jira=
 lacks T-4 parent=
 has T-13 claimed=-
 lacks T-13 offer
-has T-3 'title="title of T-3"'
-lacks T-3 worker=t-
 
 UNAME=Darwin run
 has T-8 os=other
@@ -163,6 +157,15 @@ jq -n '{epic: {ref: "T-E"}, children: [{ref: "T-3", open: true}, {ref: "T-9", op
 run T-E
 [[ $(head -1 <<<"$out") == 'scope="epic T-E" inbox=1 '* ]] || fail "epic header: $(head -1 <<<"$out")"
 [[ $(tail -n +2 <<<"$out" | cut -d' ' -f1 | tr '\n' ' ') == "T-3 T-9 " ]] || fail "epic rows: $out"
+has T-3 'owner="gone in g"'
+lacks T-3 owned_elsewhere
+lacks T-3 offer
+has T-3 jira=CA-1
+has T-3 nighthawk=r-2
+has T-3 pr=o/r#7
+has T-3 parent=T-E
+has T-3 'title="title of T-3"'
+lacks T-3 worker=t-
 
 if ((fails > 0)); then
   echo "$fails failed"

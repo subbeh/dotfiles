@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Usage: tasks-board.sh [<epic ref>]
-# Prints the task board for the repo's aven project (run from the repo), or for
-# one epic's children: a header line, then one key=value line per open task in
+# Prints the task board for the repo's aven project, leaving out epic children
+# (an epic is run with its ref), or for one epic's children; run from the repo: a header line, then one key=value line per open task in
 # pickup's order. Row fields: owner (self, "<name> in <group>" or -),
 # owned_elsewhere=yes (owner is another running session), claimed (a running
 # session the latest claim line names, other than the worker), worker and
@@ -28,7 +28,7 @@ if [[ -n ${1:-} ]]; then
   children=$(av epic list "$1" --json | jq '[.children[] | select(.open) | .ref]')
   tasks=$(av list --open --all-projects --json | jq --argjson c "$children" '[.[] | select(.ref | IN($c[]))]')
 else
-  tasks=$(av list --open --json 2>"$err") || {
+  tasks=$(av list --open --json 2>"$err" | jq '[.[] | select(.epic_parent == null)]') || {
     cat "$err" >&2
     exit 1
   }
@@ -54,7 +54,8 @@ jq -rn "$tasks_jq"'
 # Bare when it is one token, else quoted; "-" for nothing.
 def v: if . == null or . == "" then "-" elif test("^[^\\s\"=]+$") then . else @json end;
 def rank($xs): . as $x | $xs | index($x) // length;
-($sessions | map(select(.self)) | first) as $self
+($notesf[0]) as $notes
+| ($sessions | map(select(.self)) | first) as $self
 | ($sessions | map(select(.running)) | map({key: "\(.name)\t\(.directory)", value: true}) | from_entries) as $running
 | [ "scope=\($scope | v)",
     "inbox=\($tasks | map(select(.status == "inbox")) | length)",
@@ -97,5 +98,5 @@ def rank($xs): . as $x | $xs | index($x) // length;
       "title=\($t.title | @json)"
     ] | join(" ")
 )' --arg scope "$scope" --arg repo "$repo" --arg other "$other" \
-  --argjson tasks "$tasks" --argjson notes "$notes" \
+  --argjson tasks "$tasks" --slurpfile notesf <(printf '%s' "$notes") \
   --argjson sessions "$sessions" --argjson leases "$leases"
