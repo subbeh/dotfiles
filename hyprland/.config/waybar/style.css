@@ -113,6 +113,13 @@ window#waybar.bottom :first-child {
   padding-right: 2px;
 }
 
+/* BACKLIGHT */
+
+/* its icon glyph has taller line metrics, which pushes the text below the others */
+#backlight {
+  padding-bottom: 4px;
+}
+
 /* NETWORK */
 
 #network_wlan *,
