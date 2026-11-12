@@ -220,6 +220,7 @@
   // BLUETOOTH
   //
   "bluetooth": {
+    "on-click": "pkill -x rofi || __waybar_bluetooth_popup",
     "format-off": "󰂯",
     "format-on": "<span foreground='#{{ .Vars.color.blue.bright }}'>󰂯</span>",
     "format-connected": "<span foreground='#{{ .Vars.color.blue.bright }}'>󰂯</span> {device_alias}",

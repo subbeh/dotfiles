@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+THEME=~/.config/rofi/bluetooth.rasi
+
+menu() {
+  rofi -dmenu -i -no-custom -no-fixed-num-lines -theme "$THEME" -click-to-exit || true
+}
+
+notify() { notify-send -a Bluetooth "Bluetooth" "$1"; }
+
+# Print "<mac> <name>" lines for `bluetoothctl devices [filter]`
+devices() { bluetoothctl devices "$@" | awk '$1 == "Device" { mac = $2; $1 = $2 = ""; sub(/^ +/, ""); print mac, $0 }'; }
+
+powered() { bluetoothctl show | grep -q 'Powered: yes'; }
+
+battery() {
+  bluetoothctl info "$1" | sed -n 's/.*Battery Percentage: .*(\([0-9]*\)).*/\1/p'
+}
+
+mac_of() { sed -n 's/.*\[\([0-9A-F:]\{17\}\)\]$/\1/p' <<<"$1"; }
+
+device_menu() {
+  local mac=$1 name=$2 toggle action
+  if bluetoothctl info "$mac" | grep -q 'Connected: yes'; then toggle="Disconnect"; else toggle="Connect"; fi
+  action=$({
+    echo "$toggle"
+    echo "Forget"
+  } | menu)
+  case "$action" in
+    Connect)
+      notify "Connecting to $name..."
+      if bluetoothctl --timeout 15 connect "$mac" >/dev/null; then notify "Connected to $name"; else notify "Failed to connect to $name"; fi
+      ;;
+    Disconnect)
+      if bluetoothctl disconnect "$mac" >/dev/null; then notify "Disconnected $name"; else notify "Failed to disconnect $name"; fi
+      ;;
+    Forget)
+      if bluetoothctl remove "$mac" >/dev/null; then notify "Forgot $name"; else notify "Failed to forget $name"; fi
+      ;;
+  esac
+}
+
+pair_menu() {
+  local paired selected mac name
+  notify "Scanning for 10s..."
+  bluetoothctl --timeout 10 scan on >/dev/null || true
+  # Unnamed devices (name is just the MAC) are hidden: they cannot be told apart anyway
+  paired=$(devices Paired | cut -d' ' -f1)
+  selected=$(devices | awk -v paired="$paired" 'BEGIN { n = split(paired, a, "\n"); for (i = 1; i <= n; i++) skip[a[i]] = 1 } !($1 in skip) && !($2 ~ /^([0-9A-F][0-9A-F]-){5}[0-9A-F][0-9A-F]$/) { mac = $1; $1 = ""; sub(/^ +/, ""); print $0 "  [" mac "]" }' | menu)
+  [[ -n "$selected" ]] || return 0
+  mac=$(mac_of "$selected")
+  name=${selected%  \[*}
+  notify "Pairing with $name..."
+  if bluetoothctl --timeout 30 pair "$mac" >/dev/null &&
+    bluetoothctl trust "$mac" >/dev/null &&
+    bluetoothctl --timeout 15 connect "$mac" >/dev/null; then
+    notify "Paired and connected to $name"
+  else
+    notify "Failed to pair with $name"
+  fi
+}
+
+if ! powered; then
+  selected=$(echo "󰂲  Power on" | menu)
+  [[ -n "$selected" ]] || exit 0
+  if bluetoothctl power on >/dev/null; then notify "Powered on"; else notify "Failed to power on (adapter missing or blocked?)"; fi
+  exit 0
+fi
+
+connected=$(devices Connected | cut -d' ' -f1)
+selected=$({
+  echo "󰂲  Power off"
+  echo "󰂰  Scan and pair new device"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  # Some speakers connect without pairing, so list connected devices too
+  { devices Paired; devices Connected; } | sort -u | while read -r mac name; do
+    [[ -n "$mac" ]] || continue
+    icon="󰂲"
+    grep -qxF "$mac" <<<"$connected" && icon="󰂱"
+    bat=$(battery "$mac")
+    echo "$icon  $name${bat:+ ($bat%)}  [$mac]"
+  done
+} | menu)
+
+[[ -n "$selected" ]] || exit 0
+case "$selected" in
+  *"Power off") bluetoothctl power off >/dev/null || notify "Failed to power off" ;;
+  *"Scan and pair"*) pair_menu ;;
+  *"━━━"*) ;;
+  *)
+    mac=$(mac_of "$selected")
+    [[ -n "$mac" ]] || exit 0
+    name=${selected#*  }
+    name=${name%  \[*}
+    device_menu "$mac" "${name% (*%)}"
+    ;;
+esac
