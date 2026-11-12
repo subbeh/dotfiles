@@ -105,14 +105,28 @@ local function lid_closed()
   return closed
 end
 
+-- runtime dir is tmpfs, so a reboot drops back to automatic
+local FORCE_FILE = (os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/hypr-force-undocked"
+
+local function forced()
+  local f = io.open(FORCE_FILE)
+  if f then
+    f:close()
+  end
+  return f ~= nil
+end
+
 local function reload_layout()
   -- all = true: a panel disabled on lid close must still be listed to re-enable it
   local live = hl.get_monitors({ all = true })
   local candidates = live
-  if lid_closed() then
+  local closed = lid_closed()
+  -- a closed lid wins over forced undocked: the panel is unusable then
+  local only_panel = forced() and not closed
+  if closed or only_panel then
     candidates = {}
     for _, mon in ipairs(live) do
-      if not mon.name:match("^eDP") then
+      if (mon.name:match("^eDP") ~= nil) == only_panel then
         table.insert(candidates, mon)
       end
     end
@@ -131,10 +145,20 @@ local function reload()
 end
 
 -- the panel is toggled by the lid binds; reloading on it loops while the lid is closed
+-- while forced, reloading on the externals being disabled would loop like the panel does
 local function on_monitor_change(mon)
-  if not mon.name:match("^eDP") then
+  if not mon.name:match("^eDP") and not forced() then
     reload()
   end
+end
+
+local function toggle_forced()
+  if forced() then
+    os.remove(FORCE_FILE)
+  else
+    io.open(FORCE_FILE, "w"):close()
+  end
+  reload()
 end
 
 M.init = function()
@@ -144,6 +168,7 @@ M.init = function()
     hl.on("monitor.removed", on_monitor_change)
     hl.bind("switch:on:Lid Switch", reload_layout, { locked = true })
     hl.bind("switch:off:Lid Switch", reload, { locked = true })
+    hl.bind("SUPER + CTRL + D", toggle_forced)
   end, { timeout = 500, type = "oneshot" })
 end
 
