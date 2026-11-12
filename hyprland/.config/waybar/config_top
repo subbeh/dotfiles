@@ -11,7 +11,9 @@
   "modules-left": [
     "hyprland/workspaces",
     "custom/sep",
-    "hyprland/window"
+    "hyprland/window",
+    "custom/sep",
+    "custom/playerctl"
   ],
   "modules-center": [
     "clock#time",
@@ -19,7 +21,6 @@
     "clock#date"
   ],
   "modules-right": [
-    "custom/playerctl",
     "bluetooth",
     "custom/sep",
     "wireplumber",

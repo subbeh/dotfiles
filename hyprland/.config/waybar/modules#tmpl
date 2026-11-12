@@ -192,7 +192,7 @@
   "custom/playerctl": {
     "format": "{icon} <span foreground='#{{ .Vars.color.fg.default }}'>{text}</span>",
     "return-type": "json",
-    "max-length": 64,
+    "max-length": 48,
     "exec": "playerctl -p spotify metadata --format '{\"text\": \"{{ "{{" }}artist{{ "}}" }} - {{ "{{" }}markup_escape(title){{ "}}" }}\", \"tooltip\": \"{{ "{{" }}playerName{{ "}}" }} : {{ "{{" }}markup_escape(title){{ "}}" }}\", \"alt\": \"{{ "{{" }}status{{ "}}" }}\", \"class\": \"{{ "{{" }}status{{ "}}" }}\"}' -F",
     "on-click": "playerctl -p spotify play-pause",
     "on-scroll-up": "playerctl -p spotify next",
