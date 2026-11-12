@@ -8,6 +8,7 @@ hl.bind("SUPER + RETURN",                 hl.dsp.exec_cmd(TERM))
 hl.bind("SUPER + SPACE",                  hl.dsp.exec_cmd("pkill rofi || __rofi_launcher drun launcher"))
 hl.bind("ALT + F",                        function() Func.focus_or_launch("firefox", "firefox -P default") end)
 hl.bind("ALT + T",                        function() Func.focus_or_launch("kitty", "kitty") end)
+hl.bind("ALT + S",                        function() Func.focus_or_launch("Spotify", "Spotify") end)
 
 -- WINDOWS
 hl.bind("SUPER + Q",                      hl.dsp.window.close("activewindow"))
