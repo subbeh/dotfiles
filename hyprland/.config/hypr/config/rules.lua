@@ -34,6 +34,14 @@ hl.window_rule({
   float = true,
 })
 hl.window_rule({
+  -- download dialogs map with an empty title and request maximize
+  name = "float-firefox-dialogs",
+  match = { class = "firefox", initial_title = "^$" },
+  float = true,
+  center = true,
+  suppress_event = "maximize fullscreen",
+})
+hl.window_rule({
   name = "virt-manager",
   match = {
     class = "virt-manager",
