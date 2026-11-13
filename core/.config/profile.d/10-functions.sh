@@ -19,7 +19,7 @@ ck() { watch -n"${1:-5}" "$(fc -ln -1)"; }
 # copy full path to clipboard
 xf() {
   chkcmd pbcopy && echo -n "${PWD}/$*" | pbcopy
-  chkcmd wl-copy && echo -n "${PWD}/$*" | pbcopy -n
+  chkcmd wl-copy && echo -n "${PWD}/$*" | wl-copy -n
 }
 
 # copy with rsync
