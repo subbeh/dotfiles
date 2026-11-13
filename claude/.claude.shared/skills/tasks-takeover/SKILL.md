@@ -51,7 +51,8 @@ age against it. CI, Jira and aven timestamps are UTC, and the session's
 "today" is the user's local date, which can be a day ahead of UTC.
 
 A task with an `Orchestrated by` note makes this session its **worker** (see
-[`../orchestration.md`](../orchestration.md)).
+[`../orchestration.md`](../orchestration.md)). Find it with
+`aven context <ref> | grep '^Orchestrated by' | tail -1`, not a truncated read.
 
 Done when you can name the next concrete step, the files it touches, and every
 piece of drift.

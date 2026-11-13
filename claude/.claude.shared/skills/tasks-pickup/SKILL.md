@@ -23,7 +23,9 @@ argument names its tracker by shape. When it is an aven ref, run
 Pick the mode, first match wins:
 
 - **Worker**: the argument is a task whose latest `Orchestrated by` note names
-  another session. Go to step 2.
+  another session. Find it with
+  `aven context <ref> | grep '^Orchestrated by' | tail -1`, never by reading a
+  truncated `aven context`: long notes push it past any `head`. Go to step 2.
 - **Solo**: the tracker is not aven or aven + Jira, `agent-manager` is not on
   PATH, or `agent-manager sessions --json` has no `self` row. Go to step 2.
 - **Orchestrator**: everything else. Take this session's name, group and
@@ -83,9 +85,12 @@ open question.
 agent-manager name (the `self` row of `list_sessions`) or `interactive`. When
 the work gets its own branch, name it per the tracker's **Branch name**, or put
 the ref in it when the tracker has none: that is how `/tasks-takeover` finds the
-task later. As a worker, first read [`../orchestration.md`](../orchestration.md) in
-full: it holds when to report, the one-PR rule and leases. Then report `started`
-with its `tasks-report.sh`, and from then on report each state it lists.
+task later. Then, in every mode, run
+`bash <skill-dir>/../tasks-report.sh <ref> started "<one line>"`: the script,
+not your reading of the notes, decides whether this session is a worker. Exit 2
+means the task has no owner, so it reports nothing more. Otherwise it is a
+worker: read [`../orchestration.md`](../orchestration.md) in full (when to
+report, the one-PR rule, leases), and from then on report each state it lists.
 
 Print the brief:
 
