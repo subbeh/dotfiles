@@ -7,7 +7,7 @@
 #
 # Author: Nick Clyde (clydedroid)
 # Source: https://github.com/nickclyde/rofi-bluetooth (GPL-3.0)
-# Local changes: own rofi theme and flags, --status dropped (waybar's bluetooth module covers it)
+# Local changes: own rofi theme and flags, pairable on while pairing, --status dropped (waybar's bluetooth module covers it)
 #
 # A script that generates a rofi menu that uses bluetoothctl to
 # connect to bluetooth devices and display status info.
@@ -152,7 +152,10 @@ toggle_paired() {
         bluetoothctl remove "$1"
         device_menu "$device"
     else
+        # Without a running agent the adapter is not pairable, and pairing then stores no link key
+        bluetoothctl pairable on
         bluetoothctl pair "$1"
+        bluetoothctl pairable off
         device_menu "$device"
     fi
 }
