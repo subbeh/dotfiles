@@ -375,6 +375,18 @@
     "on-click-right": "pkill -SIGRTMIN+12 waybar"
   },
   //
+  // CSWAP
+  //
+  "custom/cswap": {
+    "exec": "__waybar_cswap",
+    "return-type": "json",
+    "interval": 15,
+    "tooltip": true,
+    "signal": 14,
+    "on-click": "pkill -x rofi || __waybar_cswap pick",
+    "on-click-right": "__waybar_cswap rotate"
+  },
+  //
   // BITWARDEN
   //
   "custom/bitwarden": {

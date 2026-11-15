@@ -206,6 +206,10 @@ window#waybar.bottom :first-child {
   color: @white;
 }
 
+#custom-cswap {
+  padding: 0 5px;
+}
+
 #custom-bitwarden {
   padding: 0 5px;
 }

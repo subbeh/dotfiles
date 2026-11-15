@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Waybar module: the active claude-swap (cswap) account; click picks another, right-click rotates.
+set -uo pipefail
+
+ICON='󰀄'
+SEQ=${XDG_DATA_HOME:-$HOME/.local/share}/claude-swap/sequence.json
+
+command -v cswap &>/dev/null && [[ -r $SEQ ]] || { echo '{"text": ""}'; exit 0; }
+
+# `<num>\t<label>\t<active>` per account; label is the alias, else the email's local part
+accounts() {
+  jq -r '.activeAccountNumber as $a | .accounts | to_entries[]
+    | [.key, (.value.alias // (.value.email | split("@")[0])), (.key == ($a | tostring))] | @tsv' "$SEQ"
+}
+
+switch_done() { pkill -SIGRTMIN+14 waybar; exit 0; }
+
+# `__waybar_cswap pick`: rofi list of accounts, switch to the chosen one.
+if [[ ${1:-} == pick ]]; then
+  # The theme centres the window; shift it under the cursor (the click on the module)
+  xoff=$(hyprctl monitors -j | jq -r --argjson cx "$(hyprctl cursorpos -j | jq .x)" \
+    '.[] | select(.focused) | ($cx - .x - .width / .scale / 2) | round') || xoff=0
+  chosen=$(accounts | awk -F'\t' '{print $1 "  " $2 ($3 == "true" ? "  ●" : "")}' |
+    rofi -dmenu -i -no-custom -theme "$HOME/.config/rofi/cswap.rasi" -theme-str "window { x-offset: ${xoff:-0}px; }" \
+      -click-to-exit -p cswap) || exit 0
+  [[ -n $chosen ]] && { cswap switch "${chosen%% *}" >/dev/null 2>&1 || notify-send -a cswap -u critical "cswap" "Switch failed"; }
+  switch_done
+fi
+
+# `__waybar_cswap rotate`: next account.
+if [[ ${1:-} == rotate ]]; then
+  cswap switch >/dev/null 2>&1 || notify-send -a cswap -u critical "cswap" "Switch failed"
+  switch_done
+fi
+
+active=$(accounts | awk -F'\t' '$3 == "true" {print $2}')
+tooltip=$(accounts | awk -F'\t' '{print ($3 == "true" ? "● " : "  ") $1 "  " $2}')
+
+jq -nc --arg text "$ICON $active" --arg tooltip "<b>cswap</b>
+$tooltip" '{text: $text, tooltip: $tooltip}'

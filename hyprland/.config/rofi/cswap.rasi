@@ -1,0 +1,11 @@
+@import "profiles"
+
+window {
+    location:   south;
+    y-offset:   30px;
+    x-offset:   0px;
+}
+
+listview {
+    lines:      3;
+}
