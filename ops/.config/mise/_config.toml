@@ -1,5 +1,3 @@
-{{- /* #tmpl only so the source isn't named config.toml: mise would otherwise
-load it as an untrusted project config anywhere under dotfiles/infra/. */ -}}
 [settings]
 registry_floating = true
 # agent-manager spawns cloud-ops-tools worktrees here; each would otherwise need `mise trust`

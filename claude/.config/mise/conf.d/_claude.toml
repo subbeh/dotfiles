@@ -1,0 +1,3 @@
+[tools]
+# claude-swap: switch Claude accounts within one CLAUDE_CONFIG_DIR
+"pipx:claude-swap" = "latest"
