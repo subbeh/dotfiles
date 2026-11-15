@@ -266,29 +266,25 @@ worker acts when pinged. If both pass,
 ask before you:
 
 1. **Edit** the task to `done`.
-2. Kill, then archive, each of its sessions (`agent-manager kill <id>`, then
-   `agent-manager archive <id>`): archive alone leaves it running (agent-manager
-   issue #915; drop the kill once that ships).
-3. Tell the user to delete the row that owns the worktree, which is its first
-   worker, with `d` in agent-manager. This removes the worktree and its `am/`
-   branch, and nothing else can. A worker spawned without `--worktree` has
-   none: skip this step.
-4. In epic scope, when the epic has no open tasks left and its subgroup no
+2. `agent-manager delete <id>` for each of the task's sessions: it removes the worktree and its `am/` branch with the same
+   check as `d`. When its notice says a worktree stayed, report that and stop.
+3. In epic scope, when the epic has no open tasks left and its subgroup no
    sessions, offer `agent-manager delete-group <path>`. Repo scope never offers
    it: the next spawn recreates the subgroup.
 
 A Nighthawk task has no session, worktree or local commits: its close check is
 its PR merged (`gh pr view <n> --repo <owner>/<repo> --json state`), and only
-step 1, and step 4 in epic scope, apply.
+step 1, and step 3 in epic scope, apply.
 
-When the `done` report says the task needs more PRs, skip step 1 and step 4:
+When the `done` report says the task needs more PRs, skip step 1 and step 3:
 the task stays open, and its next PR goes into **Start a task**'s options as
 a new worker (`/tasks-takeover <ref>`, with a fresh worktree unless the group's is `off`).
 
 ### Start a successor
 
-For a `handover` report: kill and archive the worker (as in **Close a task**
-step 2, #915), then spawn the successor in its
+For a `handover` report: kill, then archive, the worker (`agent-manager kill <id>`,
+then `agent-manager archive <id>`; archive alone leaves it running, agent-manager
+#915): the successor needs its worktree, so no `delete`. Then spawn the successor in its
 directory (its worktree, if it has one) with a new name, following the same rule
 (`<ref>-#<n>-<slug>` while the task's PR is open):
 
