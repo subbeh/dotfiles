@@ -140,13 +140,13 @@
   // DISKS
   //
   "disk": {
-    "format": " {percentage_used}% ",
+    "format": "󰴊 {percentage_used}% ",
     "format-alt": " {used}/{total} GiB",
     "interval": 1,
     "path": "/"
   },
   "disk#2": {
-    "format": " {percentage_used}%",
+    "format": "󰲃 {percentage_used}%",
     "format-alt": " {used}/{total} GiB",
     "interval": 1,
     "path": "/data"
@@ -394,7 +394,8 @@
     "interval": 15,
     "tooltip": true,
     "signal": 13,
-    "on-click": "__waybar_gpg unlock"
+    "on-click": "__waybar_gpg unlock",
+    "on-click-right": "__waybar_gpg restart"
   },
   //
   // KUBERNETES

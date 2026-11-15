@@ -12,6 +12,16 @@ if [[ ${1:-} == unlock ]]; then
   exit 0
 fi
 
+# `__waybar_gpg restart`: same steps as the `gpgrestart` alias (waybar can't run aliases), refresh the module.
+if [[ ${1:-} == restart ]]; then
+  pkill -9 -x scdaemon
+  if ! { gpgconf --kill gpg-agent && gpg-connect-agent 'scd serialno' 'learn --force' /bye >/dev/null 2>&1; }; then
+    notify-send -a gpg -u critical "GnuPG" "Agent restart failed"
+  fi
+  pkill -SIGRTMIN+13 waybar
+  exit 0
+fi
+
 # A signature won't prompt when the card has PW1 verified or gpg-agent caches the PIN (pcscd resets
 # the card's state within seconds, so the cache is what usually counts). VERIFY (00 20) of PW1 for
 # signing (81) without data only reports status: 9000 verified, 63Cx not, x retries left.
