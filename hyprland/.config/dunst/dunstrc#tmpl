@@ -4,9 +4,11 @@
     offset = (15, 15)
     width = 350
     notification_limit = 5
+    hide_duplicate_count = true
+    show_indicators = false
     font = FiraMono Nerd Font Mono 9
     markup = full
-    format = "<b><i>%s</i></b>\n%b"
+    format = "<b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
     icon_position = left
     max_icon_size = 48
     enable_recursive_icon_lookup = true
@@ -36,3 +38,61 @@
     foreground = "#{{ .Vars.color.red.bright }}"
     frame_color = "#{{ .Vars.color.red.bright }}"
     timeout = 0
+
+# Glyph rules: later sections win, so urgency glyphs come first, then per-app glyphs.
+# Urgency glyphs only apply to notifications without an image of their own.
+[glyph_low]
+    msg_urgency = low
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.fg.darker }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[glyph_normal]
+    msg_urgency = normal
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.blue.bright }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[glyph_critical]
+    msg_urgency = critical
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.red.bright }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+# Undo the urgency glyph where the app sent its own icon.
+[keep_icon]
+    icon = "?*"
+    icon_position = left
+    format = "<b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[app_firefox]
+    desktop_entry = "firefox"
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.fg.default }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[app_bitwarden]
+    appname = "bitwarden"
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.fg.default }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[app_cswap]
+    appname = "cswap"
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.fg.default }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[app_gpg]
+    appname = "gpg"
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.fg.default }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[app_statemate]
+    appname = "statemate"
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.fg.default }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[app_agent_manager]
+    appname = "agent-manager"
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.fg.default }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
+
+[app_spotify]
+    appname = "spotify"
+    icon_position = off
+    format = "<span size='250%%' rise='-4096' line_height='0.5' foreground='#{{ .Vars.color.fg.default }}'></span>  <b><i>%s</i></b>\n<span line_height='1.45'>%b</span>"
