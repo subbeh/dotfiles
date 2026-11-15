@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Compact branch + dirty marker for a window's path; prints nothing outside a repo.
+
+branch=$(git -C "$1" symbolic-ref --short -q HEAD 2>/dev/null || git -C "$1" rev-parse --short HEAD 2>/dev/null) || exit 0
+[[ -n "$branch" ]] || exit 0
+dirty=
+[[ -n $(git -C "$1" status --porcelain --untracked-files=normal 2>/dev/null | head -n1) ]] && dirty='*'
+# '#' is special in tmux formats
+printf ' #[fg=colour5]%s%s#[default]' "${branch//#/##}" "$dirty"

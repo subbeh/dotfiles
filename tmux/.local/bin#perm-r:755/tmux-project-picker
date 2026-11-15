@@ -29,6 +29,7 @@ build_project_list() {
     "${XDG_WORKSPACE_DIR}/jamf/repos/clopsbar"
     "${XDG_WORKSPACE_DIR}/jamf/repos/k8s-hermes-cli"
     "${XDG_WORKSPACE_DIR}/home-ops"
+    "${XDG_WORKSPACE_DIR}/dotfiles"
   )
 
   # Process additional repositories first
@@ -144,19 +145,19 @@ selected_name=$(basename "$selected_path")
 
 # Determine if this is a worktree (path is <repo>-worktrees/<name>)
 if [[ "$(dirname "$selected_path")" == *-worktrees ]]; then
-  # Worktree - use folder icon as prefix and branch icon as separator
+  # Worktree - repo name only; the branch comes from __tmux_window_git in the tab
   parent_dir=$(basename "$(dirname "$selected_path")")
   parent_dir=${parent_dir%-worktrees}
-  window_name="$ICON_FOLDER ${parent_dir} $ICON_BRANCH ${selected_name}"
+  window_name="$ICON_FOLDER ${parent_dir}"
 else
   # Regular project - use folder icon (U+F07B from nerd fonts)
   window_name="$ICON_FOLDER $selected_name"
 fi
 
-# Check if window with this name already exists
-if tmux list-windows -F "#{window_name}" 2>/dev/null | grep -q "^${window_name}$"; then
-  # Switch to existing window
-  tmux select-window -t "$window_name"
+# Switch to the window already open for this path (names repeat across worktrees)
+existing=$(tmux list-windows -F "#{window_id}"$'\t'"#{@project-root}" 2>/dev/null | awk -F'\t' -v p="$selected_path" '$2 == p {print $1; exit}')
+if [ -n "$existing" ]; then
+  tmux select-window -t "$existing"
   exit 0
 fi
 
