@@ -5,5 +5,7 @@ branch=$(git -C "$1" symbolic-ref --short -q HEAD 2>/dev/null || git -C "$1" rev
 [[ -n "$branch" ]] || exit 0
 dirty=
 [[ -n $(git -C "$1" status --porcelain --untracked-files=normal 2>/dev/null | head -n1) ]] && dirty='*'
+[[ "$branch" == main ]] && branch=
+[[ -n "$branch$dirty" ]] || exit 0
 # '#' is special in tmux formats
 printf ' #[fg=colour5]%s%s#[default]' "${branch//#/##}" "$dirty"
