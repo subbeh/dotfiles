@@ -6,4 +6,4 @@ root: ~/
 
 windows:
   - dropterm:
-  - updates:
+  - packages:

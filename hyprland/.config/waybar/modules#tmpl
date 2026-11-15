@@ -182,7 +182,8 @@
     "exec": "__waybar_updates",
     "exec-if": "exit 0",
     "on-click": "__hypr_dropterm_updater",
-    "on-click-right": "pkill -SIGRTMIN+8 waybar",
+    "on-click-right": "__hypr_dropterm_pacfind",
+    "on-click-middle": "pkill -SIGRTMIN+8 waybar",
     "signal": 8,
     "min-length": 3
   },

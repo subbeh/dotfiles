@@ -34,10 +34,10 @@ while ! tmux list-sessions -F \#S | grep -q dropterm; do sleep 0; done
 tmux set-option -t dropterm monitor-activity off
 
 # create window; the trailing colon targets the session, since bare "dropterm" matches window dropterm:1
-tmux list-windows -t dropterm | grep -q updates || tmux new-window -t dropterm: -n updates
+tmux list-windows -t dropterm | grep -q packages || tmux new-window -t dropterm: -n packages
 
 # select window
-tmux select-window -t dropterm:updates
+tmux select-window -t dropterm:packages
 
 # a lock with no pacman/paru running is stale: clear it instead of updating
 if [[ -e /var/lib/pacman/db.lck ]] && ! pgrep -x 'pacman|paru' &>/dev/null; then
@@ -47,4 +47,4 @@ else
 fi
 
 # one line: sudo's pty relay swallows any typeahead queued behind paru
-pgrep paru || tmux send-keys -t dropterm:updates "clear; $cmd; __hypr_dropterm_updater after "'$?' Enter
+pgrep paru || tmux send-keys -t dropterm:packages "clear; $cmd; __hypr_dropterm_updater after "'$?' Enter

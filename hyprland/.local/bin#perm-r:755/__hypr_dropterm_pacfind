@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Asks for a search term, then runs pacfind on it in dropterm's packages window.
+
+term=$(rofi -dmenu -p '󰮯 pacfind' -theme "$HOME/.config/rofi/pacfind.rasi" </dev/null) && [[ -n $term ]] || exit 0
+
+shown() {
+  hyprctl clients -j | jq -e 'any(.[]; .class == "dropterm" and .workspace.name != "special:dropterm")' >/dev/null
+}
+
+# Dropterm() toggles, so only call it when dropterm is hidden; "ok" goes to /dev/null
+shown || hyprctl eval 'hl.dispatch(Dropterm())' >/dev/null
+until tmux has-session -t =dropterm 2>/dev/null; do sleep 0.1; done
+tmux set-option -t dropterm monitor-activity off
+
+# the trailing colon targets the session, since bare "dropterm" matches window dropterm:1
+tmux list-windows -t dropterm -F '#W' | grep -qx packages || tmux new-window -t dropterm: -n packages
+tmux select-window -t dropterm:packages
+
+# a running update or install keeps the window
+pgrep -x 'paru|pacman' >/dev/null && exit 0
+
+# -l: the term is typed literally, never parsed as tmux key names
+tmux send-keys -t dropterm:packages -l "clear; pacfind $term"
+tmux send-keys -t dropterm:packages Enter

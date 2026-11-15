@@ -1,0 +1,14 @@
+@theme "theme"
+
+window {
+    width:      420px;
+    y-offset:   -160px;
+}
+
+inputbar {
+    padding:    16px 20px;
+}
+
+listview {
+    enabled:    false;
+}
