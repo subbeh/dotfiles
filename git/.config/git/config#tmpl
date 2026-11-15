@@ -54,3 +54,7 @@
 [diff "age"]
 	textconv = age --decrypt --identity ~/.config/statemate/key.txt
 
+
+# shortcut: covers Linux test repos only (macOS TMPDIR is /var/folders), extend when the work laptop hits it
+[includeIf "gitdir:/tmp/"]
+	path = config_tmp.inc
