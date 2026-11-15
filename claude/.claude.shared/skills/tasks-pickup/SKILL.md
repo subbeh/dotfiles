@@ -128,6 +128,13 @@ Done when you hold this round's board.
 
 ## 6. Report and ask
 
+Landing and waiting workers are the user's to track. In every reply, show them
+as table rows only: never recap them in prose, list them as action items, tell
+the user to attach, or end on a question about them. When your review of a
+landing worker's diff finds something, send it to the worker with
+`agent-manager send <id> "<points>"` (a review note, not a go-ahead) and
+mention it in that row's last-report cell.
+
 Print one table from the board's rows: ref, priority, title, aven status,
 worker session, its model and effort, its state, last report, any `live/` lease
 it holds, and `owned by <name>` where that applies. A Nighthawk row shows
@@ -152,9 +159,7 @@ order:
 3. A `handover` report: start the successor.
 4. Start the next task.
 
-A `landing` or `waiting` report gets no option and no action item: the user
-answers it in the worker's own session and tracks that themselves. Show it in
-the table only, and never ask the user to attach.
+A `landing` or `waiting` report gets no option (see the top of this step).
 
 Check a session (`agent-manager read`) and take over a task owned elsewhere go
 last. A `review` report, or a Nighthawk run whose PR is open, is parked on
@@ -183,7 +188,7 @@ A user turn starting with `[tasks]` is a worker's ping. Run step 5 first, then
 compare the ping's `<state>: <line>` with the task's `report`
 (`<state> - <line>`): when they differ, the ping is stale, so acknowledge it in
 one line and stop there. A current `landing` or `waiting` ping gets its table
-row and nothing else: no question, no action item. Otherwise continue here and
+row and nothing else, per the top of this step. Otherwise continue here and
 recommend that task first.
 
 ## 7. Actions
