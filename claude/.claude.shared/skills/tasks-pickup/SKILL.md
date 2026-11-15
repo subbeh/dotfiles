@@ -150,10 +150,11 @@ order:
 1. A dead or errored worker, or a failed or canceled Nighthawk run.
 2. A `done` report: close the task.
 3. A `handover` report: start the successor.
-4. A `landing` report: name the session to attach to, where the go-ahead to
-   land its finished work is asked.
-5. A `waiting` report: name the session to attach to, where its question is.
-6. Start the next task.
+4. Start the next task.
+
+A `landing` or `waiting` report gets no option and no action item: the user
+answers it in the worker's own session and tracks that themselves. Show it in
+the table only, and never ask the user to attach.
 
 Check a session (`agent-manager read`) and take over a task owned elsewhere go
 last. A `review` report, or a Nighthawk run whose PR is open, is parked on
@@ -181,7 +182,9 @@ Act on the answer (step 7), then go back to step 5.
 A user turn starting with `[tasks]` is a worker's ping. Run step 5 first, then
 compare the ping's `<state>: <line>` with the task's `report`
 (`<state> - <line>`): when they differ, the ping is stale, so acknowledge it in
-one line and stop there. Otherwise continue here and recommend that task first.
+one line and stop there. A current `landing` or `waiting` ping gets its table
+row and nothing else: no question, no action item. Otherwise continue here and
+recommend that task first.
 
 ## 7. Actions
 
