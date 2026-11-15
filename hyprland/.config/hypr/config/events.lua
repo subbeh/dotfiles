@@ -2,17 +2,17 @@ hl.on("hyprland.start", function()
   hl.dispatch(hl.dsp.focus({ workspace = "2" }))
   hl.exec_cmd("systemctl --user start hyprland-session.target")
   hl.exec_cmd("systemctl --user enable --now hyprpolkitagent.service")
-  hl.exec_cmd("__hypr_tmux_sessions")
+  hl.exec_cmd("_hypr_tmux_sessions")
   hl.exec_cmd("wl-paste --type text --watch cliphist store")
   hl.exec_cmd("wl-paste --type image --watch cliphist store")
   hl.exec_cmd("hyprpaper")
   hl.exec_cmd("dunst")
   hl.exec_cmd("hypridle")
   hl.exec_cmd("Thunar --daemon")
-  -- Attach here rather than in __hypr_tmux_sessions: exec_cmd inherits
+  -- Attach here rather than in _hypr_tmux_sessions: exec_cmd inherits
   -- Hyprland's stdio, so an attach in that script claims the login TTY and is
   -- waiting there when Hyprland exits.
-  hl.exec_cmd("kitty --hold sh -c '__hypr_tmux_sessions && __tmuxinator_sessions'", { workspace = "special:term silent" })
+  hl.exec_cmd("kitty --hold sh -c '_hypr_tmux_sessions && _tmuxinator_sessions'", { workspace = "special:term silent" })
   hl.exec_cmd("firefox-default.desktop", { workspace = "2" })
 end)
 

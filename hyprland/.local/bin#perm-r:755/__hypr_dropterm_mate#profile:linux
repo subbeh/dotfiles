@@ -34,4 +34,4 @@ tmux select-window -t dropterm:mate
 [[ $(tmux display-message -p -t dropterm:mate '#{pane_current_command}') == mate ]] && exit 0
 
 # refresh the waybar module (signal 6) whatever the outcome
-tmux send-keys -t dropterm:mate 'clear; mate apply; s=$?; pkill -SIGRTMIN+6 waybar; ((s)) || { tmux select-window -t dropterm:1 && __hypr_dropterm_mate hide; }' Enter
+tmux send-keys -t dropterm:mate 'clear; mate apply; s=$?; pkill -SIGRTMIN+6 waybar; ((s)) || { tmux select-window -t dropterm:1 && _hypr_dropterm_mate hide; }' Enter

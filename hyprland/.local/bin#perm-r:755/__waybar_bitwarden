@@ -9,7 +9,7 @@ ICON_UNLOCKED=''
 # shellcheck source=/dev/null
 . "${XDG_CONFIG_HOME:-$HOME/.config}/profile.d/50-bitwarden.sh"
 
-# `__waybar_bitwarden unlock`: ask for the master password with pinentry, unlock, refresh the module.
+# `_waybar_bitwarden unlock`: ask for the master password with pinentry, unlock, refresh the module.
 if [[ ${1:-} == unlock ]]; then
   pin=$(printf '%s\n' 'SETTITLE Bitwarden' 'SETDESC Unlock the Bitwarden vault' 'SETPROMPT Master password' GETPIN BYE |
     pinentry-auto 2>/dev/null | sed -n 's/^D //p')

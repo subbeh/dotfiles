@@ -5,14 +5,14 @@ set -uo pipefail
 ICON_LOCKED='󰦝'
 ICON_UNLOCKED='󰦝'
 
-# `__waybar_gpg unlock`: sign a throwaway message so pinentry asks for the PIN, refresh the module.
+# `_waybar_gpg unlock`: sign a throwaway message so pinentry asks for the PIN, refresh the module.
 if [[ ${1:-} == unlock ]]; then
   echo test | gpg --clearsign >/dev/null 2>&1 || notify-send -a gpg -u critical "GnuPG" "Card unlock failed"
   pkill -SIGRTMIN+13 waybar
   exit 0
 fi
 
-# `__waybar_gpg restart`: same steps as the `gpgrestart` alias (waybar can't run aliases), refresh the module.
+# `_waybar_gpg restart`: same steps as the `gpgrestart` alias (waybar can't run aliases), refresh the module.
 if [[ ${1:-} == restart ]]; then
   pkill -9 -x scdaemon
   if ! { gpgconf --kill gpg-agent && gpg-connect-agent 'scd serialno' 'learn --force' /bye >/dev/null 2>&1; }; then

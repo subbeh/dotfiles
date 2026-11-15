@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-statemate=$(__statemate_status tmux)
-am=$(__am_status tmux)
+statemate=$(_statemate_status tmux)
+am=$(_am_status tmux)
 
 parts=()
 [[ -n "$statemate" ]] && parts+=("$statemate")

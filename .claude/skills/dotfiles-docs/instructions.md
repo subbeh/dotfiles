@@ -129,7 +129,7 @@ You:
    
    **Cause**: Daemon was calling wrong script name
    
-   **Fix**: Updated __tmux_jpro_status_daemon to call correct script
+   **Fix**: Updated _tmux_jpro_status_daemon to call correct script
 3. Show diff
 4. User confirms
 5. Write
@@ -183,7 +183,7 @@ Details...
 
 | Key | Description | Command |
 |-----|-------------|---------|
-| `prefix i` | Jpro sessions | `__tmux_jpro_session_manager` |
+| `prefix i` | Jpro sessions | `_tmux_jpro_session_manager` |
 | `Ctrl-D` | Delete session | (in fzf picker) |
 ```
 

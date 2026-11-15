@@ -47,4 +47,4 @@ else
 fi
 
 # one line: sudo's pty relay swallows any typeahead queued behind paru
-pgrep paru || tmux send-keys -t dropterm:packages "clear; $cmd; __hypr_dropterm_updater after "'$?' Enter
+pgrep paru || tmux send-keys -t dropterm:packages "clear; $cmd; _hypr_dropterm_updater after "'$?' Enter

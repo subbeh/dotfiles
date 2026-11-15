@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Waybar module: Claude plan usage (5h and 7d windows) as cached by __claude_statusline.
+# Waybar module: Claude plan usage (5h and 7d windows) as cached by _claude_statusline.
 set -uo pipefail
 
 # Swap glyph to taste

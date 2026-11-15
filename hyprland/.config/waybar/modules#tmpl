@@ -179,10 +179,10 @@
     "format": "{}",
     "interval": 600,
     "return-type": "json",
-    "exec": "__waybar_updates",
+    "exec": "_waybar_updates",
     "exec-if": "exit 0",
-    "on-click": "__hypr_dropterm_updater",
-    "on-click-right": "__hypr_dropterm_pacfind",
+    "on-click": "_hypr_dropterm_updater",
+    "on-click-right": "_hypr_dropterm_pacfind",
     "on-click-middle": "pkill -SIGRTMIN+8 waybar",
     "signal": 8,
     "min-length": 3
@@ -221,7 +221,7 @@
   // BLUETOOTH
   //
   "bluetooth": {
-    "on-click": "pkill -x rofi || __waybar_bluetooth_popup",
+    "on-click": "pkill -x rofi || _waybar_bluetooth_popup",
     "format-off": "󰂯",
     "format-on": "<span foreground='#{{ .Vars.color.blue.bright }}'>󰂯</span>",
     "format-connected": "<span foreground='#{{ .Vars.color.blue.bright }}'>󰂯</span> {device_alias}",
@@ -255,8 +255,8 @@
       "hdmi": "<span foreground='#{{ .Vars.color.orange.base }}'>󰍹</span> monitor",
       "default": "󰓃"
     },
-    "on-click": "__waybar_cycle_sink next",
-    "on-click-right": "__waybar_cycle_sink prev",
+    "on-click": "_waybar_cycle_sink next",
+    "on-click-right": "_waybar_cycle_sink prev",
     "ignored-sinks": []
   },
   //
@@ -312,8 +312,8 @@
   "custom/network": {
     "format": "{}",
     "return-type": "json",
-    "exec": "__waybar_network",
-    "on-click": "pkill -x rofi || __waybar_network_popup",
+    "exec": "_waybar_network",
+    "on-click": "pkill -x rofi || _waybar_network_popup",
     "interval": 60,
     "signal": 7,
     "on-click-right": "pkill -SIGRTMIN+7 waybar"
@@ -322,7 +322,7 @@
   // SYNCTHING
   //
   "custom/syncthing": {
-    "exec": "__waybar_syncthing",
+    "exec": "_waybar_syncthing",
     "return-type": "json",
     "interval": 10,
     "tooltip": true
@@ -331,7 +331,7 @@
   // RESTIC
   //
   "custom/restic": {
-    "exec": "__waybar_restic",
+    "exec": "_waybar_restic",
     "return-type": "json",
     "interval": 60,
     "tooltip": true,
@@ -344,31 +344,31 @@
   // STATEMATE
   //
   "custom/statemate": {
-    "exec": "__statemate_status waybar",
+    "exec": "_statemate_status waybar",
     "return-type": "json",
     "interval": 10,
     "tooltip": true,
     "signal": 6,
-    "on-click": "__hypr_dropterm_mate",
+    "on-click": "_hypr_dropterm_mate",
     "on-click-right": "pkill -SIGRTMIN+6 waybar"
   },
   //
   // AGENT MANAGER
   //
   "custom/agent-manager": {
-    "exec": "__waybar_agent_manager",
+    "exec": "_waybar_agent_manager",
     "return-type": "json",
     "interval": 5,
     "tooltip": true,
     "signal": 11,
-    "on-click": "__waybar_agent_manager click",
+    "on-click": "_waybar_agent_manager click",
     "on-click-right": "pkill -SIGRTMIN+11 waybar"
   },
   //
   // CLAUDE
   //
   "custom/claude": {
-    "exec": "__waybar_claude",
+    "exec": "_waybar_claude",
     "return-type": "json",
     "interval": 60,
     "tooltip": true,
@@ -379,42 +379,42 @@
   // CSWAP
   //
   "custom/cswap": {
-    "exec": "__waybar_cswap",
+    "exec": "_waybar_cswap",
     "return-type": "json",
     "interval": 15,
     "tooltip": true,
     "signal": 14,
-    "on-click": "pkill -x rofi || __waybar_cswap pick",
-    "on-click-right": "__waybar_cswap rotate"
+    "on-click": "pkill -x rofi || _waybar_cswap pick",
+    "on-click-right": "_waybar_cswap rotate"
   },
   //
   // BITWARDEN
   //
   "custom/bitwarden": {
-    "exec": "__waybar_bitwarden",
+    "exec": "_waybar_bitwarden",
     "return-type": "json",
     "interval": 15,
     "tooltip": true,
     "signal": 10,
-    "on-click": "__waybar_bitwarden unlock"
+    "on-click": "_waybar_bitwarden unlock"
   },
   //
   // GPG
   //
   "custom/gpg": {
-    "exec": "__waybar_gpg",
+    "exec": "_waybar_gpg",
     "return-type": "json",
     "interval": 15,
     "tooltip": true,
     "signal": 13,
-    "on-click": "__waybar_gpg unlock",
-    "on-click-right": "__waybar_gpg restart"
+    "on-click": "_waybar_gpg unlock",
+    "on-click-right": "_waybar_gpg restart"
   },
   //
   // KUBERNETES
   //
   "custom/k8s": {
-    "exec": "__waybar_k8s",
+    "exec": "_waybar_k8s",
     "interval": 10,
     "return-type": "json"
   }

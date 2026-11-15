@@ -70,7 +70,7 @@ if [[ "$instance" ]]; then
     tmux setw -t "$SESH:$instance" @jpro_status ""
 
     # Trigger initial status update
-    ~/.local/bin/__tmux_jpro_status_update "$SESH:$instance" "$instance"
+    ~/.local/bin/_tmux_jpro_status_update "$SESH:$instance" "$instance"
 
     # select window
     tmux switchc -t "$SESH"
@@ -85,7 +85,7 @@ if [[ "$instance" ]]; then
     tmux pipe-pane -t '{bottom-left}' "cat >> ${session_dir}/logs/pane_2.log"
 
     # set context and run clops tools
-    tmux send-keys -t '{top-left}' "__jpro_set_ctx $instance ; k9s -n $instance-jamfcloud-com -c po" C-m
+    tmux send-keys -t '{top-left}' "_jpro_set_ctx $instance ; k9s -n $instance-jamfcloud-com -c po" C-m
     tmux send-keys -t '{top-right}' "jtop -i $instance" C-m
 
     # bind key for sketchybar context

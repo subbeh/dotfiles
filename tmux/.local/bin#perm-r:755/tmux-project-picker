@@ -145,7 +145,7 @@ selected_name=$(basename "$selected_path")
 
 # Determine if this is a worktree (path is <repo>-worktrees/<name>)
 if [[ "$(dirname "$selected_path")" == *-worktrees ]]; then
-  # Worktree - repo name only; the branch comes from __tmux_window_git in the tab
+  # Worktree - repo name only; the branch comes from _tmux_window_git in the tab
   parent_dir=$(basename "$(dirname "$selected_path")")
   parent_dir=${parent_dir%-worktrees}
   window_name="$ICON_FOLDER ${parent_dir}"
