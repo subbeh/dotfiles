@@ -9,6 +9,7 @@ hooks:
     match:
       - "/etc/systemd/**/*.service"
       - "/etc/systemd/**/*.timer"
+      - "/etc/systemd/**/*.conf"
     do:
       - run: sudo systemctl daemon-reload
   systemd-user-reload:

@@ -1,1 +1,1 @@
-rd.luks.name=67fcc723-c7af-49c9-9bcd-650651604b78=root rd.luks.options=discard root=/dev/mapper/root rootflags=subvol=@ rw video=eDP-1:1920x1080
+rd.luks.name=67fcc723-c7af-49c9-9bcd-650651604b78=root rd.luks.options=discard root=/dev/mapper/root rootflags=subvol=@ rw
