@@ -4,7 +4,7 @@ test -r "$XDG_CONFIG_HOME/statemate/key.txt" && export STATEMATE_KEY_FILE="$XDG_
 
 alias cd.='cd "$(yq -r .source_dir < "$XDG_CONFIG_HOME/statemate/config.yaml")"'
 alias ds='mate status'
-alias da='mate apply --noconfirm'
+alias da='mate apply --noconfirm --clean'
 alias daa='mate apply --noconfirm && mate clean --all --noconfirm'
 alias dad='mate apply --dry-run -v'
 alias de='mate edit'
