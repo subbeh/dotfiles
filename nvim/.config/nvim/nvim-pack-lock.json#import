@@ -41,7 +41,7 @@
       "src": "https://github.com/williamboman/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "4d32e018f7cfcc0ba95357465516be615c542fef",
+      "rev": "174eb9b9d5d66254966b9d52ea51b996317e51f6",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-bqf": {
@@ -65,7 +65,7 @@
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {
-      "rev": "60c0f468de3e636fa660a419d537e8033aca4e39",
+      "rev": "04f17886f75416dfdc25374c950a52c63f0e98fe",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -75,7 +75,7 @@
       "version": "'main'"
     },
     "octo.nvim": {
-      "rev": "419e67aee457406423e7cb4fc41d721ecda61bcd",
+      "rev": "0ddca04c02aab8ba18d2072f9b855f3806adad54",
       "src": "https://github.com/pwntester/octo.nvim"
     },
     "oil.nvim": {
