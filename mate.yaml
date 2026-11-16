@@ -51,7 +51,6 @@ sources:
   - nvim
   - ripgrep
   - ssh
-  - tailscale
   - television
   - starship
   - statemate
@@ -85,6 +84,7 @@ profiles:
       - hyprland
       - mpv
       - restic
+      - tailscale
     variables:
       workspaceDir: "/data/workspace"
       sshKeys:
