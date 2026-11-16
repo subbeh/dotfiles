@@ -19,7 +19,9 @@ hooks:
     do:
       - run: systemctl --user daemon-reload
   initramfs:
-    match: /etc/crypttab
+    match:
+      - /etc/crypttab
+      - /etc/kernel/cmdline
     do:
       - run: sudo mkinitcpio -P
 

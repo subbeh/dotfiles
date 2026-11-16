@@ -299,7 +299,7 @@ mkdir -p /etc/kernel
 ROOT_UUID=$(blkid -s UUID -o value /dev/disk/by-partlabel/root)
 
 cat <<EOF >/etc/kernel/cmdline
-rd.luks.name=${ROOT_UUID}=root rd.luks.options=discard root=/dev/mapper/root rootflags=subvol=@ rw
+rd.luks.name=${ROOT_UUID}=root rd.luks.options=discard root=/dev/mapper/root rootflags=subvol=@ rw video=eDP-1:1920x1080
 EOF
 
 cat <<'EOF' >/etc/mkinitcpio.d/linux.preset
@@ -332,6 +332,14 @@ EOF
 mkdir -p /boot/EFI/Linux
 mkinitcpio -P
 ```
+
+`video=eDP-1:1920x1080` shrinks the TTY to 16:9. fbcon clones one framebuffer, sized
+to the laptop panel, to every output; the 16:9 externals show it at 1920x1080 and cut
+off the bottom rows, prompt included. The panel keeps a thin unused strip instead.
+
+dotfiles manages `/etc/kernel/cmdline` afterwards (`arch/etc#owner-r:root/kernel/cmdline`),
+with the root LUKS UUID hardcoded like `/etc/crypttab`, so update it in the repo after a
+reinstall. An apply that changes it runs `mkinitcpio -P`, and sbctl's post hook re-signs the UKIs.
 
 ### Sign EFI binaries
 
