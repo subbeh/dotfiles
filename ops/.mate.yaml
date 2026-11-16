@@ -1,7 +1,7 @@
 ---
 packages:
   - bun
-  - dash
+  - dash: [pacman, {brew: dash-shell}]
   - direnv
   - docker
   - golangci-lint
@@ -11,6 +11,7 @@ packages:
   - mise
   - perf: pacman
   - pyright
+  - ruff: uv
   - rust
   - strace: pacman
   - upterm
