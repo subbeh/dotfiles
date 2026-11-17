@@ -487,6 +487,10 @@ systemctl enable snapper-timeline.timer
 systemctl enable snapper-cleanup.timer
 ```
 
+After the first boot, `mate apply` symlinks `/etc/resolv.conf` to
+`/run/systemd/resolve/stub-resolv.conf` so Tailscale and NetworkManager both
+feed systemd-resolved instead of rewriting the file.
+
 ### Reflector config
 
 ```bash

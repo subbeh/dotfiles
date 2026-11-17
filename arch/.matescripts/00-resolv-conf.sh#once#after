@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# description: Point /etc/resolv.conf at systemd-resolved so Tailscale hands it DNS over D-Bus
+
+set -euo pipefail
+
+stub=/run/systemd/resolve/stub-resolv.conf
+
+sudo systemctl enable --now systemd-resolved.service
+sudo ln -sf "$stub" /etc/resolv.conf
