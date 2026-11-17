@@ -43,6 +43,7 @@ packages:
   - linux-headers
   - linux-lts
   - linux-lts-headers
+  - nfs-utils
   - os-prober
   - pacman-contrib
   - power-profiles-daemon
