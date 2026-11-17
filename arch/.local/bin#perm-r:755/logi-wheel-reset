@@ -1,0 +1,76 @@
+#!/usr/bin/python3 -I
+"""Put Logitech wheels back in native HID mode after another host diverted them to HID++.
+
+Logi Options+ on the other KVM host diverts the scroll and thumb wheels to HID++
+reports. The mouse keeps that mode across a KVM switch and hid-generic ignores those
+reports, so scrolling stops here. Nothing marks the switch on this host: the first
+diverted wheel report is the only signal, so that notch is lost.
+"""
+
+import os
+import select
+import time
+
+DEVICE = "/dev/input/by-id/usb-Logitech_USB_Receiver-if02-hidraw"
+SWID = 0x0B
+# feature id -> (setter function, parameters for native HID reporting)
+RESET = {
+    0x2121: (2, b"\x00"),  # HIRES_WHEEL setWheelMode: HID, low-res, not inverted
+    0x2150: (2, b"\x00\x00"),  # THUMB_WHEEL setThumbwheelReporting: HID, not inverted
+}
+
+
+def request(fd, idx, feat, func, params=b""):
+    """Send a HID++ 2.0 request; return the reply's parameters, or None on error or timeout."""
+    tag = func << 4 | SWID
+    os.write(fd, bytes([0x11, idx, feat, tag]) + params.ljust(16, b"\0"))
+    deadline = time.monotonic() + 1
+    while (left := deadline - time.monotonic()) > 0 and select.select([fd], [], [], left)[0]:
+        r = os.read(fd, 64)
+        if len(r) < 5 or r[0] != 0x11 or r[1] != idx:
+            continue
+        if r[2] == feat and r[3] == tag:
+            return r[4:]
+        if r[2] == 0xFF and r[3] == feat and r[4] == tag:
+            return None
+    return None
+
+
+def wheel_features(fd, idx):
+    """Map feature index -> feature id for the wheel features device idx has."""
+    found = {}
+    for fid in RESET:
+        r = request(fd, idx, 0x00, 0, fid.to_bytes(2, "big"))  # IRoot.getFeature
+        if r and r[0]:
+            found[r[0]] = fid
+    return found
+
+
+def watch(fd):
+    known = {}
+    while True:
+        r = os.read(fd, 64)
+        # event 0 with software id 0: a wheel movement, which only arrives over HID++ when diverted
+        if len(r) < 4 or r[0] != 0x11 or r[3] != 0x00:
+            continue
+        idx, feat = r[1], r[2]
+        known[idx] = known.get(idx) or wheel_features(fd, idx)
+        if fid := known[idx].get(feat):
+            func, params = RESET[fid]
+            request(fd, idx, feat, func, params)
+            print(f"device {idx}: feature {fid:#06x} back to native HID", flush=True)
+
+
+if __name__ == "__main__":
+    while True:
+        try:
+            fd = os.open(DEVICE, os.O_RDWR)
+        except OSError:
+            time.sleep(5)  # receiver absent, or no ACL yet
+            continue
+        try:
+            watch(fd)
+        except OSError:
+            pass  # receiver gone
+        finally:
+            os.close(fd)

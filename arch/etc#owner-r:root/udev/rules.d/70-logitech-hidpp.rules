@@ -1,0 +1,2 @@
+# Bolt receiver's HID++ node only, for logi-wheel-reset
+SUBSYSTEM=="hidraw", ENV{ID_VENDOR_ID}=="046d", ENV{ID_MODEL_ID}=="c548", ENV{ID_USB_INTERFACE_NUM}=="02", TAG+="uaccess"

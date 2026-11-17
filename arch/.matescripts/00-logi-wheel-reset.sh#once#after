@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# description: Grant access to the Bolt receiver's HID++ node and start logi-wheel-reset
+
+set -euo pipefail
+
+sudo udevadm control --reload
+sudo udevadm trigger --subsystem-match=hidraw
+systemctl --user enable --now logi-wheel-reset.service

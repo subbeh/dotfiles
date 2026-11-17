@@ -1,0 +1,9 @@
+[Unit]
+Description=Keep Logitech wheels in native HID mode after a KVM switch
+
+[Service]
+ExecStart=%h/.local/bin/logi-wheel-reset
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
