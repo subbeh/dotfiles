@@ -32,6 +32,7 @@ variables:
       KARAKEEP_OPENAI_API_KEY: [openai.com, field, karakeep-api-key]
       OPNSENSE_API_KEY: [opnsense.sbbh.cloud, field, admin-api-key]
       OPNSENSE_API_SECRET: [opnsense.sbbh.cloud, field, admin-api-secret]
+      PVE_API_PASSWORD: [pve.sbbh.cloud, login, password]
       RESTIC_VPS_PASSWORD: [restic, login, password]
       RESTIC_VPS_SSH_KEY: [restic-ssh-key-vps, ssh, private]
       RESTIC_VPS_SSH_USER: [hetzner.com, field, storage-box-vps-user]
