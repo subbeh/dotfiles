@@ -316,7 +316,8 @@
     "on-click": "pkill -x rofi || _waybar_network_popup",
     "interval": 60,
     "signal": 7,
-    "on-click-right": "pkill -SIGRTMIN+7 waybar"
+    "on-click-right": "_hypr_dropterm_nmtui",
+    "on-click-middle": "pkill -SIGRTMIN+7 waybar"
   },
   //
   // SYNCTHING

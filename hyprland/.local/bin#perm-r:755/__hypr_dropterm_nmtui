@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Runs nmtui in dropterm's network window, then refreshes the waybar network module.
+
+shown() {
+  hyprctl clients -j | jq -e 'any(.[]; .class == "dropterm" and .workspace.name != "special:dropterm")' >/dev/null
+}
+
+# Dropterm() toggles, so only call it when dropterm is hidden; "ok" goes to /dev/null
+shown || hyprctl eval 'hl.dispatch(Dropterm())' >/dev/null
+until tmux has-session -t =dropterm 2>/dev/null; do sleep 0.1; done
+tmux set-option -t dropterm monitor-activity off
+
+# the window closes when nmtui exits, so an existing one means nmtui is running
+# the trailing colon targets the session, since bare "dropterm" matches window dropterm:1
+if ! tmux list-windows -t dropterm: -F '#W' | grep -qx network; then
+  # ANSI names with a default background, so kitty's themed palette applies instead of newt's blue
+  colors='root=white,default window=white,default border=cyan,default title=cyan,default'
+  colors+=' button=black,cyan actbutton=black,green compactbutton=white,default'
+  colors+=' checkbox=white,default actcheckbox=black,cyan entry=white,default label=white,default'
+  colors+=' listbox=white,default actlistbox=black,cyan sellistbox=cyan,default actsellistbox=black,cyan'
+  colors+=' textbox=white,default acttextbox=black,cyan helpline=cyan,default roottext=white,default'
+  colors+=' disentry=gray,default shadow=default,default'
+  tmux new-window -t dropterm: -n network "NEWT_COLORS='$colors' nmtui; pkill -SIGRTMIN+7 waybar"
+fi
+tmux select-window -t dropterm:network
