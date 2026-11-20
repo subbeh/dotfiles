@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# description: Enable the unit that prefers the LAN over Tailscale subnet routes
+
+set -euo pipefail
+
+sudo systemctl enable --now lan-over-tailscale.service

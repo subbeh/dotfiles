@@ -1,0 +1,12 @@
+[Unit]
+Description=Prefer the LAN over Tailscale subnet routes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# main wins whenever it holds a route more specific than default
+ExecStart=/usr/bin/ip rule add lookup main suppress_prefixlength 0 priority 2500
+ExecStop=/usr/bin/ip rule del lookup main suppress_prefixlength 0 priority 2500
+
+[Install]
+WantedBy=multi-user.target
